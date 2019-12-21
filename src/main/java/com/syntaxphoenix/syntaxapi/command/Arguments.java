@@ -26,7 +26,7 @@ public class Arguments {
 		if(position > count()) {
 			throw outOfBounce(position);
 		}
-		return arguments.get(position);
+		return arguments.get(position - 1);
 	}
 	
 	public ArgumentType getType(int position) {
