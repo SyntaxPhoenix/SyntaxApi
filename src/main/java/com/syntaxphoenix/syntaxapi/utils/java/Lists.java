@@ -75,4 +75,12 @@ public class Lists {
 		return newList;
 	}
 
+	public static <E> List<E> createWithType(Class<E> sample) {
+		return new ArrayList<>();
+	}
+	
+	public static <E> List<E> createWithType(E sample) {
+		return new ArrayList<>();
+	}
+
 }

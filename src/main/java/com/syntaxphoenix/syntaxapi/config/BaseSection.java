@@ -1,8 +1,8 @@
 package com.syntaxphoenix.syntaxapi.config;
 
 import java.util.HashMap;
-
-import org.eclipse.jdt.annotation.Nullable;
+import java.util.Map;
+import java.util.Set;
 
 import com.syntaxphoenix.syntaxapi.utils.config.ConfigSerializer;
 
@@ -12,7 +12,7 @@ import com.syntaxphoenix.syntaxapi.utils.config.ConfigSerializer;
  */
 public abstract class BaseSection {
 
-	private final HashMap<String, Object> values = new HashMap<>();
+	protected final HashMap<String, Object> values = new HashMap<>();
 	private final String name;
 
 	/**
@@ -25,8 +25,15 @@ public abstract class BaseSection {
 	/**
 	 * @return HashMap<String, Object> {section values}
 	 */
-	public HashMap<String, Object> getValues() {
+	public Map<String, Object> getValues() {
 		return values;
+	}
+	
+	/**
+	 * @return Set<String> {section keys}
+	 */
+	public Set<String> getKeys() {
+		return values.keySet();
 	}
 
 	/**
@@ -59,14 +66,38 @@ public abstract class BaseSection {
 	}
 	
 	/**
+	 * @param <E>
+	 * @param String {path}
+	 * @param Object {object instance}
+	 * @return Boolean {value is instance}
+	 */
+	public <E> boolean isInstance(String path, E value) {
+		Object object = get(path);
+		return object == null ? false : (value == null ? false : object.getClass().isAssignableFrom(value.getClass()));
+	}
+	
+	/**
+	 * @param <E>
+	 * @param String {path}
+	 * @param Class {object instance}
+	 * @return Boolean {value is instance}
+	 */
+	public <E> boolean isInstance(String path, Class<E> value) {
+		Object object = get(path);
+		return object == null ? false : (value == null ? false : object.getClass().isAssignableFrom(value));
+	}
+	
+	/**
+	 * @param <E>
 	 * @param String {path}
 	 * @param Object {default value}
 	 * @return Object {section value}
 	 */
-	public Object check(String path, Object value) {
+	@SuppressWarnings("unchecked")
+	public <E> E check(String path, E value) {
 		Object current = get(path);
-		if(current != null) {
-			return current;
+		if (current != null) {
+			return (E) current;
 		}
 		set(path, value);
 		return value;
@@ -76,7 +107,7 @@ public abstract class BaseSection {
 	 * @param String {path}
 	 * @return Object (Null) {section value}
 	 */
-	@Nullable
+	
 	public Object get(String path) {
 		if (!path.isEmpty()) {
 			return get(ConfigSerializer.getKeys(path));
@@ -85,10 +116,38 @@ public abstract class BaseSection {
 	}
 
 	/**
+	 * @param <E>
+	 * @param String {path}
+	 * @param Class<E> {sample value type}
+	 * @return Object (Null) {section value}
+	 */
+	@SuppressWarnings("unchecked")
+	public <E> E get(String path, Class<E> sample) {
+		if (!path.isEmpty()) {
+			return (E) get(ConfigSerializer.getKeys(path));
+		}
+		return null;
+	}
+
+	/**
+	 * @param <E>
+	 * @param String {path}
+	 * @param E {sample value type}
+	 * @return Object (Null) {section value}
+	 */
+	@SuppressWarnings("unchecked")
+	public <E> E get(String path, E sample) {
+		if (!path.isEmpty()) {
+			return (E) get(ConfigSerializer.getKeys(path));
+		}
+		return null;
+	}
+
+	/**
 	 * @param String[] {path}
 	 * @return Object (Null) {section value}
 	 */
-	@Nullable
+	
 	private Object get(String[] key) {
 		if (key.length != 0) {
 			if (values.containsKey(key[0])) {
@@ -109,7 +168,7 @@ public abstract class BaseSection {
 	 * @param String {path}
 	 * @return JsonSection (Null) {section value}
 	 */
-	@Nullable
+	
 	public BaseSection getSection(String path) {
 		if (!path.isEmpty()) {
 			return getSection(ConfigSerializer.getKeys(path));
@@ -121,7 +180,7 @@ public abstract class BaseSection {
 	 * @param String[] {path}
 	 * @return JsonSection (Null) {section value}
 	 */
-	@Nullable
+	
 	private BaseSection getSection(String[] key) {
 		if (key.length != 0) {
 			if (values.containsKey(key[0])) {
@@ -145,7 +204,7 @@ public abstract class BaseSection {
 	 * @param String {path}
 	 * @return JsonSection (Null) {old / new section}
 	 */
-	@Nullable
+	
 	public BaseSection createSection(String path) {
 		if (!path.isEmpty()) {
 			return createSection(ConfigSerializer.getKeys(path));
@@ -157,7 +216,7 @@ public abstract class BaseSection {
 	 * @param String[] {path}
 	 * @return JsonSection (Null) {old / new section}
 	 */
-	@Nullable
+	
 	private BaseSection createSection(String[] key) {
 		if (key.length != 0) {
 			if (values.containsKey(key[0])) {

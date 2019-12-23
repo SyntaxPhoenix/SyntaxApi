@@ -1,7 +1,6 @@
 package com.syntaxphoenix.syntaxapi.config.json;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -9,8 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.syntaxphoenix.syntaxapi.config.BaseSection;
+import com.syntaxphoenix.syntaxapi.reflections.Reflector;
 import com.syntaxphoenix.syntaxapi.utils.config.ConfigSerializer;
-import com.syntaxphoenix.syntaxapi.utils.reflection.Reflector;
 
 /**
  * @author Lauriichen
@@ -95,7 +94,6 @@ public class JsonConfigSection extends BaseSection {
 	 */
 	public JsonObject toJson() {
 		JsonObject object = new JsonObject();
-		HashMap<String, Object> values = getValues();
 		if (!values.isEmpty()) {
 			for (Entry<String, Object> entry : values.entrySet()) {
 				Object input = entry.getValue();

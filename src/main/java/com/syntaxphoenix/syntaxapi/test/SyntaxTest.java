@@ -4,9 +4,7 @@ import java.util.concurrent.Executor;
 
 import com.syntaxphoenix.syntaxapi.test.menu.MainMenu;
 import com.syntaxphoenix.syntaxapi.test.menu.menus.TestMenu;
-import com.syntaxphoenix.syntaxapi.test.tests.ColorTest;
-import com.syntaxphoenix.syntaxapi.test.tests.LoggerTest;
-import com.syntaxphoenix.syntaxapi.test.tests.MeshConfigTest;
+import com.syntaxphoenix.syntaxapi.test.tests.*;
 import com.syntaxphoenix.syntaxapi.test.utils.InputReader;
 import com.syntaxphoenix.syntaxapi.test.utils.Printer;
 
@@ -52,9 +50,9 @@ public class SyntaxTest implements Executor, Printer {
 	private TestMenu createTests() {
 		TestMenu menu = new TestMenu();
 		
-		menu.register("MeshConfig", "Tests the MeshConfig", new MeshConfigTest(), "Config File (optional) [file=]");
 		menu.register("ColorTest", "Tests java.awt.Color", new ColorTest());
 		menu.register("LoggerTest", "Tests the new Logger", new LoggerTest());
+		menu.register("NbtTest", "Tests the new NbtLib", new NbtTest());
 		
 		return menu;
 	}

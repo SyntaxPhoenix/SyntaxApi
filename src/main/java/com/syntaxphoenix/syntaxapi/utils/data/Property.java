@@ -1,18 +1,19 @@
 package com.syntaxphoenix.syntaxapi.utils.data;
-
+	
 import java.io.Serializable;
-
-/**
+	
+/**	
  * @author Lauriichen
- *
- */
+ *	
+ */	
 public class Property<E> implements Serializable {
 	
 	private static final long serialVersionUID = 8586167622486650403L;
-
-	/**
+	
+	/*
 	 * 
 	 */
+	
 	private String key;
 	private E value;
 	
@@ -20,7 +21,7 @@ public class Property<E> implements Serializable {
 		this.key = key;
 		this.value = value;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public <Z> Property<Z> tryParse(Class<Z> clz) {
 		if(instanceOf(clz)) {
@@ -44,15 +45,15 @@ public class Property<E> implements Serializable {
 	public boolean isSerializable() {
 		return value.getClass().isAssignableFrom(Serializable.class);
 	}
-
+	
 	public String getHolderKey() {
 		return "%" + key + "%";
 	}
-
+	
 	public String getKey() {
 		return key;
 	}
-
+	
 	public E getValue() {
 		return value;
 	}
@@ -70,5 +71,5 @@ public class Property<E> implements Serializable {
 	public static <T> Property<T> create(String key, T value) {
 		return new Property<T>(key, value);
 	}
-
+	
 }
