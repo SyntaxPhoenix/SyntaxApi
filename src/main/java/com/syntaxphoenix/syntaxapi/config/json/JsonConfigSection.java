@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.syntaxphoenix.syntaxapi.config.BaseSection;
 import com.syntaxphoenix.syntaxapi.reflections.Reflector;
-import com.syntaxphoenix.syntaxapi.utils.config.ConfigSerializer;
+import com.syntaxphoenix.syntaxapi.utils.config.JsonTools;
 
 /**
  * @author Lauriichen
@@ -41,6 +41,14 @@ public class JsonConfigSection extends BaseSection {
 	}
 
 	/**
+	 * @see com.syntaxphoenix.syntaxapi.config.BaseSection#isSectionInstance(com.syntaxphoenix.syntaxapi.config.BaseSection)
+	 */
+	@Override
+	protected boolean isSectionInstance(BaseSection section) {
+		return section instanceof JsonConfigSection;
+	}
+
+	/**
 	 * @param JsonObject
 	 *            {input json}
 	 */
@@ -65,7 +73,7 @@ public class JsonConfigSection extends BaseSection {
 							continue;
 						}
 						set(entry.getKey(),
-								ConfigSerializer.getConfiguredGson().fromJson(object.get("classValue"), clazz));
+								JsonTools.getConfiguredGson().fromJson(object.get("classValue"), clazz));
 					}
 				} else if (current.isJsonPrimitive()) {
 					JsonPrimitive primitive = current.getAsJsonPrimitive();
@@ -86,7 +94,7 @@ public class JsonConfigSection extends BaseSection {
 	 *            {input json}
 	 */
 	public void fromJsonString(String input) {
-		fromJson(ConfigSerializer.readJson(input));
+		fromJson(JsonTools.readJson(input));
 	}
 
 	/**
@@ -110,7 +118,7 @@ public class JsonConfigSection extends BaseSection {
 						object.addProperty(entry.getKey(), (String) input);
 					} else if (input instanceof Serializable) {
 						JsonObject serialized = new JsonObject();
-						JsonElement element = ConfigSerializer.getConfiguredGson().toJsonTree(input);
+						JsonElement element = JsonTools.getConfiguredGson().toJsonTree(input);
 						serialized.addProperty("class",
 								input.getClass().getName().replace(".java", "").replace(".class", ""));
 						serialized.add("classValue", element);
@@ -126,7 +134,7 @@ public class JsonConfigSection extends BaseSection {
 	 * @return String {section values as json string}
 	 */
 	public String toJsonString() {
-		return ConfigSerializer.getConfiguredGson().toJson(toJson());
+		return JsonTools.getConfiguredGson().toJson(toJson());
 	}
 
 }

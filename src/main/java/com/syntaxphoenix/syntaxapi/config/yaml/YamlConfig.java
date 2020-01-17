@@ -11,32 +11,43 @@ public class YamlConfig extends YamlConfigSection implements BaseConfig {
 
 	@Override
 	public void load(File file) throws IOException {
-		
+
 		if (file.exists()) {
 
 			Scanner scanner = new Scanner(file);
-			String yaml = "";
+			StringBuilder builder = new StringBuilder();
 			while (scanner.hasNextLine()) {
-				yaml += scanner.nextLine() + "\n";
+				builder.append(scanner.nextLine());
+				builder.append('\n');
 			}
 			scanner.close();
-			fromYamlString(yaml);
+
+			String yaml = builder.toString();
+			fromYamlString(yaml.substring(0, yaml.length() - 1));
 
 		}
-		
+
 	}
 
 	@Override
 	public void save(File file) throws IOException {
 		
-		File folder = file.getParentFile();
-		if(!folder.exists()) {
-			folder.mkdirs();
-		}
 		if(!file.exists()) {
+			String parentPath = file.getParent();
+			if(parentPath != null && !parentPath.isEmpty()) {
+				File parent = file.getParentFile();
+				if(parent.exists()) {
+					if(!parent.isDirectory()) {
+						parent.delete();
+						parent.mkdirs();
+					}
+				} else {
+					parent.mkdirs();
+				}
+			}
 			file.createNewFile();
 		}
-		
+
 		FileWriter writer = new FileWriter(file);
 		writer.write(toYamlString());
 		writer.close();

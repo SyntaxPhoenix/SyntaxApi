@@ -1,4 +1,4 @@
-package com.syntaxphoenix.syntaxapi.config.json;
+package com.syntaxphoenix.syntaxapi.config.xml;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -6,42 +6,46 @@ import java.io.IOException;
 import java.util.Scanner;
 
 import com.syntaxphoenix.syntaxapi.config.BaseConfig;
+import com.thoughtworks.xstream.XStream;
 
-/**
- * @author Lauriichen
- *
- */
-public class JsonConfig extends JsonConfigSection implements BaseConfig {
+public class XmlConfig extends XmlConfigSection implements BaseConfig {
+	
+	private final XStream stream;
+	
+	public XmlConfig() {
+		this(XmlDriver.XOM);
+	}
+	
+	public XmlConfig(XmlDriver driver) {
+		this(driver.newStream());
+	}
+	
+	public XmlConfig(XStream stream) {
+		this.stream = stream;
+	}
 
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseConfig#load(java.io.File)
-	 */
 	@Override
 	public void load(File file) throws IOException {
-
+		
 		if (file.exists()) {
 
 			Scanner scanner = new Scanner(file);
 			StringBuilder builder = new StringBuilder();
 			while (scanner.hasNextLine()) {
 				builder.append(scanner.nextLine());
-				builder.append('\n');
 			}
 			scanner.close();
 			
-			String json = builder.toString();
-			fromJsonString(json.substring(0, json.length() - 1));
+			String xml = builder.toString();
+			fromXmlString(xml.substring(0, xml.length() - 1), stream);
 
 		}
-
+		
 	}
 
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseConfig#save(java.io.File)
-	 */
 	@Override
 	public void save(File file) throws IOException {
-
+		
 		if(!file.exists()) {
 			String parentPath = file.getParent();
 			if(parentPath != null && !parentPath.isEmpty()) {
@@ -59,7 +63,7 @@ public class JsonConfig extends JsonConfigSection implements BaseConfig {
 		}
 		
 		FileWriter writer = new FileWriter(file);
-		writer.write(toJsonString());
+		writer.write(toXmlString(stream));
 		writer.close();
 
 	}

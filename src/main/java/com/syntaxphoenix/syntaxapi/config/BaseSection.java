@@ -1,10 +1,11 @@
 package com.syntaxphoenix.syntaxapi.config;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
-import com.syntaxphoenix.syntaxapi.utils.config.ConfigSerializer;
+import com.syntaxphoenix.syntaxapi.utils.config.ConfigTools;
+import com.syntaxphoenix.syntaxapi.utils.config.SectionMap;
 
 /**
  * @author Lauriichen
@@ -12,7 +13,7 @@ import com.syntaxphoenix.syntaxapi.utils.config.ConfigSerializer;
  */
 public abstract class BaseSection {
 
-	protected final HashMap<String, Object> values = new HashMap<>();
+	protected final SectionMap<String, Object> values = new SectionMap<>();;
 	private final String name;
 
 	/**
@@ -110,7 +111,7 @@ public abstract class BaseSection {
 	
 	public Object get(String path) {
 		if (!path.isEmpty()) {
-			return get(ConfigSerializer.getKeys(path));
+			return get(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
@@ -124,7 +125,7 @@ public abstract class BaseSection {
 	@SuppressWarnings("unchecked")
 	public <E> E get(String path, Class<E> sample) {
 		if (!path.isEmpty()) {
-			return (E) get(ConfigSerializer.getKeys(path));
+			return (E) get(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
@@ -138,7 +139,7 @@ public abstract class BaseSection {
 	@SuppressWarnings("unchecked")
 	public <E> E get(String path, E sample) {
 		if (!path.isEmpty()) {
-			return (E) get(ConfigSerializer.getKeys(path));
+			return (E) get(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
@@ -154,7 +155,7 @@ public abstract class BaseSection {
 				if (key.length > 1) {
 					BaseSection section;
 					if ((section = getSection(key[0])) != null) {
-						return section.get(ConfigSerializer.getNextKeys(key));
+						return section.get(ConfigTools.getNextKeys(key));
 					}
 				} else {
 					return values.get(key[0]);
@@ -171,7 +172,7 @@ public abstract class BaseSection {
 	
 	public BaseSection getSection(String path) {
 		if (!path.isEmpty()) {
-			return getSection(ConfigSerializer.getKeys(path));
+			return getSection(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
@@ -187,7 +188,7 @@ public abstract class BaseSection {
 				if (key.length > 1) {
 					BaseSection section;
 					if ((section = getSection(key[0])) != null) {
-						return section.getSection(ConfigSerializer.getNextKeys(key));
+						return section.getSection(ConfigTools.getNextKeys(key));
 					}
 				} else {
 					Object uncasted;
@@ -207,7 +208,7 @@ public abstract class BaseSection {
 	
 	public BaseSection createSection(String path) {
 		if (!path.isEmpty()) {
-			return createSection(ConfigSerializer.getKeys(path));
+			return createSection(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
@@ -225,7 +226,7 @@ public abstract class BaseSection {
 					if ((section = getSection(key[0])) == null) {
 						section = saveSection(initSection(key[0]));
 					}
-					return section.createSection(ConfigSerializer.getNextKeys(key));
+					return section.createSection(ConfigTools.getNextKeys(key));
 				} else {
 					Object uncasted;
 					if (!((uncasted = get(key[0])) instanceof BaseSection)) {
@@ -236,7 +237,7 @@ public abstract class BaseSection {
 			} else {
 				BaseSection section = saveSection(initSection(key[0]));
 				if (key.length > 1) {
-					return section.createSection(ConfigSerializer.getNextKeys(key));
+					return section.createSection(ConfigTools.getNextKeys(key));
 				} else {
 					return section;
 				}
@@ -248,7 +249,7 @@ public abstract class BaseSection {
 	/**
 	 * @param BaseSection {saveable section}
 	 */
-	private BaseSection saveSection(BaseSection section) {
+	protected BaseSection saveSection(BaseSection section) {
 		set(section.getName(), section);
 		return section;
 	}
@@ -258,9 +259,9 @@ public abstract class BaseSection {
 	 * @param Object {value}
 	 */
 	public void set(String path, Object value) {
-		String[] keys = ConfigSerializer.getKeys(path);
-		String key = ConfigSerializer.getLastKey(keys);
-		set(key, ConfigSerializer.getKeysWithout(keys, key), value);
+		String[] keys = ConfigTools.getKeys(path);
+		String key = ConfigTools.getLastKey(keys);
+		set(key, ConfigTools.getKeysWithout(keys, key), value);
 	}
 
 	/**
@@ -278,11 +279,59 @@ public abstract class BaseSection {
 			section.set(key, value);
 		}
 	}
+	
+	/**
+	 * @return SectionMap<String, Object> {config values}
+	 */
+	
+	public SectionMap<String, Object> toMap() {
+		SectionMap<String, Object> output = new SectionMap<>();
+		if(values.isEmpty()) {
+			return output;
+		}
+		Set<Entry<String, Object>> set = values.entrySet();
+		for(Entry<String, Object> entry : set) {
+			Object out = entry.getValue();
+			if(out instanceof BaseSection) {
+				if(isSectionInstance((BaseSection) out)) {
+					out = ((BaseSection) out).toMap();
+				}
+			}
+			output.put(entry.getKey(), out);
+		}
+		return output;
+	}
+	
+	/**
+	 * @param SectionMap<String, Object> {new config values}
+	 */
+	@SuppressWarnings("unchecked")
+	public void fromMap(SectionMap<String, Object> input) {
+		clear();
+		Set<Entry<String, Object>> set = input.entrySet();
+		if(set.isEmpty()) {
+			return;
+		}
+		for(Entry<String, Object> entry : set) {
+			Object obj = entry.getValue();
+			if(obj instanceof SectionMap) {
+				((BaseSection) createSection(entry.getKey())).fromMap((SectionMap<String, Object>) obj);
+			} else {
+				set(entry.getKey(), obj);
+			}
+		}
+	}
 
 	/**
 	 * @param String {path}
 	 * @return BaseSection {new section}
 	 */
 	protected abstract BaseSection initSection(String name);
+	
+	/**
+	 * @param BsaeSection {input}
+	 * @return boolean {is instanceof this section type}
+	 */
+	protected abstract boolean isSectionInstance(BaseSection section);
 	
 }

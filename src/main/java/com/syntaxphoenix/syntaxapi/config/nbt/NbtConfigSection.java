@@ -8,7 +8,7 @@ import com.syntaxphoenix.syntaxapi.nbt.NbtType;
 import com.syntaxphoenix.syntaxapi.nbt.tools.NbtParser;
 import com.syntaxphoenix.syntaxapi.nbt.NbtByte;
 import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
-import com.syntaxphoenix.syntaxapi.utils.config.ConfigSerializer;
+import com.syntaxphoenix.syntaxapi.utils.config.ConfigTools;
 
 public class NbtConfigSection extends BaseSection {
 
@@ -111,7 +111,7 @@ public class NbtConfigSection extends BaseSection {
 
 	public NbtTag get(String path) {
 		if (!path.isEmpty()) {
-			return get(ConfigSerializer.getKeys(path));
+			return get(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
@@ -127,7 +127,7 @@ public class NbtConfigSection extends BaseSection {
 				if (key.length > 1) {
 					NbtConfigSection section;
 					if ((section = getSection(key[0])) != null) {
-						return section.get(ConfigSerializer.getNextKeys(key));
+						return section.get(ConfigTools.getNextKeys(key));
 					}
 				} else {
 					return (NbtTag) values.get(key[0]);
@@ -144,7 +144,7 @@ public class NbtConfigSection extends BaseSection {
 
 	public NbtConfigSection getSection(String path) {
 		if (!path.isEmpty()) {
-			return getSection(ConfigSerializer.getKeys(path));
+			return getSection(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
@@ -160,7 +160,7 @@ public class NbtConfigSection extends BaseSection {
 				if (key.length > 1) {
 					NbtConfigSection section;
 					if ((section = getSection(key[0])) != null) {
-						return section.getSection(ConfigSerializer.getNextKeys(key));
+						return section.getSection(ConfigTools.getNextKeys(key));
 					}
 				} else {
 					Object uncasted;
@@ -180,7 +180,7 @@ public class NbtConfigSection extends BaseSection {
 
 	public NbtConfigSection createSection(String path) {
 		if (!path.isEmpty()) {
-			return createSection(ConfigSerializer.getKeys(path));
+			return createSection(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
@@ -198,7 +198,7 @@ public class NbtConfigSection extends BaseSection {
 					if ((section = getSection(key[0])) == null) {
 						section = saveSection(initSection(key[0]));
 					}
-					return section.createSection(ConfigSerializer.getNextKeys(key));
+					return section.createSection(ConfigTools.getNextKeys(key));
 				} else {
 					Object uncasted;
 					if (!((uncasted = get(key[0])) instanceof NbtConfigSection)) {
@@ -209,7 +209,7 @@ public class NbtConfigSection extends BaseSection {
 			} else {
 				NbtConfigSection section = saveSection(initSection(key[0]));
 				if (key.length > 1) {
-					return section.createSection(ConfigSerializer.getNextKeys(key));
+					return section.createSection(ConfigTools.getNextKeys(key));
 				} else {
 					return section;
 				}
@@ -223,9 +223,9 @@ public class NbtConfigSection extends BaseSection {
 	 * @param NbtTag {value}
 	 */
 	public void set(String path, NbtTag value) {
-		String[] keys = ConfigSerializer.getKeys(path);
-		String key = ConfigSerializer.getLastKey(keys);
-		set(key, ConfigSerializer.getKeysWithout(keys, key), value);
+		String[] keys = ConfigTools.getKeys(path);
+		String key = ConfigTools.getLastKey(keys);
+		set(key, ConfigTools.getKeysWithout(keys, key), value);
 	}
 
 	/**
@@ -260,6 +260,13 @@ public class NbtConfigSection extends BaseSection {
 		NbtConfigSection section = new NbtConfigSection(name);
 		section.fromCompound(data);
 		return section;
+	}
+	/**
+	 * @see com.syntaxphoenix.syntaxapi.config.BaseSection#isSectionInstance(com.syntaxphoenix.syntaxapi.config.BaseSection)
+	 */
+	@Override
+	protected boolean isSectionInstance(BaseSection section) {
+		return section instanceof NbtConfigSection;
 	}
 
 	/**

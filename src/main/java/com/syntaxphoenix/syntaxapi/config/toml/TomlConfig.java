@@ -1,23 +1,15 @@
-package com.syntaxphoenix.syntaxapi.config.json;
+package com.syntaxphoenix.syntaxapi.config.toml;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
 
 import com.syntaxphoenix.syntaxapi.config.BaseConfig;
 
-/**
- * @author Lauriichen
- *
- */
-public class JsonConfig extends JsonConfigSection implements BaseConfig {
+public class TomlConfig extends TomlConfigSection implements BaseConfig {
 
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseConfig#load(java.io.File)
-	 */
 	@Override
-	public void load(File file) throws IOException {
+	public void load(File file) throws Throwable {
 
 		if (file.exists()) {
 
@@ -29,18 +21,15 @@ public class JsonConfig extends JsonConfigSection implements BaseConfig {
 			}
 			scanner.close();
 			
-			String json = builder.toString();
-			fromJsonString(json.substring(0, json.length() - 1));
+			String toml = builder.toString();
+			fromTomlString(toml.substring(0, toml.length() - 1));
 
 		}
 
 	}
 
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseConfig#save(java.io.File)
-	 */
 	@Override
-	public void save(File file) throws IOException {
+	public void save(File file) throws Throwable {
 
 		if(!file.exists()) {
 			String parentPath = file.getParent();
@@ -57,11 +46,11 @@ public class JsonConfig extends JsonConfigSection implements BaseConfig {
 			}
 			file.createNewFile();
 		}
-		
-		FileWriter writer = new FileWriter(file);
-		writer.write(toJsonString());
-		writer.close();
 
+		FileWriter writer = new FileWriter(file);
+		writer.write(toTomlString());
+		writer.close();
+		
 	}
 
 }

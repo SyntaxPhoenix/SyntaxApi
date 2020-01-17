@@ -1,6 +1,5 @@
 package com.syntaxphoenix.syntaxapi.config.yaml;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -29,6 +28,10 @@ public class YamlConfigSection extends BaseSection {
 
 	public YamlConfigSection(String name) {
 		super(name);
+		yamlOptions.setIndent(2);
+		yamlOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
+		yamlOptions.setPrettyFlow(true);
+		yamlRepresenter.setDefaultFlowStyle(FlowStyle.BLOCK);
 		yaml = new Yaml(new SafeConstructor(), yamlRepresenter, yamlOptions);
 	}
 
@@ -36,36 +39,23 @@ public class YamlConfigSection extends BaseSection {
 	protected BaseSection initSection(String name) {
 		return new YamlConfigSection(name);
 	}
+	
+	@Override
+	protected boolean isSectionInstance(BaseSection section) {
+		return section instanceof YamlConfigSection;
+	}
 
 	public String toYamlString() {
-		yamlOptions.setIndent(2);
-		yamlOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
-		yamlRepresenter.setDefaultFlowStyle(FlowStyle.BLOCK);
-
 		String output = "";
 
 		if (!values.isEmpty()) {
-			output = yaml.dump(toValueMap());
+			output = yaml.dump(toMap());
 		}
 
 		if (output.equals(BLANK_CONFIG)) {
 			output = "";
 		}
 
-		return output;
-	}
-	
-	public HashMap<String, Object> toValueMap() {
-		HashMap<String, Object> output = new HashMap<>();
-		Set<Entry<String, Object>> entries = values.entrySet();
-		for (Entry<String, Object> entry : entries) {
-			Object obj = entry.getValue();
-			if (obj instanceof YamlConfigSection) {
-				output.put(entry.getKey(), ((YamlConfigSection) obj).toValueMap());
-			} else {
-				output.put(entry.getKey(), entry.getValue());
-			}
-		}
 		return output;
 	}
 

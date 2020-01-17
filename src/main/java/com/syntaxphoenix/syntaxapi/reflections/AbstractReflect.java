@@ -103,6 +103,21 @@ public abstract class AbstractReflect {
 		return null;
 	}
 
+	public void setFieldValue(String name, Object value) {
+		setFieldValue(null, name, value);
+	}
+
+	public void setFieldValue(Object source, String name, Object value) {
+		Field field = getField(name);
+		if (field != null) {
+			try {
+				field.set(source, value);
+			} catch (IllegalAccessException | IllegalArgumentException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public Constructor<?> getConstructor(String name) {
 		return constructors.get(name);
 	}
