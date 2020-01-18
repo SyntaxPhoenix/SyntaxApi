@@ -6,7 +6,7 @@ import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 
 public class LogColorType {
 	
-	public static final LogColorType DEFAULT = new LogColorType("default", "Info", ColorTools.hex2rgb("#474747"));
+	public static final LogColorType DEFAULT = new LogColorType("info", "Info", ColorTools.hex2rgb("#474747"));
 	
 	/*
 	 * 

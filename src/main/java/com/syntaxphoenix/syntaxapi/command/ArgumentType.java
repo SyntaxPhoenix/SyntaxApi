@@ -1,36 +1,47 @@
 package com.syntaxphoenix.syntaxapi.command;
 
+import java.lang.reflect.Array;
+import java.math.BigInteger;
+import java.util.ArrayList;
+
 /**
  * @author Lauriichen
  *
  */
+
 public enum ArgumentType {
 	
-	STRING(ArgumentSuperType.TEXT), 
-	INTEGER(ArgumentSuperType.NUMBER), 
-	FLOAT(ArgumentSuperType.NUMBER), 
-	LONG(ArgumentSuperType.NUMBER), 
-	DOUBLE(ArgumentSuperType.NUMBER), 
-	BIG_INTEGER(ArgumentSuperType.NUMBER), 
-	LIST(ArgumentSuperType.COLLECTION),
-	ARRAY(ArgumentSuperType.COLLECTION);
+	BOOLEAN(ArgumentSuperType.STATE, Boolean.class),
+	STRING(ArgumentSuperType.TEXT, String.class), 
+	INTEGER(ArgumentSuperType.NUMBER, Integer.class), 
+	FLOAT(ArgumentSuperType.NUMBER, Float.class), 
+	LONG(ArgumentSuperType.NUMBER, Long.class), 
+	DOUBLE(ArgumentSuperType.NUMBER, Double.class), 
+	BIG_INTEGER(ArgumentSuperType.NUMBER, BigInteger.class), 
+	LIST(ArgumentSuperType.COLLECTION, ArrayList.class),
+	ARRAY(ArgumentSuperType.COLLECTION, Array.class);
 	
 	/**
 	 * 
 	 */
-	
+
 	private final ArgumentSuperType superType;
+	private final Class<?> classType;
 	
 	/**
 	 * 
 	 */
-	private ArgumentType(ArgumentSuperType superType) {
+	private ArgumentType(ArgumentSuperType superType, Class<?> classType) {
 		this.superType = superType;
+		this.classType = classType;
 	}
-	
 	
 	public ArgumentSuperType getSuperType() {
 		return superType;
+	}
+	
+	public Class<?> getClassType() {
+		return classType;
 	}
 	
 }

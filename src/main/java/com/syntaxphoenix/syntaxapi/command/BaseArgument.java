@@ -15,6 +15,10 @@ public abstract class BaseArgument {
 	
 	public abstract Object asObject();
 	
+	public abstract String toString();
+	
+	public abstract String toString(ArgumentSerializer serializer);
+	
 	public ArrayArgument<?> asArray() {
 		return (ArrayArgument<?>) this;
 	}
@@ -36,5 +40,5 @@ public abstract class BaseArgument {
 	public DoubleArgument asDouble() {
 		return (DoubleArgument) this;
 	}
-
+	
 }

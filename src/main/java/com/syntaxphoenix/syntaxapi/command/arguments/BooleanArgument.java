@@ -1,38 +1,32 @@
 package com.syntaxphoenix.syntaxapi.command.arguments;
 
-import java.util.ArrayList;
-
 import com.syntaxphoenix.syntaxapi.command.ArgumentSerializer;
 import com.syntaxphoenix.syntaxapi.command.ArgumentType;
 import com.syntaxphoenix.syntaxapi.command.BaseArgument;
 
-/**
- * @author Lauriichen
- *
- */
-public class ListArgument<E extends BaseArgument> extends BaseArgument {
+public class BooleanArgument extends BaseArgument {
 	
-	private ArrayList<E> value;
+	private Boolean value;
 	
-	public ListArgument() {
-		this.value = new ArrayList<>();
+	public BooleanArgument() {
+		this.value = false;
 	}
 	
-	public ListArgument(ArrayList<E> value) {
+	public BooleanArgument(Boolean value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public ArgumentType getType() {
-		return ArgumentType.LIST;
+		return ArgumentType.BOOLEAN;
 	}
-	
+
 	@Override
 	public Object asObject() {
 		return value;
 	}
 	
-	public ArrayList<E> getValue() {
+	public Boolean getValue() {
 		return value;
 	}
 

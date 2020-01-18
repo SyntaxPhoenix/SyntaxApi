@@ -39,6 +39,10 @@ public class Exceptions {
 		return out.get(0);
 	}
 	
+	public static String[] stackTraceToStringArray(Throwable throwable) {
+		return stackTraceToString(throwable).split("\n");
+	}
+	
 	public static String stackTraceToString(Throwable throwable) {
 		
 		StringBuilder builder = new StringBuilder();

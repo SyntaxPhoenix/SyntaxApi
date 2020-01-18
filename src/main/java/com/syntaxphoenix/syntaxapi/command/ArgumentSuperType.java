@@ -10,6 +10,7 @@ import java.util.Collection;
 public enum ArgumentSuperType {
 	
 	TEXT, 
+	STATE,
 	NUMBER, 
 	COLLECTION;
 	

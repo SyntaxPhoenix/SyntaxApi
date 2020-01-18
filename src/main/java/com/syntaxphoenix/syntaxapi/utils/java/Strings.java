@@ -7,15 +7,15 @@ import java.util.regex.Pattern;
 
 public class Strings {
 
-	static Pattern pattern1 = Pattern.compile(".*[^0-9].*");
+	public static final Pattern NUMBER_PATTERN = Pattern.compile("-?\\d*");
+	public static final Pattern DECIMAL_PATTERN = Pattern.compile("-?\\d*\\.\\d*");
 
 	public static boolean isNumeric(String msg) {
-		if (msg.startsWith("-")) {
-			String s = msg.replaceFirst("-", "").replace(".", "");
-			return !pattern1.matcher(s).matches();
-		} else {
-			return !pattern1.matcher(msg).matches();
-		}
+		return NUMBER_PATTERN.matcher(msg).matches();
+	}
+	
+	public static boolean isDecimal(String msg) {
+		return DECIMAL_PATTERN.matcher(msg).matches();
 	}
 
 	public static String toString(Collection<String> collection) {

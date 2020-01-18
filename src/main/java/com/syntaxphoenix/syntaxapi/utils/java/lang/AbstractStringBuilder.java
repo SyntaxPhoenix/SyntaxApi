@@ -1,6 +1,7 @@
 package com.syntaxphoenix.syntaxapi.utils.java.lang;
 
 import java.util.Arrays;
+
 import sun.misc.FloatingDecimal;
 
 abstract class AbstractStringBuilder implements Appendable, CharSequence {

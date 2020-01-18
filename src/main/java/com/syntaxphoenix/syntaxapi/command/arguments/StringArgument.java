@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.command.arguments;
 
+import com.syntaxphoenix.syntaxapi.command.ArgumentSerializer;
 import com.syntaxphoenix.syntaxapi.command.ArgumentType;
 import com.syntaxphoenix.syntaxapi.command.BaseArgument;
 
@@ -8,9 +9,17 @@ import com.syntaxphoenix.syntaxapi.command.BaseArgument;
  *
  */
 public class StringArgument extends BaseArgument {
+
+	private String value;
 	
-	private String vString;
+	public StringArgument() {
+		this.value = "";
+	}
 	
+	public StringArgument(String value) {
+		this.value = value;
+	}
+
 	@Override
 	public ArgumentType getType() {
 		return ArgumentType.STRING;
@@ -18,11 +27,21 @@ public class StringArgument extends BaseArgument {
 
 	@Override
 	public Object asObject() {
-		return vString;
+		return value;
 	}
-	
+
 	public String getValue() {
-		return vString;
+		return value;
+	}
+
+	@Override
+	public String toString() {
+		return toString(ArgumentSerializer.DEFAULT);
+	}
+
+	@Override
+	public String toString(ArgumentSerializer serializer) {
+		return serializer.toString(this);
 	}
 
 }

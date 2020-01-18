@@ -2,6 +2,7 @@ package com.syntaxphoenix.syntaxapi.command.arguments;
 
 import java.math.BigInteger;
 
+import com.syntaxphoenix.syntaxapi.command.ArgumentSerializer;
 import com.syntaxphoenix.syntaxapi.command.ArgumentType;
 import com.syntaxphoenix.syntaxapi.command.BaseArgument;
 
@@ -10,9 +11,17 @@ import com.syntaxphoenix.syntaxapi.command.BaseArgument;
  *
  */
 public class BigIntegerArgument extends BaseArgument {
-	
-	private BigInteger bigInteger;
-	
+
+	private BigInteger value;
+
+	public BigIntegerArgument() {
+		this.value = BigInteger.ZERO.abs();
+	}
+
+	public BigIntegerArgument(BigInteger value) {
+		this.value = value;
+	}
+
 	@Override
 	public ArgumentType getType() {
 		return ArgumentType.BIG_INTEGER;
@@ -20,11 +29,21 @@ public class BigIntegerArgument extends BaseArgument {
 
 	@Override
 	public Object asObject() {
-		return bigInteger;
+		return value;
 	}
-	
+
 	public BigInteger getValue() {
-		return bigInteger;
+		return value;
+	}
+
+	@Override
+	public String toString() {
+		return toString(ArgumentSerializer.DEFAULT);
+	}
+
+	@Override
+	public String toString(ArgumentSerializer serializer) {
+		return serializer.toString(this);
 	}
 
 }
