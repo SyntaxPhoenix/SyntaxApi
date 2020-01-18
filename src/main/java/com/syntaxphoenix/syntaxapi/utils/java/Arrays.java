@@ -12,4 +12,16 @@ public class Arrays {
 		return (E[]) lv.toArray();
 	}
 
+	public static String[] subArray(String[] args, int index) {
+		if(index < 0 || index >= args.length) {
+			return new String[0];
+		}
+		int out = 0;
+		String[] output = new String[args.length - index];
+		for(; index < args.length; index++, out++) {
+			output[out] = args[index];
+		}
+		return output;
+	}
+
 }
