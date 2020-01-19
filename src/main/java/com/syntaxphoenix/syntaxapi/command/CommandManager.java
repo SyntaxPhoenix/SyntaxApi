@@ -75,12 +75,15 @@ public class CommandManager {
 	
 	public CommandProcess process(String message) {
 		CommandProcess process = new CommandProcess(this);
-		if(!message.startsWith(prefix)) {
+		if(!message.startsWith(prefix) || message.equals(prefix)) {
 			return process.lock();
 		}
 		process.setValid(true);
 		String[] parts = message.replace(prefix, "").split(splitter);
 		String command = parts[0].toLowerCase();
+		if(command.isEmpty()) {
+			return process.setValid(false).lock();
+		}
 		if(!commands.containsKey(command)) {
 			return process.lock();
 		}

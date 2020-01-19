@@ -5,6 +5,7 @@ import com.syntaxphoenix.syntaxapi.command.arguments.*;
  * @author Lauriichen
  *
  */
+@SuppressWarnings("unchecked")
 public abstract class BaseArgument {
 	
 	public abstract ArgumentType getType();
@@ -19,11 +20,14 @@ public abstract class BaseArgument {
 	
 	public abstract String toString(ArgumentSerializer serializer);
 	
-	public ArrayArgument<?> asArray() {
-		return (ArrayArgument<?>) this;
+	public BooleanArgument asBoolean() {
+		return (BooleanArgument) this;
 	}
-	public ListArgument<?> asList() {
-		return (ListArgument<?>) this;
+	public ArrayArgument<BaseArgument> asArray() {
+		return (ArrayArgument<BaseArgument>) this;
+	}
+	public ListArgument<BaseArgument> asList() {
+		return (ListArgument<BaseArgument>) this;
 	}
 	public StringArgument asString() {
 		return (StringArgument) this;
@@ -39,6 +43,19 @@ public abstract class BaseArgument {
 	}
 	public DoubleArgument asDouble() {
 		return (DoubleArgument) this;
+	}
+	public BigIntegerArgument asBigInteger() {
+		return (BigIntegerArgument) this;
+	}
+	public BigDecimalArgument asBigDecimal() {
+		return (BigDecimalArgument) this;
+	}
+
+	public <E> E as(Class<E> example) {
+		return (E) asObject();
+	}
+	public <E> E as(E example) {
+		return (E) asObject();
 	}
 	
 }

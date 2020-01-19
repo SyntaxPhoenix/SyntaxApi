@@ -4,22 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import com.syntaxphoenix.syntaxapi.command.arguments.ArrayArgument;
-import com.syntaxphoenix.syntaxapi.command.arguments.BigIntegerArgument;
-import com.syntaxphoenix.syntaxapi.command.arguments.BooleanArgument;
-import com.syntaxphoenix.syntaxapi.command.arguments.DoubleArgument;
-import com.syntaxphoenix.syntaxapi.command.arguments.FloatArgument;
-import com.syntaxphoenix.syntaxapi.command.arguments.IntegerArgument;
-import com.syntaxphoenix.syntaxapi.command.arguments.ListArgument;
-import com.syntaxphoenix.syntaxapi.command.arguments.LongArgument;
-import com.syntaxphoenix.syntaxapi.command.arguments.StringArgument;
+import com.syntaxphoenix.syntaxapi.command.arguments.*;
 
 public class DefaultArgumentSerializer extends ArgumentSerializer {
-
-	@Override
-	public String toString(BaseArgument argument) {
-		return argument.toString(this);
-	}
 	
 	@Override
 	public String toString(ArrayArgument<BaseArgument> argument) {
@@ -27,8 +14,7 @@ public class DefaultArgumentSerializer extends ArgumentSerializer {
 		if(value == null || value.length == 0) {
 			return "[]";
 		}
-		@SuppressWarnings("unchecked")
-		Iterator<BaseArgument> iterator = (Iterator<BaseArgument>) Arrays.stream(value);
+		Iterator<BaseArgument> iterator = Arrays.stream(value).iterator();
 		StringBuilder builder = new StringBuilder();
 		builder.append('[');
 		while(iterator.hasNext()) {
@@ -48,6 +34,11 @@ public class DefaultArgumentSerializer extends ArgumentSerializer {
 
 	@Override
 	public String toString(BigIntegerArgument argument) {
+		return argument.getValue().toString();
+	}
+
+	@Override
+	public String toString(BigDecimalArgument argument) {
 		return argument.getValue().toString();
 	}
 

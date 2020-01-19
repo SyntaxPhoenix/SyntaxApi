@@ -11,6 +11,7 @@ public enum ArgumentSuperType {
 	
 	TEXT, 
 	STATE,
+	OBJECT,
 	NUMBER, 
 	COLLECTION;
 	

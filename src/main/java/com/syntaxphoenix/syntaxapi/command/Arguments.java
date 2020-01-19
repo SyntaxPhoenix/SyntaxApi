@@ -1,7 +1,7 @@
 package com.syntaxphoenix.syntaxapi.command;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 import com.syntaxphoenix.syntaxapi.command.arguments.ListArgument;
 import com.syntaxphoenix.syntaxapi.exceptions.ObjectLockedException;
@@ -10,13 +10,13 @@ import com.syntaxphoenix.syntaxapi.exceptions.ObjectLockedException;
  * @author Lauriichen
  *
  */
-public class Arguments {
+public class Arguments implements Iterable<BaseArgument> {
 	
 	private final ArrayList<BaseArgument> arguments;
-	private boolean locked = true;
+	private boolean locked = false;
 	
-	public Arguments(List<BaseArgument> arguments) {
-		this.arguments = new ArrayList<>(arguments);
+	public Arguments(ArrayList<BaseArgument> arguments) {
+		this.arguments = arguments;
 	}
 
 	public int count() {
@@ -99,6 +99,17 @@ public class Arguments {
 	
 	private ObjectLockedException locked() {
 		return new ObjectLockedException("Cannot edit a locked object!");
+	}
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 */
+
+	@Override
+	public Iterator<BaseArgument> iterator() {
+		return arguments.iterator();
 	}
 	
 }

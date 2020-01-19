@@ -26,7 +26,15 @@ public class ColorTools {
 	}
 	
 	public static Color hex2rgba(String red, String green, String blue, int alpha) {
-		return new Color(Integer.parseInt(red, 16), Integer.parseInt(green, 16), Integer.parseInt(blue, 16), alpha);
+		return rgba(Integer.parseInt(red, 16), Integer.parseInt(green, 16), Integer.parseInt(blue, 16), alpha);
+	}
+	
+	public static Color rgb(int red, int green, int blue) {
+		return rgba(red, green, blue, 255);
+	}
+	
+	public static Color rgba(int red, int green, int blue, int alpha) {
+		return new Color(red, green, blue, alpha);
 	}
 	
 	public static String toAnsiColor(Color color) {

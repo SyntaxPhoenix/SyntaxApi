@@ -1,6 +1,6 @@
 package com.syntaxphoenix.syntaxapi.command;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Lauriichen
@@ -14,7 +14,7 @@ public abstract class ArgumentValidator {
 	 * @param String Array
 	 * @return Argument List
 	 */
-	public abstract List<BaseArgument> process(String... rawArguments);
+	public abstract ArrayList<BaseArgument> process(String... rawArguments);
 	
 	/**
 	 * @param Argument Array
