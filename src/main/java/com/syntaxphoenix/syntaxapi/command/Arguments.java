@@ -1,7 +1,10 @@
 package com.syntaxphoenix.syntaxapi.command;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.syntaxphoenix.syntaxapi.command.arguments.ListArgument;
+import com.syntaxphoenix.syntaxapi.exceptions.ObjectLockedException;
 
 /**
  * @author Lauriichen
@@ -9,10 +12,11 @@ import java.util.List;
  */
 public class Arguments {
 	
-	private List<BaseArgument> arguments;
+	private final ArrayList<BaseArgument> arguments;
+	private boolean locked = true;
 	
 	public Arguments(List<BaseArgument> arguments) {
-		this.arguments = Collections.unmodifiableList(arguments);
+		this.arguments = new ArrayList<>(arguments);
 	}
 
 	public int count() {
@@ -29,12 +33,56 @@ public class Arguments {
 		return arguments.get(position - 1);
 	}
 	
+	public void add(BaseArgument argument, int position) {
+		if(locked) {
+			throw locked();
+		}
+		if(position < 1) {
+			throw negativeOrZero();
+		}
+		if(argument == null) {
+			return;
+		}
+		arguments.add(position - 1, argument);
+	}
+	
+	public void add(BaseArgument argument) {
+		if(locked) {
+			throw locked();
+		}
+		if(argument == null) {
+			return;
+		}
+		arguments.add(argument);
+	}
+	
 	public ArgumentType getType(int position) {
 		return get(position).getType();
 	}
 	
 	public ArgumentSuperType getSuperType(int position) {
 		return getType(position).getSuperType();
+	}
+	
+	protected boolean isLocked() {
+		return locked;
+	}
+	
+	protected void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+	
+	/*
+	 * 
+	 */
+	
+	@Override
+	public String toString() {
+		return toString(ArgumentSerializer.DEFAULT);
+	}
+	
+	public String toString(ArgumentSerializer serializer) {
+		return new ListArgument<>(arguments).toString(serializer);
 	}
 	
 	/**
@@ -47,6 +95,10 @@ public class Arguments {
 	
 	private IndexOutOfBoundsException outOfBounce(int position) {
 		return new IndexOutOfBoundsException("Index: " + position + " - Size: " + count());
+	}
+	
+	private ObjectLockedException locked() {
+		return new ObjectLockedException("Cannot edit a locked object!");
 	}
 	
 }

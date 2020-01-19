@@ -6,6 +6,6 @@ package com.syntaxphoenix.syntaxapi.command;
  */
 public abstract class BaseCommand {
 	
-	public abstract void execute(Arguments arguments);
+	protected abstract void execute(Arguments arguments);
 
 }
