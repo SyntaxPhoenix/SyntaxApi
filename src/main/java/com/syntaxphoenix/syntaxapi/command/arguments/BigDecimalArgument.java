@@ -24,7 +24,7 @@ public class BigDecimalArgument extends BaseArgument {
 
 	@Override
 	public ArgumentType getType() {
-		return ArgumentType.BIG_INTEGER;
+		return ArgumentType.BIG_DECIMAL;
 	}
 
 	@Override
