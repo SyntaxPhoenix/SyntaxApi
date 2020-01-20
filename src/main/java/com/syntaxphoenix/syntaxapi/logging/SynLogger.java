@@ -3,7 +3,6 @@ package com.syntaxphoenix.syntaxapi.logging;
 import java.awt.Color;
 import java.io.PrintStream;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import com.syntaxphoenix.syntaxapi.logging.color.ColorMap;
 import com.syntaxphoenix.syntaxapi.logging.color.ColorTools;
@@ -13,33 +12,32 @@ import com.syntaxphoenix.syntaxapi.utils.java.Times;
 
 public class SynLogger {
 
-	public static final String DEFAULT_FORMAT = "[%date% / %time%][%type% - %thread%] %message%";
-	public static final Pattern DEFAULT_PATTERN = Pattern.compile("");
+	public static final String DEFAULT_FORMAT = "[%date% / %time%][%thread% => %type%] %message%";
 
 	/*
 	 * 
 	 */
 
-	private boolean colored = true;
-	private PrintStream stream;
-	private String format;
-	private Pattern pattern;
 	private ColorMap colorMap = new ColorMap();
+	private PrintStream stream;
+	private boolean colored;
+	private String format;
 
 	public SynLogger() {
 		this(System.out);
 	}
 
-	public SynLogger(String format, Pattern pattern) {
-		this(System.out, format, pattern);
+	public SynLogger(String format) {
+		this(System.out, format);
 	}
 
 	public SynLogger(PrintStream stream) {
-		this(stream, DEFAULT_FORMAT, DEFAULT_PATTERN);
+		this(stream, DEFAULT_FORMAT);
 	}
 
-	public SynLogger(PrintStream stream, String format, Pattern pattern) {
-		setFormat(format, pattern);
+	public SynLogger(PrintStream stream, String format) {
+		setColored(true);
+		setFormat(format);
 		setStream(stream);
 		setDefaultColors();
 	}
@@ -56,9 +54,8 @@ public class SynLogger {
 		this.stream = stream;
 	}
 	
-	public void setFormat(String format, Pattern pattern) {
+	public void setFormat(String format) {
 		this.format = format;
-		this.pattern = pattern;
 	}
 	
 	public boolean isColored() {
@@ -71,10 +68,6 @@ public class SynLogger {
 	
 	public String getFormat() {
 		return format;
-	}
-	
-	public Pattern getPattern() {
-		return pattern;
 	}
 	
 	/*
