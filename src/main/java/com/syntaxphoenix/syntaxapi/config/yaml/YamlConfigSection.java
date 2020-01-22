@@ -8,18 +8,19 @@ import java.util.Set;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.SafeConstructor;
 import org.yaml.snakeyaml.error.YAMLException;
 import org.yaml.snakeyaml.representer.Representer;
 
 import com.syntaxphoenix.syntaxapi.config.BaseSection;
+import com.syntaxphoenix.syntaxapi.config.yaml.utils.LinkedConstructor;
+import com.syntaxphoenix.syntaxapi.config.yaml.utils.LinkedRepresenter;
 
 public class YamlConfigSection extends BaseSection {
 
 	public static final String COMMENT_PREFIX = "# ";
 	public static final String BLANK_CONFIG = "{}\n";
 	private final DumperOptions yamlOptions = new DumperOptions();
-	private final Representer yamlRepresenter = new Representer();
+	private final Representer yamlRepresenter;
 	private final Yaml yaml;
 
 	public YamlConfigSection() {
@@ -31,8 +32,8 @@ public class YamlConfigSection extends BaseSection {
 		yamlOptions.setIndent(2);
 		yamlOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
 		yamlOptions.setPrettyFlow(true);
-		yamlRepresenter.setDefaultFlowStyle(FlowStyle.BLOCK);
-		yaml = new Yaml(new SafeConstructor(), yamlRepresenter, yamlOptions);
+		yamlRepresenter = new LinkedRepresenter(yamlOptions);
+		yaml = new Yaml(new LinkedConstructor(), yamlRepresenter, yamlOptions);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package com.syntaxphoenix.syntaxapi.command;
 
-import java.util.HashMap;
-
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
+import com.syntaxphoenix.syntaxapi.utils.alias.Alias;
+import com.syntaxphoenix.syntaxapi.utils.alias.AliasMap;
 import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
 
 /**
@@ -11,9 +11,10 @@ import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
  */
 public class CommandManager {
 	
-	private final HashMap<String, BaseCommand> commands = new HashMap<>();
+	private final AliasMap<BaseCommand> commands = new AliasMap<>();
 	private ArgumentValidator validator = ArgumentValidator.DEFAULT;
 	private SynLogger logger = null;
+	
 	private String splitter = " ";
 	private String prefix = "!";
 	
@@ -61,14 +62,13 @@ public class CommandManager {
 	 * 
 	 */
 	
-	public CommandManager register(BaseCommand command, String... names) {
-		if(names == null || names.length == 0) {
-			return this;
-		}
-		for(String name : names) {
-			if(!commands.containsKey(name = name.toLowerCase())) {
-				commands.put(name, command);
-			}
+	public CommandManager register(BaseCommand command, String name, String... aliases) {
+		return register(command, new Alias(name, aliases));
+	}
+	
+	public CommandManager register(BaseCommand command, Alias alias) {
+		if(commands.hasConflict(alias).isEmpty()) {
+			commands.put(alias, command);
 		}
 		return this;
 	}
@@ -78,18 +78,25 @@ public class CommandManager {
 		if(!message.startsWith(prefix) || message.equals(prefix)) {
 			return process.lock();
 		}
-		process.setValid(true);
-		String[] parts = message.replace(prefix, "").split(splitter);
-		String command = parts[0].toLowerCase();
+		return process(message.replace(prefix, "").split(splitter));
+	}
+	
+	public CommandProcess process(String... message) {
+		return process(new CommandProcess(this), message);
+	}
+	
+	private CommandProcess process(CommandProcess process, String... message) {
+		String command = message[0].toLowerCase();
 		if(command.isEmpty()) {
-			return process.setValid(false).lock();
+			return process.lock();
 		}
+		process.setValid(true);
 		if(!commands.containsKey(command)) {
 			return process.lock();
 		}
 		process.setLabel(command);
 		process.setCommand(commands.get(command));
-		process.setArguments(new Arguments(validator.process(Arrays.subArray(parts, 1))));
+		process.setArguments(new Arguments(validator.process(Arrays.subArray(message, 1))));
 		return process.lock();
 	}
 	

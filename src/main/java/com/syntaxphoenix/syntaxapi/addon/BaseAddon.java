@@ -6,12 +6,16 @@ package com.syntaxphoenix.syntaxapi.addon;
  */ 
 public abstract class BaseAddon {
 	
-	public abstract void onLoad();
+	public void onLoad() {
+		
+	}
 	
-	public abstract void onEnable();
+	public void onEnable() {
+		
+	}
 	
-	public abstract void onReload();
-	
-	public abstract void onDisable();
+	public void onDisable() {
+		
+	}
 	
 }

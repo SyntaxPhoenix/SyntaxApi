@@ -4,9 +4,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
 public abstract class AbstractReflect {
+	
+	public static final AbstractReflect FIELD = new Reflect(Field.class).searchField("modify", "modifiers");
 
 	private final Class<?> owner;
 	private final HashMap<String, Constructor<?>> constructors = new HashMap<>();
@@ -95,9 +98,14 @@ public abstract class AbstractReflect {
 			try {
 				output = field.get(source);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if(!access) {
+					field.setAccessible(access);
+				}
 				e.printStackTrace();
 			}
-			field.setAccessible(access);
+			if(!access) {
+				field.setAccessible(access);
+			}
 			return output;
 		}
 		return null;
@@ -110,10 +118,31 @@ public abstract class AbstractReflect {
 	public void setFieldValue(Object source, String name, Object value) {
 		Field field = getField(name);
 		if (field != null) {
+			boolean access = field.isAccessible();
+			if (!access) {
+				field.setAccessible(true);
+			}
+			boolean isFinal;
+			int previous = field.getModifiers();
+			if(isFinal = Modifier.isFinal(previous)) {
+				FIELD.setFieldValue(field, "modify", previous & ~Modifier.FINAL);
+			}
 			try {
 				field.set(source, value);
 			} catch (IllegalAccessException | IllegalArgumentException e) {
+				if(!access) {
+					field.setAccessible(access);
+				}
+				if(isFinal) {
+					FIELD.setFieldValue(field, "modify", previous);
+				}
 				e.printStackTrace();
+			}
+			if(!access) {
+				field.setAccessible(access);
+			}
+			if(isFinal) {
+				FIELD.setFieldValue(field, "modify", previous);
 			}
 		}
 	}
