@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -59,12 +60,16 @@ public class AddonLoader {
 				loaded--;
 				continue;
 			}
-
+			try {
+				manager.register(addon);
+			} catch (AddonException e) {
+				addon.delete();
+				logger.log(e);
+			}
 		}
-
+		return loaded;
 	}
-
-	@SuppressWarnings("resource")
+	
 	Addon loadAddon(File file) throws Throwable {
 
 		JarInputStream input = new JarInputStream(new FileInputStream(file));
@@ -82,9 +87,7 @@ public class AddonLoader {
 			throw new AddonException(file.getName() + " does not contain a addon.json");
 		}
 
-		JarEntry jsonEntry = entries.get("addon.json");
-
-		String content = Streams.toString(jar.getInputStream(entry));
+		String content = Streams.toString(jar.getInputStream(entries.get("addon.json")));
 		JsonConfig config = new JsonConfig();
 		config.fromJsonString(content);
 
@@ -101,27 +104,41 @@ public class AddonLoader {
 			input.close();
 			throw new AddonException(file.getName() + " -> main class (\"" + mainPath + "\") not found");
 		}
-		
+
 		BaseAddon baseAddon;
-		Class<?> mainClass;
-		
+		Class<? extends BaseAddon> mainClass;
+
 		try {
-			mainClass = loader.loadClass(mainPath);
-			if (mainClass.isAssignableFrom(BaseAddon.class)) {
-				
+			Class<?> rawClass = loader.loadClass(mainPath);
+			if (rawClass.isAssignableFrom(BaseAddon.class)) {
+				mainClass = rawClass.asSubclass(BaseAddon.class);
+				try {
+					baseAddon = mainClass.newInstance();
+				} catch (Throwable throwable) {
+					config.clear();
+					jar.close();
+					input.close();
+					throw new AddonException(file.getName() + " -> cannot create an instanceof main class!");
+				}
 			} else {
+				config.clear();
+				jar.close();
+				input.close();
 				throw new AddonException(file.getName() + " -> main class does not implement BaseAddon!");
 			}
 		} catch (Throwable throwable) {
-			config.clear();
-			jar.close();
-			input.close();
 			if (throwable instanceof AddonException) {
 				throw throwable;
 			} else {
+				config.clear();
+				jar.close();
+				input.close();
 				throw new AddonException(file.getName() + " -> failed to load main class", throwable);
 			}
 		}
+
+		Addon addon = new Addon(mainClass, baseAddon, config, file);
+		Map<String, Class<?>> classes = addon.classes();
 
 		Set<String> keySet = entries.keySet();
 		for (String key : keySet) {
@@ -130,8 +147,9 @@ public class AddonLoader {
 			}
 			key = key.substring(0, key.length() - 6);
 			try {
-				loader.loadClass(key);
+				classes.put(key, loader.loadClass(key));
 			} catch (ClassNotFoundException throwable) {
+				classes.clear();
 				config.clear();
 				jar.close();
 				input.close();
@@ -139,9 +157,17 @@ public class AddonLoader {
 				throw new AddonException(file.getName() + " -> failed to find class \"" + key + "\"", throwable);
 			}
 		}
-		
-		jar.close();
-		input.close();
+		keySet.clear();
+		entries.clear();
+
+		try {
+			jar.close();
+			input.close();
+		} catch (Throwable throwable) {
+			logger.log(throwable);
+		}
+
+		return addon;
 
 	}
 

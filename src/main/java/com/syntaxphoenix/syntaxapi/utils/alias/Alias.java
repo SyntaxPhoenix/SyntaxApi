@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.utils.alias;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -60,6 +61,16 @@ public class Alias {
 
 	public boolean hasAliases() {
 		return !this.aliases.isEmpty();
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public Alias removeConflicts(List<String> conflicts) {
+		ArrayList<String> list = new ArrayList<>(aliases);
+		list.removeAll(conflicts);
+		return new Alias(name, displayName, list.toArray(new String[0]));
 	}
 
 }

@@ -1,20 +1,41 @@
 package com.syntaxphoenix.syntaxapi.addon;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.syntaxphoenix.syntaxapi.addon.AddonState;
+import com.syntaxphoenix.syntaxapi.config.json.JsonConfig;
+import com.syntaxphoenix.syntaxapi.reflections.AbstractReflect;
+import com.syntaxphoenix.syntaxapi.reflections.Reflect;
+
 public class Addon {
-	
+
+	private static final AbstractReflect ADDON = new Reflect(Addon.class).searchField("d1", "classes")
+			.searchField("c2", "mainClass").searchField("c3", "addonInfo").searchField("c4", "addon")
+			.searchField("c5", "addonFile");
+
 	private final Map<String, Class<?>> classes = Collections.synchronizedMap(new HashMap<String, Class<?>>());
 	private final Class<? extends BaseAddon> mainClass;
+	private final JsonConfig addonInfo;
 	private final BaseAddon addon;
+	private final File addonFile;
 	
-	public Addon(Class<? extends BaseAddon> mainClass, BaseAddon addon) {
+	private AddonState state;
+
+	public Addon(Class<? extends BaseAddon> mainClass, BaseAddon addon, JsonConfig addonInfo, File addonFile) {
 		this.mainClass = mainClass;
+		this.addonInfo = addonInfo;
+		this.addonFile = addonFile;
 		this.addon = addon;
+		this.state = AddonState.LOADED;
 	}
-	
+
+	public final JsonConfig getAddonInfo() {
+		return addonInfo;
+	}
+
 	public final BaseAddon getAddon() {
 		return addon;
 	}
@@ -22,13 +43,34 @@ public class Addon {
 	public final Class<? extends BaseAddon> getMainClass() {
 		return mainClass;
 	}
+
+	public final File getAddonFile() {
+		return addonFile;
+	}
 	
+	public AddonState getState() {
+		return state;
+	}
+
 	/*
 	 * 
 	 */
-	
+
 	Map<String, Class<?>> classes() {
 		return classes;
+	}
+
+	void delete() {
+		state = AddonState.INVALID;
+		
+		classes.clear();
+		addonInfo.clear();
+		
+		ADDON.setFieldValue(this, "c1", null);
+		ADDON.setFieldValue(this, "c2", null);
+		ADDON.setFieldValue(this, "c3", null);
+		ADDON.setFieldValue(this, "c4", null);
+		ADDON.setFieldValue(this, "c5", null);
 	}
 
 }
