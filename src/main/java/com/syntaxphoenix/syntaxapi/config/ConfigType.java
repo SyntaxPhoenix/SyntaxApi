@@ -5,14 +5,13 @@ import com.syntaxphoenix.syntaxapi.config.yaml.*;
 import com.syntaxphoenix.syntaxapi.reflections.Reflect;
 import com.syntaxphoenix.syntaxapi.config.json.*;
 import com.syntaxphoenix.syntaxapi.config.nbt.*;
-import com.syntaxphoenix.syntaxapi.config.xml.*;
 import com.syntaxphoenix.syntaxapi.config.toml.*;
 
 public enum ConfigType {
 
 	JSON(JsonConfig.class, JsonConfigSection.class), YAML(YamlConfig.class, YamlConfigSection.class),
 	INI(IniConfig.class, IniConfigSection.class), NBT(NbtConfig.class, NbtConfigSection.class),
-	TOML(TomlConfig.class, TomlConfigSection.class), XML(XmlConfig.class, XmlConfigSection.class);
+	TOML(TomlConfig.class, TomlConfigSection.class);
 	
 	private Reflect baseConfig;
 	private Reflect baseSection;

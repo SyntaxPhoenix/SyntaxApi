@@ -1,11 +1,14 @@
 package com.syntaxphoenix.syntaxapi.command;
 
+import java.util.function.Function;
+
 import com.syntaxphoenix.syntaxapi.exceptions.ObjectLockedException;
 
 public class CommandProcess {
 	
 	private final CommandManager manager;
 	
+	private Function<String, ? extends BaseInfo> info = (label -> new DefaultInfo(label));
 	private boolean locked = false;
 	private boolean valid = false;
 	private BaseCommand command;
@@ -66,6 +69,15 @@ public class CommandProcess {
 	
 	public Arguments getArguments() {
 		return arguments;
+	}
+	
+	public CommandProcess setInfoConstructor(Function<String, ? extends BaseInfo> info) {
+		this.info = info;
+		return this;
+	}
+	
+	public BaseInfo constructInfo() {
+		return info.apply(label == null ? "" : label);
 	}
 	
 	public ExecutionState asState() {

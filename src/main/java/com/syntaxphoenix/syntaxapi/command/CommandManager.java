@@ -109,12 +109,12 @@ public class CommandManager {
 		if(!state.isRunnable()) {
 			return state;
 		}
-		return execute(process.getCommand(), process.getArguments());
+		return execute(process.getCommand(), process.constructInfo(), process.getArguments());
 	}
 	
-	public ExecutionState execute(BaseCommand command, Arguments arguments) {
+	public ExecutionState execute(BaseCommand command, BaseInfo info, Arguments arguments) {
 		try {
-			command.execute(arguments);
+			command.execute(info, arguments);
 		} catch(Throwable throwable) {
 			if(hasLogger()) {
 				logger.log(throwable);

@@ -74,4 +74,12 @@ public class Numbers {
 		return in * (-1);
 	}
 
+	public static double parseDouble(String string) {
+		try {
+			return Double.parseDouble(string);
+		} catch(NumberFormatException e) {
+			return 0.0;
+		}
+	}
+
 }
