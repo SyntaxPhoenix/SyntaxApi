@@ -59,7 +59,7 @@ public final class NbtCompound extends NbtTag {
      */
     public NbtNumber getNumber(String key) {
         if (!hasKey(key)) return null;
-        NbtTag tag = getTag(key);
+        NbtTag tag = get(key);
         if(!(tag instanceof NbtNumber)) return null;
         return (NbtNumber) tag;
     }
@@ -71,7 +71,7 @@ public final class NbtCompound extends NbtTag {
      * @return a byte
      * @throws NoSuchElementException if there is no tag with given name
      */
-    public NbtTag getTag(String key) {
+    public NbtTag get(String key) {
         if (!hasKey(key)) return null;
         return value.get(key);
     }
@@ -226,8 +226,8 @@ public final class NbtCompound extends NbtTag {
      * @return a list
      * @throws NoSuchElementException if there is no compound with given name
      */
-    public Map<String, NbtTag> getCompound(String key) {
-        return getCompoundTag(key).getValue();
+    public Map<String, NbtTag> getCompoundMap(String key) {
+        return getCompound(key).getValue();
     }
 
     /**
@@ -237,7 +237,7 @@ public final class NbtCompound extends NbtTag {
      * @return a compound
      * @throws NoSuchElementException if there is no compound with given name
      */
-    public NbtCompound getCompoundTag(String key) {
+    public NbtCompound getCompound(String key) {
         NbtTag tag = value.get(key);
         if (!(tag instanceof NbtCompound)) return null;
         return (NbtCompound) tag;
@@ -268,6 +268,22 @@ public final class NbtCompound extends NbtTag {
         if (!(tag instanceof NbtLongArray)) return null;
         return ((NbtLongArray) tag).getValue();
     }
+
+    
+    /**
+     * Returns a boolean named with the given key.
+     *
+     * @param key the key
+     * @return a boolean
+     * @throws NoSuchElementException if there is no boolean with given name
+     */
+	public boolean getBoolean(String path) {
+		byte byt = getByte(path);
+		if(byt == 0 || byt == 1) {
+			return byt == 1;
+		}
+		return false;
+	}
     
     /**
      * Returns an immutable set containing all the keys in this compound.
@@ -329,7 +345,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the value
      */
-    public void setByteArray(String key, byte[] value) {
+    public void set(String key, byte[] value) {
         set(key, new NbtByteArray(value));
     }
     
@@ -339,9 +355,19 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the value
      */
-    public void setByte(String key, byte value) {
+    public void set(String key, byte value) {
         set(key, new NbtByte(value));
     }
+
+    /**
+     * Put the given key and value into the compound tag.
+     *
+     * @param key they key
+     * @param value the value
+     */
+	public void set(String path, boolean bool) {
+		set(path, (byte) (bool ? 1 : 0));
+	}
     
     /**
      * Put the given key and value into the compound tag.
@@ -349,7 +375,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the value
      */
-    public void setDouble(String key, double value) {
+    public void set(String key, double value) {
         set(key, new NbtDouble(value));
     }
     
@@ -359,7 +385,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the value
      */
-    public void setFloat(String key, float value) {
+    public void set(String key, float value) {
         set(key, new NbtFloat(value));
     }
     
@@ -369,7 +395,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the value
      */
-    public void setIntArray(String key, int[] value) {
+    public void set(String key, int[] value) {
         set(key, new NbtIntArray(value));
     }
     
@@ -379,7 +405,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the value
      */
-    public void setLongArray(String key, long[] value) {
+    public void set(String key, long[] value) {
         set(key, new NbtLongArray(value));
     }
     
@@ -389,7 +415,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the valu
      */
-    public void setInt(String key, int value) {
+    public void set(String key, int value) {
         set(key, new NbtInt(value));
     }
     
@@ -399,7 +425,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the valu
      */
-    public void setBigInt(String key, BigInteger value) {
+    public void set(String key, BigInteger value) {
         set(key, new NbtBigInt(value));
     }
     
@@ -409,7 +435,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the value
      */
-    public void setLong(String key, long value) {
+    public void set(String key, long value) {
         set(key, new NbtLong(value));
     }
     
@@ -419,7 +445,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the value
      */
-    public void setShort(String key, short value) {
+    public void set(String key, short value) {
         set(key, new NbtShort(value));
     }
     
@@ -429,7 +455,7 @@ public final class NbtCompound extends NbtTag {
      * @param key they key
      * @param value the value
      */
-    public void setString(String key, String value) {
+    public void set(String key, String value) {
         set(key, new NbtString(value));
     }
     
@@ -473,14 +499,5 @@ public final class NbtCompound extends NbtTag {
         
         return builder.append("}").toString();
     }
-
-	public boolean getBoolean(String path) {
-		byte byt = getByte(path);
-		return byt == 1;
-	}
-
-	public void setBoolean(String path, boolean bool) {
-		setByte(path, (byte) (bool ? 1 : 0));
-	}
 
 }

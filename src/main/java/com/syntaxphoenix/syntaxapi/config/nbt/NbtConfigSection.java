@@ -6,11 +6,12 @@ import com.syntaxphoenix.syntaxapi.config.BaseSection;
 import com.syntaxphoenix.syntaxapi.nbt.NbtTag;
 import com.syntaxphoenix.syntaxapi.nbt.NbtType;
 import com.syntaxphoenix.syntaxapi.nbt.tools.NbtParser;
+import com.syntaxphoenix.syntaxapi.nbt.utils.NbtStorage;
 import com.syntaxphoenix.syntaxapi.nbt.NbtByte;
 import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
 import com.syntaxphoenix.syntaxapi.utils.config.ConfigTools;
 
-public class NbtConfigSection extends BaseSection {
+public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompound> {
 
 	/**
 	 * 
@@ -29,43 +30,42 @@ public class NbtConfigSection extends BaseSection {
 	/**
 	 * @return NBTCompound {section values}
 	 */
-	public NbtCompound asCompound() {
+	@Override
+	public NbtCompound asNbt() {
 		NbtCompound data = new NbtCompound();
 		if (!values.isEmpty()) {
 			for (Entry<String, Object> entry : values.entrySet()) {
 				Object raw = entry.getValue();
 				if (raw instanceof NbtConfigSection) {
-					data.set(entry.getKey(), ((NbtConfigSection) raw).asCompound());
+					data.set(entry.getKey(), ((NbtConfigSection) raw).asNbt());
 				} else if (raw instanceof NbtTag) {
 					data.set(entry.getKey(), (NbtTag) raw);
 				} else {
 					NbtTag tag = NbtParser.fromObject(raw);
-					if(tag != null) {
+					if (tag != null) {
 						data.set(entry.getKey(), tag);
 					}
 				}
 			}
 		}
-		data.set("section", new NbtByte((byte) 0));
+		data.set("section", true);
 		return data;
 	}
 
 	/**
 	 * @param NbtCompound {data values}
 	 */
-	public void fromCompound(NbtCompound data) {
+	@Override
+	public void fromNbt(NbtCompound data) {
 		values.clear();
 		for (String key : data.getKeys()) {
-			NbtTag base = data.getTag(key);
+			NbtTag base = data.get(key);
 			if (base.getType() == NbtType.COMPOUND) {
 				NbtCompound compound = (NbtCompound) base;
 				if (compound.hasKey("section")) {
-					NbtTag section;
-					if ((section = compound.getTag("section")).getType() == NbtType.BYTE) {
-						if (((NbtByte) section).getByteValue() == (byte) 0) {
-							saveSection(initSection(key, compound));
-							continue;
-						}
+					if (compound.getBoolean("section")) {
+						saveSection(initSection(key, compound));
+						continue;
 					}
 				}
 				set(key, compound);
@@ -258,9 +258,10 @@ public class NbtConfigSection extends BaseSection {
 	 */
 	protected NbtConfigSection initSection(String name, NbtCompound data) {
 		NbtConfigSection section = new NbtConfigSection(name);
-		section.fromCompound(data);
+		section.fromNbt(data);
 		return section;
 	}
+
 	/**
 	 * @see com.syntaxphoenix.syntaxapi.config.BaseSection#isSectionInstance(com.syntaxphoenix.syntaxapi.config.BaseSection)
 	 */
@@ -273,16 +274,16 @@ public class NbtConfigSection extends BaseSection {
 	 * @param NbtConfigSection {saveable section}
 	 */
 	private NbtConfigSection saveSection(NbtConfigSection section) {
-		set(section.getName(), section.asCompound());
+		set(section.getName(), section.asNbt());
 		return section;
 	}
-	
+
 	/**
 	 * @return String {Compound as String}
 	 */
 	@Override
 	public String toString() {
-		return asCompound().toMSONString();
+		return asNbt().toMSONString();
 	}
 
 }

@@ -1,9 +1,13 @@
 package com.syntaxphoenix.syntaxapi.utils.data;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public abstract class Propertyable {
+import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
+import com.syntaxphoenix.syntaxapi.nbt.utils.NbtStorage;
+
+public abstract class Propertyable implements NbtStorage<NbtCompound> {
 	
 	private final ArrayList<Property<?>> properties = new ArrayList<>();
 	
@@ -87,6 +91,58 @@ public abstract class Propertyable {
 
 	public Property<?>[] getProperties() {
 		return properties.toArray(new Property<?>[0]);
+	}
+	
+	/*
+	 * 
+	 */
+	
+	@Override
+	public NbtCompound asNbt() {
+		NbtCompound compound = new NbtCompound();
+		if(properties.isEmpty()) {
+			return compound;
+		}
+		for(Property<?> property : properties) {
+			String key = property.getKey();
+			Object value = property.getValue();
+			if(property.instanceOf(Boolean.class)) {
+				compound.set(key, (boolean) value);
+			} else if(property.instanceOf(Byte.class)) {
+				compound.set(key, (byte) value);
+			} else if(property.instanceOf(Short.class)) {
+				compound.set(key, (short) value);
+			} else if(property.instanceOf(Integer.class)) {
+				compound.set(key, (int) value);
+			} else if(property.instanceOf(Long.class)) {
+				compound.set(key, (long) value);
+			} else if(property.instanceOf(Float.class)) {
+				compound.set(key, (float) value);
+			} else if(property.instanceOf(Double.class)) {
+				compound.set(key, (double) value);
+			} else if(property.instanceOf(BigInteger.class)) {
+				compound.set(key, (BigInteger) value);
+			} else if(property.instanceOf(String.class)) {
+				compound.set(key, (String) value);
+			} else if(property.instanceOf(byte[].class)) {
+				compound.set(key, (byte[]) value);
+			} else if(property.instanceOf(int[].class)) {
+				compound.set(key, (int[]) value);
+			} else if(property.instanceOf(long[].class)) {
+				compound.set(key, (long[]) value);
+			}
+		}
+		return compound;
+	}
+	
+	@Override
+	public void fromNbt(NbtCompound nbt) {
+		if(nbt.isEmpty()) {
+			return;
+		}
+		for(String key : nbt.getKeys()) {
+			addProperty(Property.create(key, nbt.get(key).getValue()));
+		}
 	}
 
 }

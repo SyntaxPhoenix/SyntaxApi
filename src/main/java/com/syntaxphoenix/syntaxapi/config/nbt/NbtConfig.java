@@ -45,7 +45,7 @@ public class NbtConfig extends NbtConfigSection implements BaseConfig {
 			return;
 		}
 		
-		fromCompound((NbtCompound) nbt);
+		fromNbt((NbtCompound) nbt);
 		
 	}
 
@@ -70,7 +70,7 @@ public class NbtConfig extends NbtConfigSection implements BaseConfig {
 		
 		FileOutputStream stream = new FileOutputStream(file);
 		
-		serializer.toStream(new NbtNamedTag("root", asCompound()), stream);
+		serializer.toStream(new NbtNamedTag("root", asNbt()), stream);
 		
 		stream.close();
 		

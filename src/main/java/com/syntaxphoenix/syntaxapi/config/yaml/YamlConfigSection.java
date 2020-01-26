@@ -13,7 +13,6 @@ import org.yaml.snakeyaml.representer.Representer;
 
 import com.syntaxphoenix.syntaxapi.config.BaseSection;
 import com.syntaxphoenix.syntaxapi.config.yaml.utils.LinkedConstructor;
-import com.syntaxphoenix.syntaxapi.config.yaml.utils.LinkedRepresenter;
 
 public class YamlConfigSection extends BaseSection {
 
@@ -32,7 +31,7 @@ public class YamlConfigSection extends BaseSection {
 		yamlOptions.setIndent(2);
 		yamlOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
 		yamlOptions.setPrettyFlow(true);
-		yamlRepresenter = new LinkedRepresenter(yamlOptions);
+		yamlRepresenter = new Representer(yamlOptions);
 		yaml = new Yaml(new LinkedConstructor(), yamlRepresenter, yamlOptions);
 	}
 

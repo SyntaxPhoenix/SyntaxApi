@@ -2,8 +2,8 @@ package com.syntaxphoenix.syntaxapi.nbt.utils;
 
 import com.syntaxphoenix.syntaxapi.nbt.NbtTag;
 
-public interface NbtSaveable {
+public interface NbtSaveable<E extends NbtTag> {
 	
-	public NbtTag asNbt();
+	public E asNbt();
 
 }
