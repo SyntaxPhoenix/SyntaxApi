@@ -1,4 +1,4 @@
-package com.syntaxphoenix.syntaxapi.utils.file;
+package com.syntaxphoenix.syntaxapi.utils.java;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,20 +20,20 @@ public class Zipper {
 			return null;
 		}
 		byte[] buffer = new byte[2048];
-		ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
-		ZipEntry entry = zis.getNextEntry();
+		ZipInputStream inputStream = new ZipInputStream(new FileInputStream(zip));
+		ZipEntry entry = inputStream.getNextEntry();
 		while (entry != null) {
 			File file = new File(directory, entry.getName());
-			FileOutputStream fos = new FileOutputStream(file);
-			int len;
-			while ((len = zis.read(buffer)) > 0) {
-				fos.write(buffer, 0, len);
+			FileOutputStream fileOutput = new FileOutputStream(file);
+			int length;
+			while ((length = inputStream.read(buffer)) > 0) {
+				fileOutput.write(buffer, 0, length);
 			}
-			fos.close();
-			entry = zis.getNextEntry();
+			fileOutput.close();
+			entry = inputStream.getNextEntry();
 		}
-		zis.closeEntry();
-		zis.close();
+		inputStream.closeEntry();
+		inputStream.close();
 		if(deleteZipOnEnd) zip.delete();
 		return directory.listFiles();
 	}
@@ -61,27 +61,27 @@ public class Zipper {
 		if (!zipFile.exists()) {
 			zipFile.createNewFile();
 		}
-		FileOutputStream fos = new FileOutputStream(zipFile);
-		ZipOutputStream zipOut = new ZipOutputStream(fos);
+		FileOutputStream fileOutput = new FileOutputStream(zipFile);
+		ZipOutputStream zipOutput = new ZipOutputStream(fileOutput);
 		int failed = 0;
-		for (int x = 0; x < toZip.length; x++) {
-			File f = toZip[x];
-			if(f == null) {
+		for (int index = 0; index < toZip.length; index++) {
+			File file = toZip[index];
+			if(file == null) {
 				failed += 1;
 				continue;
 			}
-			FileInputStream fis = new FileInputStream(f);
-			ZipEntry entry = new ZipEntry(f.getName());
-			zipOut.putNextEntry(entry);
+			FileInputStream fileInput = new FileInputStream(file);
+			ZipEntry entry = new ZipEntry(file.getName());
+			zipOutput.putNextEntry(entry);
 			byte[] bytes = new byte[2048];
 			int length;
-			while ((length = fis.read(bytes)) >= 0) {
-				zipOut.write(bytes, 0, length);
+			while ((length = fileInput.read(bytes)) >= 0) {
+				zipOutput.write(bytes, 0, length);
 			}
-			fis.close();
+			fileInput.close();
 		}
-		zipOut.close();
-		fos.close();
+		zipOutput.close();
+		fileOutput.close();
 		if(failed == toZip.length) {
 			zipFile.delete();
 		}

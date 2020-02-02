@@ -27,7 +27,7 @@ public class LogColorType {
 	}
 
 	public LogColorType(String id, Color color) {
-		this(id, Strings.upFirstLetter(id), color);
+		this(id, Strings.firstLetterToUpperCase(id), color);
 	}
 
 	public LogColorType(String id, String name, Color color) {

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
+import com.syntaxphoenix.syntaxapi.utils.java.lang.StringBuilder;
 
 public class Strings {
 
@@ -31,16 +32,14 @@ public class Strings {
 	}
 
 	public static String toString(String[] array, String adder) {
-		String st = "";
-		for (int v = 0; v < array.length; v++) {
-			String s = array[v];
-			if ((v + 1) == array.length) {
-				st = st + s;
-			} else {
-				st = st + s + adder;
+		StringBuilder builder = new StringBuilder();
+		for (int index = 0; index < array.length; index++) {
+			builder.append(array[index]);
+			if ((index + 1) != array.length) {
+				builder.append(adder);
 			}
 		}
-		return st;
+		return builder.toStringClear();
 	}
 
 	public static String toString(List<String> list) {
@@ -48,24 +47,22 @@ public class Strings {
 	}
 
 	public static String toString(List<String> list, String adder) {
-		String s = "";
-		for (int v = 0; v < list.size(); v++) {
-			if (v + 1 == list.size()) {
-				s = s + list.get(v);
-			} else {
-				s = s + list.get(v) + adder;
+		StringBuilder builder = new StringBuilder();
+		int size = list.size();
+		for (int index = 0; index < size; index++) {
+			builder.append(list.get(index));
+			if ((index + 1) != size) {
+				builder.append(adder);
 			}
 		}
-		return s;
+		return builder.toStringClear();
 	}
 
-	public static String changeBool(String inString) {
-		if (inString.equalsIgnoreCase("FALSE")) {
-			return "true";
-		} else if (inString.equalsIgnoreCase("TRUE")) {
-			return "false";
+	public static String changeBool(String input) {
+		if(isBoolean(input)) {
+			return input.equalsIgnoreCase("false") ? "true" : "false";
 		}
-		return inString;
+		return input;
 	}
 
 	public static UUID toUUID(String id) {
@@ -73,34 +70,34 @@ public class Strings {
 				+ id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20, 32));
 	}
 
-	public static int count(String msg, Character ch) {
+	public static int count(String message, Character toCount) {
 		int count = 0;
-		char[] chars = msg.toCharArray();
-		for (char c : chars) {
-			if (ch.equals(c)) {
+		char[] chars = message.toCharArray();
+		for (char character : chars) {
+			if (toCount.equals(character)) {
 				count++;
 			}
 		}
 		return count;
 	}
 
-	public static boolean isBoolean(String msg) {
-		if (msg.equalsIgnoreCase("true") || msg.equalsIgnoreCase("false")) {
+	public static boolean isBoolean(String input) {
+		if (input.equalsIgnoreCase("true") || input.equalsIgnoreCase("false")) {
 			return true;
 		}
 		return false;
 	}
 	
-	public static String upFirstLetter(String input) {
-		String first = (input = input.toLowerCase()).substring(0, 1);
-		return input.replaceFirst(first, first.toUpperCase());
+	public static String firstLetterToUpperCase(String string) {
+		String letter = (string = string.toLowerCase()).substring(0, 1);
+		return string.replaceFirst(letter, letter.toUpperCase());
 	}
 
-	public static String remFirstMinus(String str) {
-		if(str.startsWith("-")) {
-			str = str.replaceFirst("-", "");
+	public static String removeFirstMinus(String string) {
+		if(string.startsWith("-")) {
+			string = string.replaceFirst("-", "");
 		}
-		return str;
+		return string;
 	}
 
 }

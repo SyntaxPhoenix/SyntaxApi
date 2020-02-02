@@ -13,7 +13,7 @@ import java.util.jar.JarInputStream;
 import com.syntaxphoenix.syntaxapi.config.json.JsonConfig;
 import com.syntaxphoenix.syntaxapi.exceptions.AddonException;
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
-import com.syntaxphoenix.syntaxapi.utils.file.Files;
+import com.syntaxphoenix.syntaxapi.utils.java.Files;
 import com.syntaxphoenix.syntaxapi.utils.java.Streams;
 
 /**
@@ -118,7 +118,7 @@ public class AddonLoader {
 					config.clear();
 					jar.close();
 					input.close();
-					throw new AddonException(file.getName() + " -> cannot create an instanceof main class!");
+					throw new AddonException(file.getName() + " -> cannot create an instanceof main class!", throwable);
 				}
 			} else {
 				config.clear();
@@ -139,7 +139,7 @@ public class AddonLoader {
 
 		Addon addon = new Addon(mainClass, baseAddon, config, file);
 		Map<String, Class<?>> classes = addon.classes();
-
+		
 		Set<String> keySet = entries.keySet();
 		for (String key : keySet) {
 			if (!key.endsWith(".class")) {
@@ -154,6 +154,7 @@ public class AddonLoader {
 				jar.close();
 				input.close();
 				keySet.clear();
+				addon.delete();
 				throw new AddonException(file.getName() + " -> failed to find class \"" + key + "\"", throwable);
 			}
 		}

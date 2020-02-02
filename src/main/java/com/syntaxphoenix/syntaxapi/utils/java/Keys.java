@@ -24,12 +24,12 @@ public class Keys {
     	return generateKey(DEFAULT_KEY_LENGTH);
     }
 	
-	public static String generateKey(Integer lenght) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < lenght; ++i) {
-            sb.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
+	public static String generateKey(Integer length) {
+        StringBuilder builder = new StringBuilder();
+        for (int current = 0; current < length; ++current) {
+            builder.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
         }
-        return sb.toString();
+        return builder.toString();
 	}
 	
 	/*
@@ -46,11 +46,11 @@ public class Keys {
 		if(length > DEFAULT_INT_LENGTH) {
 			length = DEFAULT_INT_LENGTH;
 		}
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; ++i) {
-            sb.append(NUMBERS.charAt(RANDOM.nextInt(NUMBERS.length())));
+        StringBuilder builder = new StringBuilder();
+        for (int current = 0; current < length; ++current) {
+            builder.append(NUMBERS.charAt(RANDOM.nextInt(NUMBERS.length())));
         }
-        return Integer.valueOf(sb.toString());
+        return Integer.valueOf(builder.toString());
 	}
 	
 	/*
@@ -67,11 +67,11 @@ public class Keys {
 		if(length > DEFAULT_LONG_LENGTH) {
 			length = DEFAULT_LONG_LENGTH;
 		}
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; ++i) {
-            sb.append(NUMBERS.charAt(RANDOM.nextInt(NUMBERS.length())));
+        StringBuilder builder = new StringBuilder();
+        for (int current = 0; current < length; ++current) {
+            builder.append(NUMBERS.charAt(RANDOM.nextInt(NUMBERS.length())));
         }
-        return Long.valueOf(sb.toString());
+        return Long.valueOf(builder.toString());
 	}
 
 }

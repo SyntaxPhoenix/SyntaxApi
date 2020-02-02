@@ -7,10 +7,10 @@ public class Arrays {
 
 	@SuppressWarnings("unchecked")
 	@SafeVarargs
-	public static <E> E[] merge(E[] cmp1, E... cmp2) {
-		List<E> lv = Lists.asList(cmp1);
-		lv.addAll(Lists.asList(cmp2));
-		return (E[]) lv.toArray();
+	public static <E> E[] merge(E[] array1, E... array2) {
+		List<E> list = Lists.asList(array1);
+		list.addAll(Lists.asList(array2));
+		return (E[]) list.toArray();
 	}
 
 	public static String[] subArray(String[] args, int index) {
