@@ -72,5 +72,17 @@ public class Alias {
 		list.removeAll(conflicts);
 		return new Alias(name, displayName, list.toArray(new String[0]));
 	}
+	
+	/*
+	 * 
+	 */
+	
+	public static Alias create(String name) {
+		return new Alias(name);
+	}
+	
+	public static Alias create(String name, String... aliases) {
+		return new Alias(name, aliases);
+	}
 
 }
