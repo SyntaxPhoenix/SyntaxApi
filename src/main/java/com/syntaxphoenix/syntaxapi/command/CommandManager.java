@@ -1,5 +1,7 @@
 package com.syntaxphoenix.syntaxapi.command;
 
+import java.util.Map.Entry;
+
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 import com.syntaxphoenix.syntaxapi.utils.alias.Alias;
 import com.syntaxphoenix.syntaxapi.utils.alias.AliasMap;
@@ -17,6 +19,31 @@ public class CommandManager {
 	
 	private String splitter = " ";
 	private String prefix = "!";
+	
+	/*
+	 * 
+	 */
+	
+	public AliasMap<BaseCommand> getClonedMap() {
+		return commands.clone();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Entry<Alias, BaseCommand>[] getEntries()  {
+		return commands.entrySet().toArray(new Entry[0]); 
+	}
+	
+	public BaseCommand[] getCommands() {
+		return commands.values().toArray(new BaseCommand[0]);
+	}
+	
+	public Alias[] getAliases() {
+		return commands.entrySet().toArray(new Alias[0]);
+	}
+	
+	/*
+	 * 
+	 */
 	
 	public String getPrefix() {
 		return prefix;
@@ -87,6 +114,7 @@ public class CommandManager {
 	
 	private CommandProcess process(CommandProcess process, String... message) {
 		String command = message[0].toLowerCase();
+		process.setLabel(command);
 		if(command.isEmpty()) {
 			return process.lock();
 		}
@@ -94,11 +122,14 @@ public class CommandManager {
 		if(!commands.containsKey(command)) {
 			return process.lock();
 		}
-		process.setLabel(command);
 		process.setCommand(commands.get(command));
 		process.setArguments(new Arguments(validator.process(Arrays.subArray(message, 1))));
 		return process.lock();
 	}
+	
+	/*
+	 * 
+	 */
 	
 	public ExecutionState execute(String message) {
 		return process(message).execute();

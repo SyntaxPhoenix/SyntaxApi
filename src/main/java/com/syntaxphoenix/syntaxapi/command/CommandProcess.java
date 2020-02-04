@@ -1,6 +1,6 @@
 package com.syntaxphoenix.syntaxapi.command;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import com.syntaxphoenix.syntaxapi.exceptions.ObjectLockedException;
 
@@ -8,7 +8,7 @@ public class CommandProcess {
 	
 	private final CommandManager manager;
 	
-	private Function<String, ? extends BaseInfo> info = (label -> new DefaultInfo(label));
+	private BiFunction<CommandManager, String, ? extends BaseInfo> info = ((manager, label) -> new DefaultInfo(manager, label));
 	private boolean locked = false;
 	private boolean valid = false;
 	private BaseCommand command;
@@ -71,13 +71,13 @@ public class CommandProcess {
 		return arguments;
 	}
 	
-	public CommandProcess setInfoConstructor(Function<String, ? extends BaseInfo> info) {
+	public CommandProcess setInfoConstructor(BiFunction<CommandManager, String, ? extends BaseInfo> info) {
 		this.info = info;
 		return this;
 	}
 	
 	public BaseInfo constructInfo() {
-		return info.apply(label == null ? "" : label);
+		return info.apply(manager, label == null ? "" : label);
 	}
 	
 	public ExecutionState asState() {
