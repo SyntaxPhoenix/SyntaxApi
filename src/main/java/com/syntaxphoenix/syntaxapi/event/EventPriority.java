@@ -1,26 +1,31 @@
 package com.syntaxphoenix.syntaxapi.event;
 
-import com.syntaxphoenix.syntaxapi.utils.priority.Priority;
+import java.util.List;
 
-public enum EventPriority implements Priority<EventPriority> {
-	NORMAL
-	;
+import com.google.common.collect.ImmutableList;
 
-	@Override
-	public boolean isHigher(Priority<EventPriority> priority) {
-		// TODO Auto-generated method stub
-		return false;
+public enum EventPriority {
+
+	LOWEST(-2), LOW(-1), NORMAL(0), HIGH(1), HIGHEST(2);
+	
+	/*
+	 * 
+	 */
+	
+	public static final List<EventPriority> ORDERED_VALUES = ImmutableList.of(HIGHEST, HIGH, NORMAL, LOW, LOWEST);
+	
+	/*
+	 * 
+	 */
+
+	private int priority;
+
+	private EventPriority(int priority) {
+		this.priority = priority;
 	}
-
-	@Override
-	public boolean isSame(Priority<EventPriority> priority) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Priority<EventPriority> getDefault() {
-		return null;
+	
+	public int priority() {
+		return priority;
 	}
 
 }

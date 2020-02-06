@@ -1,8 +1,11 @@
 package com.syntaxphoenix.syntaxapi.event;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
-import com.syntaxphoenix.syntaxapi.utils.priority.PrioritisedList;
+import com.google.common.collect.ImmutableList;
+import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 
 /**
  * 
@@ -11,21 +14,55 @@ import com.syntaxphoenix.syntaxapi.utils.priority.PrioritisedList;
  */
 
 public class EventManager {
-
-	private HashMap<Class<? extends Event>, PrioritisedList<EventPriority, EventListener>> listeners = new HashMap<>();
-
-	public EventCall generateCall(Event event) {
-		return new EventCall(event, getCopy(event.getClass()));
+	
+	private final LinkedHashMap<Class<? extends Event>, ArrayList<EventExecutor>> listeners = new LinkedHashMap<>();
+	private final SynLogger logger;
+	
+	public EventManager() {
+		this.logger = null;
 	}
-
-	private PrioritisedList<EventPriority, EventListener> getCopy(Class<? extends Event> clazz) {
-		if (listeners.containsKey(clazz)) {
-			return listeners.get(clazz).copy();
-		} else {
-			PrioritisedList<EventPriority, EventListener> list = new PrioritisedList<>(EventPriority.NORMAL);
-			listeners.put(clazz, list);
-			return list.copy();
+	
+	public EventManager(SynLogger logger) {
+		this.logger = logger;
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public boolean hasLogger() {
+		return logger != null;
+	}
+	
+	public SynLogger getLogger() {
+		return logger;
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public EventCall generateCall(Event event) {
+		return new EventCall(this, event, getExecutors(event.getClass()));
+	}
+	
+	public EventResult call(Event event) {
+		return call(generateCall(event));
+	}
+	
+	public EventResult call(EventCall call) {
+		return call.execute();
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public List<EventExecutor> getExecutors(Class<? extends Event> event) {
+		if(!listeners.containsKey(event)) {
+			return ImmutableList.of();
 		}
+		return ImmutableList.copyOf(listeners.get(event));
 	}
 
 }
