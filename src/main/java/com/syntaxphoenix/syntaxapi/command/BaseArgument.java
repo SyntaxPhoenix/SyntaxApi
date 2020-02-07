@@ -32,6 +32,9 @@ public abstract class BaseArgument {
 	public StringArgument asString() {
 		return (StringArgument) this;
 	}
+	public NumericArgument asNumeric() {
+		return (NumericArgument) this;
+	}
 	public IntegerArgument asInteger() {
 		return (IntegerArgument) this;
 	}

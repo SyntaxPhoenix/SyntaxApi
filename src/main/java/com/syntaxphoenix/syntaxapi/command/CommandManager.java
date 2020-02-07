@@ -93,6 +93,10 @@ public class CommandManager {
 		return register(command, new Alias(name, aliases));
 	}
 	
+	public CommandManager register(BaseCommand command, String description, String name, String[] aliases) {
+		return register(command, new Alias(name, aliases).setDescription(description));
+	}
+	
 	public CommandManager register(BaseCommand command, Alias alias) {
 		if(commands.hasConflict(alias).isEmpty()) {
 			commands.put(alias, command);

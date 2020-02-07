@@ -2,13 +2,13 @@ package com.syntaxphoenix.syntaxapi.command.arguments;
 
 import com.syntaxphoenix.syntaxapi.command.ArgumentSerializer;
 import com.syntaxphoenix.syntaxapi.command.ArgumentType;
-import com.syntaxphoenix.syntaxapi.command.BaseArgument;
+import com.syntaxphoenix.syntaxapi.command.NumericArgument;
 
 /**
  * @author Lauriichen
  *
  */
-public class LongArgument extends BaseArgument {
+public class LongArgument extends NumericArgument {
 	
 	private Long value;
 	
@@ -27,6 +27,11 @@ public class LongArgument extends BaseArgument {
 
 	@Override
 	public Object asObject() {
+		return value;
+	}
+	
+	@Override
+	public Number asNumber() {
 		return value;
 	}
 	

@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 
 import com.syntaxphoenix.syntaxapi.command.ArgumentSerializer;
 import com.syntaxphoenix.syntaxapi.command.ArgumentType;
-import com.syntaxphoenix.syntaxapi.command.BaseArgument;
+import com.syntaxphoenix.syntaxapi.command.NumericArgument;
 
 /**
  * @author Lauriichen
  *
  */
-public class BigDecimalArgument extends BaseArgument {
+public class BigDecimalArgument extends NumericArgument {
 
 	private BigDecimal value;
 
@@ -29,6 +29,11 @@ public class BigDecimalArgument extends BaseArgument {
 
 	@Override
 	public Object asObject() {
+		return value;
+	}
+
+	@Override
+	public Number asNumber() {
 		return value;
 	}
 

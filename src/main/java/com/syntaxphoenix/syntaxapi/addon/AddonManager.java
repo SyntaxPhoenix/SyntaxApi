@@ -90,7 +90,7 @@ public class AddonManager {
 				array = new String[] { built };
 			}
 		}
-		return new Alias(name, display, array);
+		return new Alias(name, array).setDisplayName(display);
 	}
 
 	/*

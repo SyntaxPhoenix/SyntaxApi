@@ -12,15 +12,11 @@ public class Alias {
 	private final List<String> aliases;
 	
 	private String displayName;
+	private String description;
 	
 	public Alias(String name, String... aliases) {
-		this(name, name, aliases);
-	}
-	
-	public Alias(String name, String displayName, String... aliases) {
 		this.name = name.toLowerCase();
 		this.aliases = ImmutableList.copyOf(Lists.asList(aliases));
-		this.displayName = displayName;
 	}
 	
 	public String[] getAliases() {
@@ -36,11 +32,25 @@ public class Alias {
 	 */
 	
 	public String getDisplayName() {
-		return displayName;
+		return displayName == null ? name : displayName;
 	}
 	
-	public void setDisplayName(String displayName) {
+	public Alias setDisplayName(String displayName) {
 		this.displayName = displayName;
+		return this;
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public String getDescription() {
+		return description == null ? "" : description;
+	}
+	
+	public Alias setDescription(String description) {
+		this.description = description;
+		return this;
 	}
 	
 	/*
@@ -52,15 +62,27 @@ public class Alias {
 	}
 	
 	public boolean isAlias(String alias) {
-		return this.aliases.contains(alias);
+		return aliases.contains(alias);
 	}
 	
 	public boolean isLabel(String label) {
 		return isName((label = label.toLowerCase())) ? true : isAlias(label);
 	}
+	
+	/*
+	 * 
+	 */
 
 	public boolean hasAliases() {
-		return !this.aliases.isEmpty();
+		return !aliases.isEmpty();
+	}
+	
+	public boolean hasDisplayName() {
+		return displayName != null && !displayName.isEmpty();
+	}
+	
+	public boolean hasDescription() {
+		return description != null && !description.isEmpty();
 	}
 	
 	/*
@@ -70,7 +92,7 @@ public class Alias {
 	public Alias removeConflicts(List<String> conflicts) {
 		ArrayList<String> list = new ArrayList<>(aliases);
 		list.removeAll(conflicts);
-		return new Alias(name, displayName, list.toArray(new String[0]));
+		return new Alias(name, list.toArray(new String[0])).setDisplayName(displayName).setDescription(description);
 	}
 	
 	/*
