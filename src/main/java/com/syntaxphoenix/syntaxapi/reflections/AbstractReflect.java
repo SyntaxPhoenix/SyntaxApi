@@ -275,9 +275,11 @@ public abstract class AbstractReflect {
 			method = owner.getDeclaredMethod(methodName, arguments);
 		} catch (NoSuchMethodException | SecurityException e) {
 		}
-		try {
-			method = owner.getMethod(methodName, arguments);
-		} catch (NoSuchMethodException | SecurityException e) {
+		if (method == null) {
+			try {
+				method = owner.getMethod(methodName, arguments);
+			} catch (NoSuchMethodException | SecurityException e) {
+			}
 		}
 		if (method != null) {
 			methods.put(name, method);
@@ -318,9 +320,11 @@ public abstract class AbstractReflect {
 			field = owner.getDeclaredField(fieldName);
 		} catch (NoSuchFieldException | SecurityException e) {
 		}
-		try {
-			field = owner.getField(fieldName);
-		} catch (NoSuchFieldException | SecurityException e) {
+		if (field == null) {
+			try {
+				field = owner.getField(fieldName);
+			} catch (NoSuchFieldException | SecurityException e) {
+			}
 		}
 		if (field != null) {
 			fields.put(name, field);
