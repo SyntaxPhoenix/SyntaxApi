@@ -8,6 +8,9 @@ import com.syntaxphoenix.syntaxapi.nbt.NbtNamedTag;
 import com.syntaxphoenix.syntaxapi.utils.io.Serializer;
 
 public class NbtSerializer implements Serializer<NbtNamedTag> {
+	
+	public static final NbtSerializer COMPRESSED = new NbtSerializer(true);
+	public static final NbtSerializer UNCOMPRESSED = new NbtSerializer(true);
     
     private final boolean compress;
     
