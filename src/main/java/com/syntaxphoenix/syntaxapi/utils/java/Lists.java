@@ -25,6 +25,16 @@ public class Lists {
 		}
 		return output;
 	}
+	
+	public static String getEqualsIgnoreCase(String equals, List<String> list) {
+		if(list.isEmpty()) return equals;
+		for(String input : list) {
+			if(input.equalsIgnoreCase(equals)) {
+				return input;
+			}
+		}
+		return equals;
+	}
 
 	public static boolean containsEqualsIgnoreCase(String equals, List<String> list) {
 		if(list.isEmpty()) return false;
