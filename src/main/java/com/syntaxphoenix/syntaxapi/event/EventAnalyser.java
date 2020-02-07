@@ -29,8 +29,7 @@ public final class EventAnalyser {
 		String base = "event-";
 		int current = 0;
 		String name;
-
-		HashMap<Class<? extends Event>, EventExecutor> methods = new HashMap<>();
+		HashMap<Class<? extends Event>, EventExecutor> executors = new HashMap<>();
 		while (reflect.containsMethod(name = (base + current))) {
 			current++;
 			Method method = reflect.getMethod(name);
@@ -42,12 +41,13 @@ public final class EventAnalyser {
 				continue;
 			}
 			Class<? extends Event> clazz = (Class<? extends Event>) method.getParameterTypes()[0];
-			if (methods.containsKey(clazz)) {
-				methods.get(clazz).add(handler.priority(), new EventMethod(listener, method, handler.ignoreCancel()));
+			if (executors.containsKey(clazz)) {
+				executors.get(clazz).add(handler.priority(), new EventMethod(listener, method, handler.ignoreCancel()));
 			} else {
-				methods.put(clazz, new EventExecutor(manager, listener, clazz));
+				executors.put(clazz, new EventExecutor(manager, listener, clazz));
 			}
 		}
+		manager.registerExecutors(executors.values());
 		return current;
 	}
 
