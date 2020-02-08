@@ -20,7 +20,7 @@ import com.syntaxphoenix.syntaxapi.utils.java.Streams;
  * @author Lauriichen
  *
  */
-public class AddonLoader<E extends BaseAddon> {
+public final class AddonLoader<E extends BaseAddon> {
 	
 	private final AddonManager<E> manager;
 	private final ClassLoader loader;

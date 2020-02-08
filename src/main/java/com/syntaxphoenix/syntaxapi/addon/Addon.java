@@ -10,7 +10,7 @@ import com.syntaxphoenix.syntaxapi.config.json.JsonConfig;
 import com.syntaxphoenix.syntaxapi.reflections.AbstractReflect;
 import com.syntaxphoenix.syntaxapi.reflections.Reflect;
 
-public class Addon<E extends BaseAddon> {
+public final class Addon<E extends BaseAddon> {
 
 	private static final AbstractReflect ADDON = new Reflect(Addon.class).searchField("d1", "classes")
 			.searchField("c2", "mainClass").searchField("c3", "addonInfo").searchField("c4", "addon")
@@ -30,6 +30,7 @@ public class Addon<E extends BaseAddon> {
 		this.addonFile = addonFile;
 		this.addon = addon;
 		this.state = AddonState.LOADED;
+		addon.setAddon(this);
 	}
 
 	public final JsonConfig getAddonInfo() {

@@ -17,18 +17,18 @@ import com.syntaxphoenix.syntaxapi.utils.java.Strings;
  * @author Lauriichen
  *
  */
-public class AddonManager<E extends BaseAddon> {
+public abstract class AddonManager<E extends BaseAddon> {
 
-	private final AddonLoader<E> loader = new AddonLoader<>(this, this.getClass().getClassLoader());
-	private final ArrayList<File> directories = new ArrayList<>();
-	private final AliasMap<Addon<E>> addons = new AliasMap<>();
+	protected final AddonLoader<E> loader = new AddonLoader<>(this, this.getClass().getClassLoader());
+	protected final ArrayList<File> directories = new ArrayList<>();
+	protected final AliasMap<Addon<E>> addons = new AliasMap<>();
 	private final Class<E> addonClass;
 	private final SynLogger logger;
 
 	public AddonManager(Class<E> addonClass) {
 		this(addonClass, new SynLogger());
 	}
-	
+
 	public AddonManager(Class<E> addonClass, SynLogger logger) {
 		this.addonClass = addonClass;
 		this.logger = logger;
@@ -49,28 +49,32 @@ public class AddonManager<E extends BaseAddon> {
 	void register(Addon<E> addon) throws AddonException {
 		WeakReference<Alias> alias = new WeakReference<>(makeAlias(addon));
 		String name = alias.get().getName();
-		
+
 		Alias label;
 		ArrayList<String> conflict = addons.hasConflict(alias.get());
-		if(!conflict.isEmpty()) {
-			if(conflict.contains(name)) {
+		if (!conflict.isEmpty()) {
+			if (conflict.contains(name)) {
 				throw new AddonException("Addon with the name " + name + " already exists!");
 			}
 			label = alias.get().removeConflicts(conflict);
-			logger.log(LogType.WARNING, "Following aliases could not be used for addon \"" + name + "\": " +  Strings.toString(conflict));
+			logger.log(LogType.WARNING,
+					"Following aliases could not be used for addon \"" + name + "\": " + Strings.toString(conflict));
 		} else {
 			label = alias.get();
 		}
 		conflict.clear();
 		alias.enqueue();
-		
-		addons.put(label, addon);
+
+		addon.getAddon().setManager(this);
+		if (onRegistration(label, addon)) {
+			addons.put(label, addon);
+		}
 	}
 
 	Alias makeAlias(Addon<E> addon) {
 		JsonConfig info = addon.getAddonInfo();
-		String name = (info.contains("name") ? info.get("name", String.class) : addon.getAddonFile().getName().replace(".jar", ""))
-				.replace(" ", "_");
+		String name = (info.contains("name") ? info.get("name", String.class)
+				: addon.getAddonFile().getName().replace(".jar", "")).replace(" ", "_");
 		String display = info.contains("display") ? info.get("display", String.class) : name;
 
 		StringBuilder builder = new StringBuilder();
@@ -101,6 +105,14 @@ public class AddonManager<E extends BaseAddon> {
 			}
 		}
 		return new Alias(name, array).setDisplayName(display);
+	}
+
+	/*
+	 * 
+	 */
+
+	protected boolean onRegistration(Alias label, Addon<E> addon) {
+		return true;
 	}
 
 	/*
