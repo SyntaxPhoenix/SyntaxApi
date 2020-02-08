@@ -10,21 +10,21 @@ import com.syntaxphoenix.syntaxapi.config.json.JsonConfig;
 import com.syntaxphoenix.syntaxapi.reflections.AbstractReflect;
 import com.syntaxphoenix.syntaxapi.reflections.Reflect;
 
-public class Addon {
+public class Addon<E extends BaseAddon> {
 
 	private static final AbstractReflect ADDON = new Reflect(Addon.class).searchField("d1", "classes")
 			.searchField("c2", "mainClass").searchField("c3", "addonInfo").searchField("c4", "addon")
 			.searchField("c5", "addonFile");
 
 	private final Map<String, Class<?>> classes = Collections.synchronizedMap(new HashMap<String, Class<?>>());
-	private final Class<? extends BaseAddon> mainClass;
+	private final Class<? extends E> mainClass;
 	private final JsonConfig addonInfo;
-	private final BaseAddon addon;
 	private final File addonFile;
+	private final E addon;
 	
 	private AddonState state;
 
-	public Addon(Class<? extends BaseAddon> mainClass, BaseAddon addon, JsonConfig addonInfo, File addonFile) {
+	public Addon(Class<? extends E> mainClass, E addon, JsonConfig addonInfo, File addonFile) {
 		this.mainClass = mainClass;
 		this.addonInfo = addonInfo;
 		this.addonFile = addonFile;
@@ -36,11 +36,11 @@ public class Addon {
 		return addonInfo;
 	}
 
-	public final BaseAddon getAddon() {
+	public final E getAddon() {
 		return addon;
 	}
 
-	public final Class<? extends BaseAddon> getMainClass() {
+	public final Class<? extends E> getMainClass() {
 		return mainClass;
 	}
 

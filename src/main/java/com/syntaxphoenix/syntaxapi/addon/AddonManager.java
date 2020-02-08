@@ -17,14 +17,20 @@ import com.syntaxphoenix.syntaxapi.utils.java.Strings;
  * @author Lauriichen
  *
  */
-public class AddonManager {
+public class AddonManager<E extends BaseAddon> {
 
-	private final AddonLoader loader = new AddonLoader(this, this.getClass().getClassLoader());
+	private final AddonLoader<E> loader = new AddonLoader<>(this, this.getClass().getClassLoader());
 	private final ArrayList<File> directories = new ArrayList<>();
-	private final AliasMap<Addon> addons = new AliasMap<>();
+	private final AliasMap<Addon<E>> addons = new AliasMap<>();
+	private final Class<E> addonClass;
 	private final SynLogger logger;
 
-	public AddonManager(SynLogger logger) {
+	public AddonManager(Class<E> addonClass) {
+		this(addonClass, new SynLogger());
+	}
+	
+	public AddonManager(Class<E> addonClass, SynLogger logger) {
+		this.addonClass = addonClass;
 		this.logger = logger;
 	}
 
@@ -32,11 +38,15 @@ public class AddonManager {
 		return logger;
 	}
 
+	public Class<E> getAddonClass() {
+		return addonClass;
+	}
+
 	/*
 	 * 
 	 */
 
-	void register(Addon addon) throws AddonException {
+	void register(Addon<E> addon) throws AddonException {
 		WeakReference<Alias> alias = new WeakReference<>(makeAlias(addon));
 		String name = alias.get().getName();
 		
@@ -57,7 +67,7 @@ public class AddonManager {
 		addons.put(label, addon);
 	}
 
-	Alias makeAlias(Addon addon) {
+	Alias makeAlias(Addon<E> addon) {
 		JsonConfig info = addon.getAddonInfo();
 		String name = (info.contains("name") ? info.get("name", String.class) : addon.getAddonFile().getName().replace(".jar", ""))
 				.replace(" ", "_");
@@ -116,18 +126,18 @@ public class AddonManager {
 		return addons;
 	}
 
-	public BaseAddon getAddon(String label) {
+	public E getAddon(String label) {
 		if (addons.isEmpty()) {
 			return null;
 		}
 		return addons.get(label).getAddon();
 	}
 
-	public BaseAddon getAddon(Class<? extends BaseAddon> clazz) {
+	public E getAddon(Class<? extends BaseAddon> clazz) {
 		if (addons.isEmpty()) {
 			return null;
 		}
-		for (Addon addon : addons.values()) {
+		for (Addon<E> addon : addons.values()) {
 			if (addon.getMainClass().equals(clazz)) {
 				return addon.getAddon();
 			}

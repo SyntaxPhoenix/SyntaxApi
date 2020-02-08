@@ -20,19 +20,19 @@ import com.syntaxphoenix.syntaxapi.utils.java.Streams;
  * @author Lauriichen
  *
  */
-public class AddonLoader {
-
-	private final AddonManager manager;
+public class AddonLoader<E extends BaseAddon> {
+	
+	private final AddonManager<E> manager;
 	private final ClassLoader loader;
 	private final SynLogger logger;
 
-	AddonLoader(AddonManager manager, ClassLoader loader) {
+	AddonLoader(AddonManager<E> manager, ClassLoader loader) {
 		this.logger = manager.getLogger();
 		this.manager = manager;
 		this.loader = loader;
 	}
 
-	public AddonManager getManager() {
+	public AddonManager<E> getManager() {
 		return manager;
 	}
 
@@ -52,7 +52,7 @@ public class AddonLoader {
 		}
 		int size = loaded;
 		for (int index = 0; index < size; index++) {
-			Addon addon;
+			Addon<E> addon;
 			try {
 				addon = loadAddon(jarFiles.get(index));
 			} catch (Throwable throwable) {
@@ -70,7 +70,7 @@ public class AddonLoader {
 		return loaded;
 	}
 	
-	Addon loadAddon(File file) throws Throwable {
+	Addon<E> loadAddon(File file) throws Throwable {
 
 		JarInputStream input = new JarInputStream(new FileInputStream(file));
 		JarFile jar = new JarFile(file);
@@ -105,13 +105,13 @@ public class AddonLoader {
 			throw new AddonException(file.getName() + " -> main class (\"" + mainPath + "\") not found");
 		}
 
-		BaseAddon baseAddon;
-		Class<? extends BaseAddon> mainClass;
+		E baseAddon;
+		Class<? extends E> mainClass;
 
 		try {
 			Class<?> rawClass = loader.loadClass(mainPath);
-			if (rawClass.isAssignableFrom(BaseAddon.class)) {
-				mainClass = rawClass.asSubclass(BaseAddon.class);
+			if (rawClass.isAssignableFrom(manager.getAddonClass())) {
+				mainClass = rawClass.asSubclass(manager.getAddonClass());
 				try {
 					baseAddon = mainClass.newInstance();
 				} catch (Throwable throwable) {
@@ -137,7 +137,7 @@ public class AddonLoader {
 			}
 		}
 
-		Addon addon = new Addon(mainClass, baseAddon, config, file);
+		Addon<E> addon = new Addon<>(mainClass, baseAddon, config, file);
 		Map<String, Class<?>> classes = addon.classes();
 		
 		Set<String> keySet = entries.keySet();
