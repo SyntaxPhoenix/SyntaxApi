@@ -53,6 +53,7 @@ public class SyntaxTest implements Executor, Printer {
 		menu.register("ColorTest", "Tests java.awt.Color", new ColorTest());
 		menu.register("LoggerTest", "Tests the new Logger", new LoggerTest());
 		menu.register("NbtTest", "Tests the new NbtLib", new NbtTest());
+		menu.register("ThreadTest", "Tests the new Threading Stuff", new ThreadTest(), "amount=<Number>", "threadsMin=<Number>", "threadsMax=<Number>");
 		
 		return menu;
 	}
