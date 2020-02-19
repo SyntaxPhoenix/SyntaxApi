@@ -23,6 +23,19 @@ public class GridMap<V> {
 		this.type = type;
 	}
 	
+	/*
+	 * 
+	 */
+	
+	@SuppressWarnings("unchecked")
+	public GridLayer<V>[] getLayers() {
+		return layers.toArray(new GridLayer[0]);
+	}
+	
+	/*
+	 * 
+	 */
+	
 	public int getHeight() {
 		if(layers.isEmpty()) {
 			return 0;

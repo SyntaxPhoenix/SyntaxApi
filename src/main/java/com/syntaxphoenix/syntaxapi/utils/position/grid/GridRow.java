@@ -14,6 +14,15 @@ public final class GridRow<V> {
 	 * 
 	 */
 	
+	@SuppressWarnings("unchecked")
+	public GridValue<V>[] getValues() {
+		return values.toArray(new GridValue[0]);
+	}
+	
+	/*
+	 * 
+	 */
+	
 	public int getX() {
 		return x;
 	}

@@ -14,6 +14,15 @@ public final class GridLayer<V> {
 	 * 
 	 */
 	
+	@SuppressWarnings("unchecked")
+	public GridRow<V>[] getRows() {
+		return rows.toArray(new GridRow[0]);
+	}
+	
+	/*
+	 * 
+	 */
+	
 	public int getY() {
 		return y;
 	}
