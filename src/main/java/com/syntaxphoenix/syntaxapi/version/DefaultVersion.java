@@ -25,7 +25,7 @@ public class DefaultVersion extends Version {
 	public VersionAnalyzer getAnalyzer() {
 		return formatted -> {
 			DefaultVersion version = new DefaultVersion();
-			String[] parts = formatted.contains(".") ? formatted.split(".") : new String[] { formatted };
+			String[] parts = formatted.contains(".") ? formatted.split("\\.") : new String[] { formatted };
 			try {
 				if (parts.length == 1) {
 					version.setMajor(Strings.isNumeric(parts[0]) ? Integer.parseInt(parts[0]) : 0);
