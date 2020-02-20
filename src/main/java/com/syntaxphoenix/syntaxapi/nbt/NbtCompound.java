@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.nbt;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -413,7 +414,7 @@ public final class NbtCompound extends NbtTag {
      * Put the given key and value into the compound tag.
      *
      * @param key they key
-     * @param value the valu
+     * @param value the value
      */
     public void set(String key, int value) {
         set(key, new NbtInt(value));
@@ -423,10 +424,20 @@ public final class NbtCompound extends NbtTag {
      * Put the given key and value into the compound tag.
      *
      * @param key they key
-     * @param value the valu
+     * @param value the value
      */
     public void set(String key, BigInteger value) {
         set(key, new NbtBigInt(value));
+    }
+    
+    /**
+     * Put the given key and value into the compound tag.
+     *
+     * @param key they key
+     * @param value the value
+     */
+    public void set(String key, BigDecimal value) {
+        set(key, new NbtBigDecimal(value));
     }
     
     /**

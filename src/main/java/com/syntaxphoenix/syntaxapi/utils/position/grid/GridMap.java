@@ -90,6 +90,11 @@ public class GridMap<V> {
 	/*
 	 * 
 	 */
+
+	public void clear() {
+		layers.forEach(layer -> layer.clear());
+		layers.clear();
+	}
 	
 	public GridMap<V> set(int x, int z, V value) {
 		return set(x, 0, z, value);

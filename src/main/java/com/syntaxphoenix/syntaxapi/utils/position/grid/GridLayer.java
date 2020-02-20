@@ -73,6 +73,11 @@ public final class GridLayer<V> {
 	 * 
 	 */
 	
+	public void clear() {
+		rows.forEach(row -> row.clear());
+		rows.clear();
+	}
+	
 	public GridLayer<V> set(int x, int z, V value) {
 		Optional<GridRow<V>> option = getRow(x);
 		GridRow<V> row;

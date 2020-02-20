@@ -51,6 +51,10 @@ public final class GridRow<V> {
 	/*
 	 * 
 	 */
+
+	public void clear() {
+		values.clear();
+	}
 	
 	public GridRow<V> set(int z, V value) {
 		Optional<GridValue<V>> option = getValue(z);

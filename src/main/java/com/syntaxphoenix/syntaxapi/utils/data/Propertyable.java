@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.utils.data;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -122,6 +123,8 @@ public abstract class Propertyable implements NbtStorage<NbtCompound> {
 				compound.set(key, (double) value);
 			} else if(property.instanceOf(BigInteger.class)) {
 				compound.set(key, (BigInteger) value);
+			} else if(property.instanceOf(BigDecimal.class)) {
+				compound.set(key, (BigDecimal) value);
 			} else if(property.instanceOf(String.class)) {
 				compound.set(key, (String) value);
 			} else if(property.instanceOf(byte[].class)) {
