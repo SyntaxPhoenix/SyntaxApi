@@ -14,6 +14,20 @@ import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 public class NbtJsonParser {
 	
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	
+	public static JsonElement toJson(Object object) {
+		if(object instanceof JsonElement) {
+			return (JsonElement) object;
+		}
+		return GSON.toJsonTree(object);
+	}
+	
+	public static NbtTag toNbt(Object object) {
+		if(object instanceof JsonElement) {
+			return toNbt((JsonElement) object);
+		}
+		return toNbt(toJson(object));
+	}
 
 	public static NbtTag toNbt(JsonElement element) {
 		if (element.isJsonObject()) {
