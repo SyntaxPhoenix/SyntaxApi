@@ -15,9 +15,19 @@ public class NbtJsonParser {
 	
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	
+	public static Object fromJson(JsonElement element, Class<?> type) {
+		return GSON.fromJson(element, type);
+	}
+	
+	public static Object fromNbt(NbtTag tag, Class<?> type) {
+		return fromJson(toJson(tag), type);
+	}
+	
 	public static JsonElement toJson(Object object) {
 		if(object instanceof JsonElement) {
 			return (JsonElement) object;
+		} else if(object instanceof NbtTag) {
+			return toJson((NbtTag) object);
 		}
 		return GSON.toJsonTree(object);
 	}
@@ -25,6 +35,8 @@ public class NbtJsonParser {
 	public static NbtTag toNbt(Object object) {
 		if(object instanceof JsonElement) {
 			return toNbt((JsonElement) object);
+		} else if(object instanceof NbtTag) {
+			return (NbtTag) object;
 		}
 		return toNbt(toJson(object));
 	}
