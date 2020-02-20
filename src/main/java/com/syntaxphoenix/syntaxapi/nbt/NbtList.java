@@ -55,7 +55,17 @@ public final class NbtList<T extends NbtTag> extends NbtAbstractList<T> {
     	
     }
     
-    // GTTTTRS
+    // Adding Stuff
+    
+    @SuppressWarnings("unchecked")
+	public boolean addTag(NbtTag element) {
+    	if(element != null) {
+    		if(type == null) {
+    			type = element.getType();
+    		}
+    	}
+    	return super.add((T) element);
+    }
     
     @Override
     public boolean add(T element) {
@@ -76,6 +86,15 @@ public final class NbtList<T extends NbtTag> extends NbtAbstractList<T> {
     	}
     	super.add(index, element);
     }
+
+	public void addAllTags(Collection<NbtTag> collection) {
+		if(collection.isEmpty()) {
+			return;
+		}
+		for(NbtTag tag : collection) {
+			addTag(tag);
+		}
+	}
     
     /**
      * Returns the size of this list.

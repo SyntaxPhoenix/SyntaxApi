@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.syntaxphoenix.syntaxapi.nbt.NbtBigDecimal;
 import com.syntaxphoenix.syntaxapi.nbt.NbtBigInt;
 import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
 import com.syntaxphoenix.syntaxapi.nbt.NbtList;
@@ -43,6 +44,8 @@ public class NbtParser {
 			String input = (String) raw;
 			if(Strings.isNumeric(input)) {
 				return new NbtBigInt(input);
+			} else if(Strings.isDecimal(input)) {
+				return new NbtBigDecimal(input);
 			}
 			return new NbtString(input);
 		} else if(raw instanceof List) {

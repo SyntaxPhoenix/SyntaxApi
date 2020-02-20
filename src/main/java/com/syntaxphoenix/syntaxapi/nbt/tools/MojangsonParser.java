@@ -105,9 +105,11 @@ public final class MojangsonParser {
 		}
 		if (Strings.isNumeric(str)) {
 			return new NbtBigInt(str);
-		} else {
-			return new NbtString(str);
 		}
+		if(Strings.isDecimal(str)) {
+			return new NbtBigDecimal(str);
+		}
+		return new NbtString(str);
 	}
 
 	private String parseQuotedString() throws MojangsonParseException {

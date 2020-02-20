@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.nbt;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public interface NbtNumber {
@@ -31,6 +32,14 @@ public interface NbtNumber {
 	public default double asDouble() {
 		return asNumber().doubleValue();
 	}
+	
+	public default BigInteger asBigInteger() {
+		return new BigInteger(asNumber().toString());
+	}
+	
+	public default BigDecimal asBigDecimal() {
+		return new BigDecimal(asNumber().toString());
+	}
 
 	public static NbtTag fromNumber(Number raw) {
 		if(raw instanceof Byte) {
@@ -45,8 +54,12 @@ public interface NbtNumber {
 			return new NbtLong(raw.longValue());
 		} else if(raw instanceof Double) {
 			return new NbtDouble(raw.doubleValue());
-		} else {
+		} else if(raw instanceof BigInteger) {
 			return new NbtBigInt((BigInteger) raw);
+		} else if(raw instanceof BigDecimal) {
+			return new NbtBigDecimal((BigDecimal) raw);
+		} else {
+			return new NbtInt(raw.intValue());
 		}
 	}
 
