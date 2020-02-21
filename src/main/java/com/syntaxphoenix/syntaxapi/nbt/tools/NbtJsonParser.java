@@ -15,14 +15,32 @@ public class NbtJsonParser {
 	
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	
-	public static Object fromJson(JsonElement element, Class<?> type) {
-		return GSON.fromJson(element, type);
+	/**
+	 * @see com.google.gson.Gson
+	 */
+	public static Object fromJson(JsonElement element, Class<?> classOfT) {
+		return GSON.fromJson(element, classOfT);
 	}
 	
+	/**
+	 * Convert nbt to json and then serialize it with {@code fromJson(JsonElement, Class<?>)}
+	 * 
+	 * @param tag - Nbt to convert
+	 * @param type - Type of in nbt serialized object
+	 * 
+	 * @return the object
+	 */
 	public static Object fromNbt(NbtTag tag, Class<?> type) {
 		return fromJson(toJson(tag), type);
 	}
 	
+	/**
+	 * Serialize an object to json
+	 * 
+	 * @param object - Object to serialize
+	 * 
+	 * @return json that was created
+	 */
 	public static JsonElement toJson(Object object) {
 		if(object instanceof JsonElement) {
 			return (JsonElement) object;
@@ -32,6 +50,13 @@ public class NbtJsonParser {
 		return GSON.toJsonTree(object);
 	}
 	
+	/**
+	 * Serialize an object to nbt
+	 * 
+	 * @param object - Object to serialize
+	 * 
+	 * @return nbt that was created
+	 */
 	public static NbtTag toNbt(Object object) {
 		if(object instanceof JsonElement) {
 			return toNbt((JsonElement) object);
@@ -40,7 +65,14 @@ public class NbtJsonParser {
 		}
 		return toNbt(toJson(object));
 	}
-
+	
+	/**
+	 * Convert json to nbt
+	 * 
+	 * @param element - json element that should be converted
+	 * 
+	 * @return resulting nbt tag
+	 */
 	public static NbtTag toNbt(JsonElement element) {
 		if (element.isJsonObject()) {
 			return toNbtCompound(element.getAsJsonObject());
@@ -65,6 +97,13 @@ public class NbtJsonParser {
 		return null;
 	}
 
+	/**
+	 * Convert a JsonObject to an NbtCompound
+	 * 
+	 * @param object - JsonObject that should be converted
+	 * 
+	 * @return resulting NbtCompound
+	 */
 	public static NbtCompound toNbtCompound(JsonObject object) {
 		NbtCompound compound = new NbtCompound();
 		if(object.size() == 0) {
@@ -80,6 +119,13 @@ public class NbtJsonParser {
 		return compound;
 	}
 
+	/**
+	 * Convert a JsonObject to an NbtList
+	 * 
+	 * @param object - JsonObject that should be converted
+	 * 
+	 * @return resulting NbtList
+	 */
 	public static NbtList<?> toNbtList(JsonArray array) {
 		NbtList<?>[] lists = toNbtLists(array);
 		if (lists.length == 0) {
@@ -94,6 +140,14 @@ public class NbtJsonParser {
 		return list;
 	}
 
+
+	/**
+	 * Convert a JsonObject to an NbtList Array
+	 * 
+	 * @param object - JsonObject that should be converted
+	 * 
+	 * @return resulting NbtList Array that contains a List for each NbtType
+	 */
 	public static NbtList<?>[] toNbtLists(JsonArray array) {
 		if (array.size() == 0) {
 			return new NbtList[0];
@@ -115,10 +169,13 @@ public class NbtJsonParser {
 		return output;
  	}
 	
-	/*
+	/**
+	 * Convert nbt to json
 	 * 
+	 * @param tag - nbt that should be converted
+	 * 
+	 * @return resulting json
 	 */
-	
 	public static JsonElement toJson(NbtTag tag) {
 		if(tag instanceof NbtCompound) {
 			return toJsonObject((NbtCompound) tag);
@@ -128,6 +185,13 @@ public class NbtJsonParser {
 		return GSON.toJsonTree(tag.getValue());
 	}
 	
+	/**
+	 * Convert an NbtCompound to a JsonObject
+	 * 
+	 * @param compound - NbtCompound that should be converted
+	 * 
+	 * @return resulting JsonObject
+	 */
 	public static JsonObject toJsonObject(NbtCompound compound) {
 		JsonObject object = new JsonObject();
 		if(compound.size() == 0) {
@@ -139,6 +203,13 @@ public class NbtJsonParser {
 		return object;
 	}
 	
+	/**
+	 * Convert a NbtList to an JsonArray
+	 * 
+	 * @param list - NbtList that should be converted
+	 * 
+	 * @return resulting JsonArray
+	 */
 	public static JsonArray toJsonArray(NbtList<?> list) {
 		JsonArray array = new JsonArray();
 		if(list.isEmpty()) {

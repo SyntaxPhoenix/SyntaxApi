@@ -24,10 +24,24 @@ public class NbtParser {
 	public static final MojangsonDeserializer DESERIALIZER = new MojangsonDeserializer();
 	public static final MojangsonSerializer SERIALIZER = new MojangsonSerializer(true);
 	
+	/**
+	 * Convert nbt to mson
+	 * 
+	 * @param tag - NbtTag that should be converted
+	 * 
+	 * @return resulting mson string
+	 */
 	public static String toPrettyMson(NbtNamedTag tag) {
 		return SERIALIZER.toString(tag);
 	}
 	
+	/**
+	 * Convert mson to nbt
+	 * 
+	 * @param mson - mson string that should be converted
+	 * 
+	 * @return resulting NbtTag
+	 */
 	public static NbtNamedTag fromPrettyMson(String mson) {
 		try {
 			return DESERIALIZER.fromString(mson);
@@ -35,7 +49,14 @@ public class NbtParser {
 			return null;
 		}
 	}
-
+	
+	/**
+	 * Analyzes and tries to convert an Object to nbt
+	 * 
+	 * @param raw - not analyzed or converted object that should be converted to nbt
+	 * 
+	 * @return NbtTag or null depending on if it was successful or not
+	 */
 	@SuppressWarnings("unchecked")
 	public static NbtTag fromObject(Object raw) {
 		if(raw instanceof Number) {
@@ -62,6 +83,13 @@ public class NbtParser {
 		return null;
 	}
 	
+	/**
+	 * Trying to convert a List to NbtList's
+	 * 
+	 * @param list - list of objects that should be converted
+	 * 
+	 * @return list of NbtList's based on their type
+	 */
 	@SuppressWarnings("unchecked")
 	public static List<NbtList<?>> fromList(List<Object> list) {
 		List<NbtList<?>> output = new ArrayList<>();
@@ -85,6 +113,13 @@ public class NbtParser {
 		return output;
 	}
 	
+	/**
+	 * Trying to convert a Map to an NbtCompound
+	 * 
+	 * @param map - Map that should be converted to an NbtCompound
+	 * 
+	 * @return resulting NbtCompound tag
+	 */
 	public static NbtCompound fromMap(Map<Object, Object> map) {
 		NbtCompound compound = new NbtCompound();
 		if(map == null || map.isEmpty()) {
@@ -105,6 +140,13 @@ public class NbtParser {
 		return compound;
 	}
 	
+	/**
+	 * Convert a List of NbtList's to an NbtList of NbtList's
+	 * 
+	 * @param lists - lists that should be converted
+	 * 
+	 * @return NbtList containing all NbtList's
+	 */
 	public static NbtList<NbtList<?>> listsToList(List<NbtList<?>> lists) {
 		NbtList<NbtList<?>> list = new NbtList<>();
 		if(lists == null || lists.isEmpty()) {
