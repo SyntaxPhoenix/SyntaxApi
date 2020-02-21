@@ -44,7 +44,7 @@ public class LinkedConstructor extends SafeConstructor {
 
 		Iterator<NodeTuple> indicies2remove;
 		for (indicies2remove = nodeValue.iterator(); indicies2remove.hasNext(); ++i) {
-			NodeTuple tuple = (NodeTuple) indicies2remove.next();
+			NodeTuple tuple = indicies2remove.next();
 			Node keyNode = tuple.getKeyNode();
 			if (!keyNode.getTag().equals(Tag.MERGE)) {
 				Object key = this.constructObject(keyNode);
@@ -58,7 +58,7 @@ public class LinkedConstructor extends SafeConstructor {
 					}
 				}
 
-				Integer prevIndex = (Integer) keys.put(key, i);
+				Integer prevIndex = keys.put(key, i);
 				if (prevIndex != null) {
 					if (!this.isAllowDuplicateKeys()) {
 						throw new YamlException(node.getStartMark().toString() + " // " + key + " // " + tuple.getKeyNode().getStartMark());

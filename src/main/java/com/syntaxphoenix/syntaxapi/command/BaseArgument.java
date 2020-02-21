@@ -16,6 +16,7 @@ public abstract class BaseArgument {
 	
 	public abstract Object asObject();
 	
+	@Override
 	public abstract String toString();
 	
 	public abstract String toString(ArgumentSerializer serializer);

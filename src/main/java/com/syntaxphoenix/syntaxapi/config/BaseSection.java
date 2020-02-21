@@ -315,7 +315,7 @@ public abstract class BaseSection {
 		for(Entry<String, Object> entry : set) {
 			Object obj = entry.getValue();
 			if(obj instanceof SectionMap) {
-				((BaseSection) createSection(entry.getKey())).fromMap((SectionMap<String, Object>) obj);
+				createSection(entry.getKey()).fromMap((SectionMap<String, Object>) obj);
 			} else {
 				set(entry.getKey(), obj);
 			}

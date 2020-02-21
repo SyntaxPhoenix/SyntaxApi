@@ -66,6 +66,7 @@ public class InputReader extends Thread {
 		return this;
 	}
 	
+	@Override
 	public void start() {
 		if(!started) {
 			super.start();
@@ -76,6 +77,7 @@ public class InputReader extends Thread {
 		interrupt();
 	}
 
+	@Override
 	public void interrupt() {
 		if(online) {
 			online = false;

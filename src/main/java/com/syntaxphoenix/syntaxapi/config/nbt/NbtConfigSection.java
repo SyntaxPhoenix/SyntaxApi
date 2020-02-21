@@ -86,6 +86,7 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 	 * @param String {path}
 	 * @return Boolean {value exists}
 	 */
+	@Override
 	public boolean contains(String path) {
 		return get(path) != null;
 	}
@@ -109,6 +110,7 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 	 * @return NBTTag (Null) {section value}
 	 */
 
+	@Override
 	public NbtTag get(String path) {
 		if (!path.isEmpty()) {
 			return get(ConfigTools.getKeys(path));
@@ -142,6 +144,7 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 	 * @return JsonSection (Null) {section value}
 	 */
 
+	@Override
 	public NbtConfigSection getSection(String path) {
 		if (!path.isEmpty()) {
 			return getSection(ConfigTools.getKeys(path));
@@ -178,6 +181,7 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 	 * @return JsonSection (Null) {old / new section}
 	 */
 
+	@Override
 	public NbtConfigSection createSection(String path) {
 		if (!path.isEmpty()) {
 			return createSection(ConfigTools.getKeys(path));
@@ -248,6 +252,7 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 	 * @param String {path}
 	 * @return NBTConfigSection {new section}
 	 */
+	@Override
 	protected NbtConfigSection initSection(String name) {
 		return new NbtConfigSection(name);
 	}

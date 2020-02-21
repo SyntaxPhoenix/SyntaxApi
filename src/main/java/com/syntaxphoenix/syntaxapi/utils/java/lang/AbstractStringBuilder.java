@@ -17,6 +17,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 		this.value = new char[var1];
 	}
 
+	@Override
 	public int length() {
 		return this.count;
 	}
@@ -76,6 +77,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 		}
 	}
 
+	@Override
 	public char charAt(int var1) {
 		if (var1 >= 0 && var1 < this.count) {
 			return this.value[var1];
@@ -179,6 +181,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 		}
 	}
 
+	@Override
 	public AbstractStringBuilder append(CharSequence var1) {
 		if (var1 == null) {
 			return this.appendNull();
@@ -186,7 +189,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 			return this.append((String) var1);
 		} else {
 			return var1 instanceof AbstractStringBuilder ? this.append((AbstractStringBuilder) var1)
-					: this.append((CharSequence) var1, 0, var1.length());
+					: this.append(var1, 0, var1.length());
 		}
 	}
 
@@ -202,18 +205,19 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 		return this;
 	}
 
+	@Override
 	public AbstractStringBuilder append(CharSequence var1, int var2, int var3) {
 		if (var1 == null) {
 			var1 = "null";
 		}
 
-		if (var2 >= 0 && var2 <= var3 && var3 <= ((CharSequence) var1).length()) {
+		if (var2 >= 0 && var2 <= var3 && var3 <= var1.length()) {
 			int var4 = var3 - var2;
 			this.ensureCapacityInternal(this.count + var4);
 			int var5 = var2;
 
 			for (int var6 = this.count; var5 < var3; ++var6) {
-				this.value[var6] = ((CharSequence) var1).charAt(var5);
+				this.value[var6] = var1.charAt(var5);
 				++var5;
 			}
 
@@ -221,7 +225,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 			return this;
 		} else {
 			throw new IndexOutOfBoundsException(
-					"start " + var2 + ", end " + var3 + ", s.length() " + ((CharSequence) var1).length());
+					"start " + var2 + ", end " + var3 + ", s.length() " + var1.length());
 		}
 	}
 
@@ -262,6 +266,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 		return this;
 	}
 
+	@Override
 	public AbstractStringBuilder append(char var1) {
 		this.ensureCapacityInternal(this.count + 1);
 		this.value[this.count++] = var1;
@@ -382,6 +387,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 		return this.substring(var1, this.count);
 	}
 
+	@Override
 	public CharSequence subSequence(int var1, int var2) {
 		return this.substring(var1, var2);
 	}
@@ -455,7 +461,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 		}
 
 		return var2 instanceof String ? this.insert(var1, (String) var2)
-				: this.insert(var1, (CharSequence) var2, 0, ((CharSequence) var2).length());
+				: this.insert(var1, var2, 0, var2.length());
 	}
 
 	public AbstractStringBuilder insert(int var1, CharSequence var2, int var3, int var4) {
@@ -464,20 +470,20 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 		}
 
 		if (var1 >= 0 && var1 <= this.length()) {
-			if (var3 >= 0 && var4 >= 0 && var3 <= var4 && var4 <= ((CharSequence) var2).length()) {
+			if (var3 >= 0 && var4 >= 0 && var3 <= var4 && var4 <= var2.length()) {
 				int var5 = var4 - var3;
 				this.ensureCapacityInternal(this.count + var5);
 				System.arraycopy(this.value, var1, this.value, var1 + var5, this.count - var1);
 
 				for (int var6 = var3; var6 < var4; ++var6) {
-					this.value[var1++] = ((CharSequence) var2).charAt(var6);
+					this.value[var1++] = var2.charAt(var6);
 				}
 
 				this.count += var5;
 				return this;
 			} else {
 				throw new IndexOutOfBoundsException(
-						"start " + var3 + ", end " + var4 + ", s.length() " + ((CharSequence) var2).length());
+						"start " + var3 + ", end " + var4 + ", s.length() " + var2.length());
 			}
 		} else {
 			throw new IndexOutOfBoundsException("dstOffset " + var1);
@@ -564,6 +570,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 
 	}
 
+	@Override
 	public abstract String toString();
 
 	final char[] getValue() {

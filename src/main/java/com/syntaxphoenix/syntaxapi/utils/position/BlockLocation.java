@@ -40,38 +40,47 @@ public class BlockLocation extends Location {
 	 * 
 	 */
 	
+	@Override
 	public long getNormalizedX() {
 		return x;
 	}
 	
+	@Override
 	public long getNormalizedY() {
 		return y;
 	}
 	
+	@Override
 	public long getNormalizedZ() {
 		return z;
 	}
 	
+	@Override
 	public double getX() {
 		return x;
 	}
 	
+	@Override
 	public double getY() {
 		return y;
 	}
 	
+	@Override
 	public double getZ() {
 		return z;
 	}
 	
+	@Override
 	public void setX(double x) {
 		this.x = (long) x;
 	}
 	
+	@Override
 	public void setY(double y) {
 		this.y = (long) y;
 	}
 	
+	@Override
 	public void setZ(double z) {
 		this.z = (long) z;
 	}

@@ -103,6 +103,7 @@ public abstract class Version {
 	 * 
 	 */
 	
+	@Override
 	public Version clone() {
 		return init(major, minor, patch);
 	}
