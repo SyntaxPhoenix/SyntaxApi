@@ -2,18 +2,18 @@ package com.syntaxphoenix.syntaxapi.reflections;
 
 import java.util.HashMap;
 
-public class Reflector {
+public class ClassCache {
 	
-	private static HashMap<String, Class<?>> classes = new HashMap<>();
+	public static final HashMap<String, Class<?>> CLASSES = new HashMap<>();
     
     public static Class<?> getClass(String classPath) {
-    	if(classes.containsKey(classPath)) {
-    		return classes.get(classPath);
+    	if(CLASSES.containsKey(classPath)) {
+    		return CLASSES.get(classPath);
     	}
         try {
         	Class<?> clz = Class.forName(classPath);
         	if(clz != null) {
-        		classes.put(classPath, clz);
+        		CLASSES.put(classPath, clz);
         		return clz;
         	}
     		return null;

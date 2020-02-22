@@ -19,7 +19,7 @@ public abstract class AbstractReflect {
 	private final HashMap<String, Field> fields = new HashMap<>();
 
 	protected AbstractReflect(String classPath) {
-		this.owner = Reflector.getClass(classPath);
+		this.owner = ClassCache.getClass(classPath);
 	}
 
 	protected AbstractReflect(Class<?> owner) {

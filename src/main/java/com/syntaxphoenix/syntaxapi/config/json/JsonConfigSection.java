@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.syntaxphoenix.syntaxapi.config.BaseSection;
-import com.syntaxphoenix.syntaxapi.reflections.Reflector;
+import com.syntaxphoenix.syntaxapi.reflections.ClassCache;
 import com.syntaxphoenix.syntaxapi.utils.config.JsonTools;
 
 /**
@@ -68,7 +68,7 @@ public class JsonConfigSection extends BaseSection {
 					if (object.get("class") == null) {
 						((JsonConfigSection) createSection(entry.getKey())).fromJson(object);
 					} else {
-						Class<?> clazz = Reflector.getClass(object.get("class").getAsString());
+						Class<?> clazz = ClassCache.getClass(object.get("class").getAsString());
 						if (clazz == null) {
 							continue;
 						}
