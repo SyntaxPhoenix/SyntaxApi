@@ -14,7 +14,12 @@ public class CachedObject<V> {
 	}
 	
 	public V getValue() {
-		lastAccessed = System.currentTimeMillis();
+		return getValue(true);
+	}
+	
+	final V getValue(boolean update) {
+		if(update)
+			lastAccessed = System.currentTimeMillis();
 		return value;
 	}
 
