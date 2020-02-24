@@ -36,7 +36,7 @@ public class CacheList<V> {
 			timer = null;
 	}
 	
-	public List<V> getListCopy() {
+	public ArrayList<V> getListCopy() {
 		ArrayList<V> values = new ArrayList<>(size());
 		synchronized (cacheList) {
 			Iterator<CachedObject<V>> iterator = cacheList.iterator();
