@@ -10,7 +10,7 @@ import com.syntaxphoenix.syntaxapi.logging.color.LogColorType;
 import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
 import com.syntaxphoenix.syntaxapi.utils.java.Times;
 
-public class SynLogger {
+public final class SynLogger implements ILogger {
 
 	public static final String DEFAULT_FORMAT = "[%date% / %time%][%thread% => %type%] %message%";
 
@@ -99,14 +99,17 @@ public class SynLogger {
 	 * 
 	 */
 
+	@Override
 	public void log(String message) {
 		log(LogType.INFO, message);
 	}
 
+	@Override
 	public void log(LogType type, String message) {
 		log(type.id(), message);
 	}
 
+	@Override
 	public void log(String typeId, String message) {
 		log(getType(typeId), message);
 	}
@@ -121,14 +124,17 @@ public class SynLogger {
 	 * 
 	 */
 
+	@Override
 	public void log(String... messages) {
 		log(LogType.INFO, messages);
 	}
 
+	@Override
 	public void log(LogType type, String... messages) {
 		log(type.id(), messages);
 	}
 
+	@Override
 	public void log(String typeId, String... messages) {
 		log(getType(typeId), messages);
 	}
@@ -146,14 +152,17 @@ public class SynLogger {
 	 * 
 	 */
 
+	@Override
 	public void log(Throwable throwable) {
 		log(LogType.ERROR, throwable);
 	}
 
+	@Override
 	public void log(LogType type, Throwable throwable) {
 		log(type.id(), throwable);
 	}
 
+	@Override
 	public void log(String typeId, Throwable throwable) {
 		log(getType(typeId), throwable);
 	}
