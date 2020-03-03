@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import sun.misc.FloatingDecimal;
 
+@SuppressWarnings("restriction")
 abstract class AbstractStringBuilder implements Appendable, CharSequence {
 	char[] value;
 	int count;
