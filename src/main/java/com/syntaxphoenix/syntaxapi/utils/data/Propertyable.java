@@ -89,6 +89,10 @@ public abstract class Propertyable implements NbtStorage<NbtCompound> {
 	public int getPropertyCount() {
 		return properties.size();
 	}
+	
+	public boolean hasProperties() {
+		return !properties.isEmpty();
+	}
 
 	public Property<?>[] getProperties() {
 		return properties.toArray(new Property<?>[0]);
