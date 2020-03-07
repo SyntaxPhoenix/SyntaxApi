@@ -38,7 +38,7 @@ public class CommandManager {
 	}
 	
 	public Alias[] getAliases() {
-		return commands.entrySet().toArray(new Alias[0]);
+		return commands.keySet().toArray(new Alias[0]);
 	}
 	
 	/*
