@@ -8,6 +8,10 @@ public class MurmurHashGenerator extends RandomNumberGenerator {
 	public MurmurHashGenerator() {
 		this.seed = System.currentTimeMillis();
 	}
+
+	public MurmurHashGenerator(long seed) {
+		this.seed = seed;
+	}
 	
 	/*
 	 * 

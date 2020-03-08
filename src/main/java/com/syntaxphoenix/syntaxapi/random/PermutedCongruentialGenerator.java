@@ -5,8 +5,16 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 	private long state;
 	private long seed;
 
-	private long multiplier;
-	private long increment;
+	private long multiplier = 645;
+	private long increment = 2583;
+	
+	public PermutedCongruentialGenerator() {
+		setSeed(System.currentTimeMillis());
+	}
+	
+	public PermutedCongruentialGenerator(long seed) {
+		setSeed(seed);
+	}
 
 	/*
 	 * 
