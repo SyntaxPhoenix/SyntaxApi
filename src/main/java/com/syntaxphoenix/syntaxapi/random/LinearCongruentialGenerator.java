@@ -23,7 +23,7 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 	
 	public void setSeed(long seed) {
 		this.seed = seed;
-		this.state = Math.toIntExact(seed);
+		this.state = Math.toIntExact(seed >> 32);
 	}
 	
 	public long getSeed() {
