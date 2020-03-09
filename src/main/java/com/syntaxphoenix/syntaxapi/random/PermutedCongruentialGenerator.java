@@ -55,6 +55,7 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 
 	public void setMultiplier(long multiplier) {
 		this.multiplier = multiplier;
+		checkVariables();
 	}
 	
 	/*
@@ -67,6 +68,7 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 
 	public void setIncrement(long increment) {
 		this.increment = increment;
+		checkVariables();
 	}
 
 	/*
@@ -110,7 +112,6 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 	public int nextInt() {
 		long number = state;
 		long count = number >> 59;
-		
 		state = number * multiplier + increment;
 		number ^= number >> 18;
 		return (int) (((int) number) >> count | number << (-count & 31));
@@ -194,5 +195,18 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 		}
 		return min + Math.abs(nextDouble() % (max - min));
 	}
-
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 */
+	
+	private void checkVariables() {
+		if(multiplier <= 0)
+			multiplier = 1;
+		if(increment < 0)
+			increment = 0;
+	}
+	
 }

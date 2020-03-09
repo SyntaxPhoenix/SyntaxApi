@@ -80,7 +80,10 @@ public class MurmurHashGenerator extends RandomNumberGenerator {
 
 	@Override
 	public int nextInt() {
-		return generateInt(seed, iterations++);
+		if(iterations == Long.MAX_VALUE)
+			iterations = 0L;
+		int output = generateInt(seed, iterations++);
+		return output;
 	}
 
 	@Override

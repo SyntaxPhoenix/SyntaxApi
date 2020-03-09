@@ -5,8 +5,8 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 	private long seed;
 	private int state;
 	
-	private int aRngConstant = 32543;
-	private int cRngConstant = 87454568;
+	private int multiplier = 87454568;
+	private int increment = 3214561;
 	private int modulu = 2 ^ 31;
 
 	public LinearCongruentialGenerator() {
@@ -48,24 +48,26 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 	 * 
 	 */
 	
-	public int getAConstant() {
-		return aRngConstant;
+	public int getMultipliert() {
+		return multiplier;
 	}
 	
-	public void setAConstant(int aRngConstant) {
-		this.aRngConstant = aRngConstant;
+	public void setMultiplier(int multiplier) {
+		this.multiplier = multiplier;
+		checkVariables();
 	}
 	
 	/*
 	 * 
 	 */
 	
-	public int getCConstant() {
-		return cRngConstant;
+	public int getIncrement() {
+		return increment;
 	}
 	
-	public void setCConstant(int cRngConstant) {
-		this.cRngConstant = cRngConstant;
+	public void setIncrement(int increment) {
+		this.increment = increment;
+		checkVariables();
 	}
 	
 	/*
@@ -78,6 +80,7 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 
 	public void setModulu(int modulu) {
 		this.modulu = modulu;
+		checkVariables();
 	}
 	
 	/*
@@ -119,7 +122,7 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 
 	@Override
 	public int nextInt() {
-		return state = (aRngConstant * state + cRngConstant) % modulu;
+		return state = ((multiplier * state) + increment) % modulu;
 	}
 
 	@Override
@@ -199,6 +202,25 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 			return min;
 		}
 		return min + Math.abs(nextDouble() % (max - min));
+	}
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 */
+	
+	private void checkVariables() {
+		if(modulu <= 0)
+			modulu = 1;
+		if(multiplier <= 0)
+			multiplier = 1;
+		if(increment < 0)
+			increment = 0;
+		if(multiplier > modulu)
+			multiplier = modulu != 1 ? modulu - 1 : 1;
+		if(increment > modulu)
+			increment = modulu - 1;
 	}
 	
 }
