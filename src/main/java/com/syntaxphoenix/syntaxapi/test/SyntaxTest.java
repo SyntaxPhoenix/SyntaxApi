@@ -49,7 +49,8 @@ public class SyntaxTest implements Executor, Printer {
 	 */
 	private TestMenu createTests() {
 		TestMenu menu = new TestMenu();
-		
+
+		menu.register("VersionTest", "Tests the Version Manager", new VersionTest());
 		menu.register("ServiceTest", "Tests RNG", new ServiceTest());
 		menu.register("ColorTest", "Tests java.awt.Color", new ColorTest());
 		menu.register("LoggerTest", "Tests the new Logger", new LoggerTest());

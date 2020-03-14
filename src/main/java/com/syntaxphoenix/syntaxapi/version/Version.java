@@ -1,6 +1,6 @@
 package com.syntaxphoenix.syntaxapi.version;
 
-public abstract class Version {
+public abstract class Version implements Comparable<Version> {
 	
 	private int major;
 	private int minor;
@@ -62,13 +62,18 @@ public abstract class Version {
 	 */
 	
 	public boolean isHigher(Version version) {
-		if(major > version.major) {
+		if(major > version.major)
 			return true;
-		} else if(minor > version.minor) {
+		if(major < version.major)
+			return false;
+		if(minor > version.minor)
 			return true;
-		} else if(patch > version.patch) {
+		if(minor < version.minor)
+			return false;
+		if(patch > version.patch)
 			return true;
-		}
+		if(patch < version.patch)
+			return false;
 		return false;
 	}
 	
@@ -77,13 +82,18 @@ public abstract class Version {
 	}
 	
 	public boolean isLower(Version version) {
-		if(major < version.major) {
+		if(major < version.major)
 			return true;
-		} else if(minor < version.minor) {
+		if(major > version.major)
+			return false;
+		if(minor < version.minor)
 			return true;
-		} else if(patch < version.patch) {
+		if(minor > version.minor)
+			return false;
+		if(patch < version.patch)
 			return true;
-		}
+		if(patch > version.patch)
+			return false;
 		return false;
 	}
 	
@@ -129,6 +139,19 @@ public abstract class Version {
 	@Override
 	public String toString() {
 		return getFormatter().format(this);
+	}
+	
+	/*
+	 * 
+	 */
+	
+	@Override
+	public int compareTo(Version version) {
+		if(isLower(version))
+			return -1;
+		if(isHigher(version))
+			return 1;
+		return 0;
 	}
 	
 }
