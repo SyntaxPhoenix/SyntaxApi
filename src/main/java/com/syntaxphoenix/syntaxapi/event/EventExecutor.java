@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-public final class EventExecutor {
+public final class EventExecutor implements Comparable<EventExecutor> {
 
 	private final EnumMap<EventPriority, ArrayList<EventMethod>> methods = new EnumMap<>(EventPriority.class);
 	private final Class<? extends Event> event;
@@ -61,6 +61,20 @@ public final class EventExecutor {
 		ArrayList<EventMethod> output = new ArrayList<>();
 		methods.forEach((priority, list) -> output.addAll(list));
 		return output;
+	}
+	
+	/*
+	 * 
+	 */
+
+	@Override
+	public int compareTo(EventExecutor o) {
+		Class<? extends Event> other = o.getEvent();
+		if(event.equals(other))
+			return 0;
+		if(event.isAssignableFrom(other))
+			return -1;
+		return 1;
 	}
 	
 }

@@ -6,8 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
-import com.syntaxphoenix.syntaxapi.logging.SynLogger;
+import com.syntaxphoenix.syntaxapi.logging.ILogger;
 
 /**
  * 
@@ -18,13 +17,13 @@ import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 public class EventManager {
 
 	private final LinkedHashMap<Class<? extends Event>, ArrayList<EventExecutor>> listeners = new LinkedHashMap<>();
-	private final SynLogger logger;
+	private final ILogger logger;
 
 	public EventManager() {
 		this.logger = null;
 	}
 
-	public EventManager(SynLogger logger) {
+	public EventManager(ILogger logger) {
 		this.logger = logger;
 	}
 
@@ -36,7 +35,7 @@ public class EventManager {
 		return logger != null;
 	}
 
-	public SynLogger getLogger() {
+	public ILogger getLogger() {
 		return logger;
 	}
 
@@ -111,21 +110,22 @@ public class EventManager {
 		return getExecutors(event, false);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<EventExecutor> getExecutors(Class<? extends Event> event, boolean allowAssignableClasses) {
 		if (!allowAssignableClasses) {
 			if (!listeners.containsKey(event)) {
-				return ImmutableList.of();
+				return new ArrayList<>();
 			}
-			return ImmutableList.copyOf(listeners.get(event));
+			return (List<EventExecutor>) listeners.get(event).clone();
 		}
 		ArrayList<EventExecutor> executors = new ArrayList<>();
 		Set<Class<? extends Event>> keys = listeners.keySet();
 		for(Class<? extends Event> assign : keys) {
-			if(event.isAssignableFrom(assign) || assign.equals(event)) {
+			if(assign.isAssignableFrom(event)) {
 				executors.addAll(listeners.get(assign));
 			}
 		}
-		return ImmutableList.copyOf(executors);
+		return (List<EventExecutor>) executors.clone();
 	}
 
 }

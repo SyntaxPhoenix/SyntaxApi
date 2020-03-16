@@ -1,6 +1,7 @@
 package com.syntaxphoenix.syntaxapi.event;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public final class EventCall {
 		this.executors = executors;
 		this.manager = manager;
 		this.event = event;
+		
+		Collections.sort(executors);
 	}
 	
 	public final EventManager getManager() {

@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import com.syntaxphoenix.syntaxapi.event.Event;
+
 public class Reflections {
 
 	public static boolean hasSameArguments(Class<?>[] compare1, Class<?>[] compare2) {
@@ -15,10 +17,10 @@ public class Reflections {
 			return false;
 		}
 		for(Class<?> arg1 : compare1) {
-			boolean found = false;
+			boolean found = true;
 			for(Class<?> arg2 : compare2) {
-				if(arg2.isAssignableFrom(arg1)) {
-					found = true;
+				if(!arg1.isAssignableFrom(arg2)) {
+					found = false;
 					break;
 				}
 			}
@@ -106,6 +108,19 @@ public class Reflections {
 			}
 		}
 		return null;
+	}
+
+	public static int countSuperTypesTill(Class<? extends Event> type, Class<? extends Event> superType) {
+		int count = 0;
+		Class<?> currentType = type;
+		while(!superType.equals(currentType)) {
+			currentType = currentType.getSuperclass();
+			System.out.println(type + " | " + currentType + " | " + count);
+			count++;
+			if(currentType == null)
+				break;
+		}
+		return count;
 	}
 
 }
