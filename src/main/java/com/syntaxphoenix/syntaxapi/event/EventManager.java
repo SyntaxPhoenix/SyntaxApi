@@ -121,7 +121,7 @@ public class EventManager {
 		ArrayList<EventExecutor> executors = new ArrayList<>();
 		Set<Class<? extends Event>> keys = listeners.keySet();
 		for(Class<? extends Event> assign : keys) {
-			if(assign.isAssignableFrom(event) || assign.equals(event)) {
+			if(event.isAssignableFrom(assign) || assign.equals(event)) {
 				executors.addAll(listeners.get(assign));
 			}
 		}
