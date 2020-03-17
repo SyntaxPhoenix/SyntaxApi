@@ -12,7 +12,7 @@ import java.util.jar.JarInputStream;
 
 import com.syntaxphoenix.syntaxapi.config.json.JsonConfig;
 import com.syntaxphoenix.syntaxapi.exceptions.AddonException;
-import com.syntaxphoenix.syntaxapi.logging.SynLogger;
+import com.syntaxphoenix.syntaxapi.logging.ILogger;
 import com.syntaxphoenix.syntaxapi.utils.java.Files;
 import com.syntaxphoenix.syntaxapi.utils.java.Streams;
 
@@ -24,7 +24,7 @@ public final class AddonLoader<E extends BaseAddon> {
 	
 	private final AddonManager<E> manager;
 	private final ClassLoader loader;
-	private final SynLogger logger;
+	private final ILogger logger;
 
 	AddonLoader(AddonManager<E> manager, ClassLoader loader) {
 		this.logger = manager.getLogger();

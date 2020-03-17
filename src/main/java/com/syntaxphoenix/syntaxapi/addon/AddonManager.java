@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.syntaxphoenix.syntaxapi.config.json.JsonConfig;
 import com.syntaxphoenix.syntaxapi.exceptions.AddonException;
+import com.syntaxphoenix.syntaxapi.logging.ILogger;
 import com.syntaxphoenix.syntaxapi.logging.LogType;
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 import com.syntaxphoenix.syntaxapi.utils.alias.Alias;
@@ -23,18 +24,18 @@ public abstract class AddonManager<E extends BaseAddon> {
 	protected final ArrayList<File> directories = new ArrayList<>();
 	protected final AliasMap<Addon<E>> addons = new AliasMap<>();
 	private final Class<E> addonClass;
-	private final SynLogger logger;
+	private final ILogger logger;
 
 	public AddonManager(Class<E> addonClass) {
 		this(addonClass, new SynLogger());
 	}
 
-	public AddonManager(Class<E> addonClass, SynLogger logger) {
+	public AddonManager(Class<E> addonClass, ILogger logger) {
 		this.addonClass = addonClass;
 		this.logger = logger;
 	}
 
-	protected SynLogger getLogger() {
+	protected ILogger getLogger() {
 		return logger;
 	}
 

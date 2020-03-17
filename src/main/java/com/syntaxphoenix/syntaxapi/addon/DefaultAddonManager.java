@@ -1,6 +1,6 @@
 package com.syntaxphoenix.syntaxapi.addon;
 
-import com.syntaxphoenix.syntaxapi.logging.SynLogger;
+import com.syntaxphoenix.syntaxapi.logging.ILogger;
 
 public class DefaultAddonManager<E extends BaseAddon> extends AddonManager<E> {
 
@@ -8,7 +8,7 @@ public class DefaultAddonManager<E extends BaseAddon> extends AddonManager<E> {
 		super(addonClass);
 	}
 
-	public DefaultAddonManager(Class<E> addonClass, SynLogger logger) {
+	public DefaultAddonManager(Class<E> addonClass, ILogger logger) {
 		super(addonClass, logger);
 	}
 
