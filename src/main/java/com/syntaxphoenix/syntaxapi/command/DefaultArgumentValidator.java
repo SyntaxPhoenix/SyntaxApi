@@ -32,6 +32,16 @@ public class DefaultArgumentValidator extends ArgumentValidator {
 				continue;
 			} else if (Strings.isNumeric(argument)) {
 				try {
+					list.add(new ByteArgument(Byte.parseByte(argument)));
+					continue;
+				} catch (NumberFormatException e) {
+				}
+				try {
+					list.add(new ShortArgument(Short.parseShort(argument)));
+					continue;
+				} catch (NumberFormatException e) {
+				}
+				try {
 					list.add(new IntegerArgument(Integer.parseInt(argument)));
 					continue;
 				} catch (NumberFormatException e) {

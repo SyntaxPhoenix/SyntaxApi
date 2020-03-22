@@ -42,6 +42,12 @@ public abstract class BaseArgument {
 	public LongArgument asLong() {
 		return (LongArgument) this;
 	}
+	public ByteArgument asByte() {
+		return (ByteArgument) this;
+	}
+	public ShortArgument asShort() {
+		return (ShortArgument) this;
+	}
 	public FloatArgument asFloat() {
 		return (FloatArgument) this;
 	}

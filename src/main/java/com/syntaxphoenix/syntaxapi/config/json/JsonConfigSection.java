@@ -7,6 +7,7 @@ import java.util.Set;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.syntaxphoenix.syntaxapi.command.DefaultArgumentValidator;
 import com.syntaxphoenix.syntaxapi.config.BaseSection;
 import com.syntaxphoenix.syntaxapi.reflections.ClassCache;
 import com.syntaxphoenix.syntaxapi.utils.config.JsonTools;
@@ -25,8 +26,7 @@ public class JsonConfigSection extends BaseSection {
 	}
 
 	/**
-	 * @param String
-	 *            {name}
+	 * @param String {name}
 	 */
 	public JsonConfigSection(String name) {
 		super(name);
@@ -49,8 +49,7 @@ public class JsonConfigSection extends BaseSection {
 	}
 
 	/**
-	 * @param JsonObject
-	 *            {input json}
+	 * @param JsonObject {input json}
 	 */
 	public void fromJson(JsonObject input) {
 		if (input.isJsonNull()) {
@@ -72,15 +71,30 @@ public class JsonConfigSection extends BaseSection {
 						if (clazz == null) {
 							continue;
 						}
-						set(entry.getKey(),
-								JsonTools.getConfiguredGson().fromJson(object.get("classValue"), clazz));
+						set(entry.getKey(), JsonTools.getConfiguredGson().fromJson(object.get("classValue"), clazz));
 					}
 				} else if (current.isJsonPrimitive()) {
 					JsonPrimitive primitive = current.getAsJsonPrimitive();
 					if (primitive.isBoolean()) {
 						set(entry.getKey(), primitive.getAsBoolean());
 					} else if (primitive.isNumber()) {
-						set(entry.getKey(), primitive.getAsNumber());
+						Number number = primitive.getAsNumber();
+						if (number instanceof Byte) {
+							set(entry.getKey(), number.byteValue());
+						} else if (number instanceof Short) {
+							set(entry.getKey(), number.shortValue());
+						} else if (number instanceof Integer) {
+							set(entry.getKey(), number.intValue());
+						} else if (number instanceof Long) {
+							set(entry.getKey(), number.longValue());
+						} else if (number instanceof Float) {
+							set(entry.getKey(), number.floatValue());
+						} else if (number instanceof Double) {
+							set(entry.getKey(), number.doubleValue());
+						} else {
+							set(entry.getKey(),
+									DefaultArgumentValidator.DEFAULT.process(number.toString()).get(0).asObject());
+						}
 					} else {
 						set(entry.getKey(), primitive.getAsString());
 					}
@@ -90,8 +104,7 @@ public class JsonConfigSection extends BaseSection {
 	}
 
 	/**
-	 * @param String
-	 *            {input json}
+	 * @param String {input json}
 	 */
 	public void fromJsonString(String input) {
 		fromJson(JsonTools.readJson(input));

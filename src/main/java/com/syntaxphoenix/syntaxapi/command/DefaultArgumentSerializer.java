@@ -48,6 +48,16 @@ public class DefaultArgumentSerializer extends ArgumentSerializer {
 	}
 
 	@Override
+	public String toString(ByteArgument argument) {
+		return argument.getValue().toString();
+	}
+
+	@Override
+	public String toString(ShortArgument argument) {
+		return argument.getValue().toString();
+	}
+
+	@Override
 	public String toString(FloatArgument argument) {
 		return argument.getValue().toString();
 	}

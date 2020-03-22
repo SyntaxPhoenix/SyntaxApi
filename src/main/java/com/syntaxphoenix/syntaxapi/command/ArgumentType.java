@@ -15,6 +15,8 @@ public enum ArgumentType {
 	CUSTOM(ArgumentSuperType.OBJECT, Object.class),
 	BOOLEAN(ArgumentSuperType.STATE, Boolean.class),
 	STRING(ArgumentSuperType.TEXT, String.class), 
+	BYTE(ArgumentSuperType.NUMBER, Byte.class), 
+	SHORT(ArgumentSuperType.NUMBER, Short.class), 
 	INTEGER(ArgumentSuperType.NUMBER, Integer.class), 
 	FLOAT(ArgumentSuperType.NUMBER, Float.class), 
 	LONG(ArgumentSuperType.NUMBER, Long.class), 

@@ -13,6 +13,12 @@ public abstract class ArgumentSerializer {
 		case BOOLEAN:
 			output = toString(argument.asBoolean());
 			break;
+		case BYTE:
+			output = toString(argument.asArray());
+			break;
+		case SHORT:
+			output = toString(argument.asBigInteger());
+			break;
 		case ARRAY:
 			output = toString(argument.asArray());
 			break;
@@ -54,6 +60,10 @@ public abstract class ArgumentSerializer {
 	public abstract String toString(BigIntegerArgument argument);
 
 	public abstract String toString(DoubleArgument argument);
+
+	public abstract String toString(ByteArgument argument);
+
+	public abstract String toString(ShortArgument argument);
 
 	public abstract String toString(FloatArgument argument);
 
