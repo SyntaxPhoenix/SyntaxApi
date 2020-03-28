@@ -1,6 +1,8 @@
 package com.syntaxphoenix.syntaxapi.reflections;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Optional;
 
 public class ClassCache {
 	
@@ -23,4 +25,15 @@ public class ClassCache {
             return null;
         }
     }
+    
+    public static void uncache(AbstractReflect reflect) {
+    	Class<?> search = reflect.getOwner();
+    	reflect.delete();
+    	if(CLASSES.isEmpty())
+    		return;
+    	Optional<Entry<String, Class<?>>> option = CLASSES.entrySet().stream().filter(entry -> entry.getValue().equals(search)).findFirst();
+    	if(option.isPresent())
+    		CLASSES.remove(option.get().getKey());
+    }
+    
 }

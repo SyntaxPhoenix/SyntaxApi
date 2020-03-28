@@ -38,6 +38,22 @@ public abstract class AbstractReflect {
 	 * 
 	 */
 
+	public void delete() {
+		constructors.clear();
+		methods.clear();
+		fields.clear();
+		try {
+			fields.put("owner", this.getClass().getDeclaredField("owner"));
+			setFieldValue("owner", null);
+			fields.remove("owner");
+		} catch (NoSuchFieldException | SecurityException e) {
+		}
+	}
+	
+	/*
+	 * 
+	 */
+
 	public boolean putConstructor(String name, Constructor<?> constructor) {
 		if (constructors.containsKey(name)) {
 			return false;

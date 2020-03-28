@@ -7,6 +7,10 @@ public abstract class AbstractReflectCache<R extends AbstractReflect> {
 	
 	protected final HashMap<String, R> cache = new HashMap<>();
 	
+	public void clear() {
+		cache.values().forEach(ClassCache::uncache);
+	}
+	
 	public Optional<R> get(String name) {
 		return Optional.ofNullable(cache.get(name));
 	}
