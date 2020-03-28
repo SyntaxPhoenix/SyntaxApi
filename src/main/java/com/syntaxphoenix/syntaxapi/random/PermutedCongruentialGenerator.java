@@ -171,7 +171,7 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 		if (max <= min) {
 			return min;
 		}
-		return min + Math.abs(nextFloat() % (max - min));
+		return min + (nextFloat() * (max - min));
 	}
 
 	/*
@@ -193,7 +193,7 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 		if (max <= min) {
 			return min;
 		}
-		return min + Math.abs(nextDouble() % (max - min));
+		return min + (nextDouble() * (max - min));
 	}
 	
 	/*
