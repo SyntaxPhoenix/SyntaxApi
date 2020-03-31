@@ -3,6 +3,8 @@ package com.syntaxphoenix.syntaxapi.utils.java;
 import java.lang.reflect.Array;
 import java.util.List;
 
+import com.syntaxphoenix.syntaxapi.utils.java.tools.Compare;
+
 public class Arrays {
 
 	@SuppressWarnings("unchecked")
@@ -77,6 +79,20 @@ public class Arrays {
 				System.arraycopy(input3, 0, input3, 0, size3);
 			}
 		}
+	}
+
+	public static <A> boolean contains(A[] values, A find) {
+		for(A value : values)
+			if(value.equals(find))
+				return true;
+		return false;
+	}
+
+	public static <A, B> boolean contains(A[] values, B find, Compare<A, B> comparator) {
+		for(A value : values)
+			if(comparator.compare(value, find))
+				return true;
+		return false;
 	}
 
 }
