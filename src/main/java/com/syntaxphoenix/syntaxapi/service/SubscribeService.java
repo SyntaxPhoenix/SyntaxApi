@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 public @interface SubscribeService {
 	
 	public Class<? extends IService> service();
-	public EventPriority priority();
+	public EventPriority priority() default EventPriority.NORMAL;
 
 }
