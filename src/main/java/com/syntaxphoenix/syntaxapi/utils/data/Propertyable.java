@@ -83,7 +83,7 @@ public abstract class Propertyable implements NbtStorage<NbtCompound> {
 	}
 	
 	public boolean containsProperty(String key) {
-		return properties.stream().filter(property -> property.getKey().equals(key)).findFirst().isPresent();
+		return properties.stream().anyMatch(property -> property.getKey().equals(key));
 	}
 
 	public int getPropertyCount() {
