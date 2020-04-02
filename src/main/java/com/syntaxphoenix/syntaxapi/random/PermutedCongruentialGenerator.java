@@ -177,10 +177,10 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 	/*
 	 * 
 	 */
-
+	
 	@Override
 	public double nextDouble() {
-		return (((long) (next(26)) << 27) + next(27)) * 1.0D;
+		return (((long) (next(26)) << 27) + next(27)) * 0x1.0p-53;
 	}
 
 	@Override

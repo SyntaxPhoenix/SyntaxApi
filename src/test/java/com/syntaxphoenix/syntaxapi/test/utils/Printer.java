@@ -1,21 +1,39 @@
 package com.syntaxphoenix.syntaxapi.test.utils;
 
+import com.syntaxphoenix.syntaxapi.test.SyntaxExecutor;
+
 /**
  * @author Lauriichen
  *
  */
 public interface Printer {
 	
-	public static void prints(Object input) {
-		System.out.println(input);
-	}
+	/*
+	 * 
+	 */
 	
 	public static void spaces() {
 		prints("------------------------------------------------------------------");
 	}
 	
+	public static void prints(Object input) {
+		prints(input.toString());
+	}
+	
+	public static void prints(String input) {
+		SyntaxExecutor.LOGGER.log(input);
+	}
+	
+	/*
+	 * 
+	 */
+	
 	public default void print(Object input) {
-		System.out.println(input);
+		print(input.toString());
+	}
+	
+	public default void print(String input) {
+		SyntaxExecutor.LOGGER.log(input);
 	}
 	
 	public default void space() {
