@@ -348,4 +348,19 @@ public abstract class AbstractReflect {
 		return this;
 	}
 
+	public AbstractReflect searchFields(String name, String fieldName) {
+		if (containsField(name)) {
+			return this;
+		}
+		Field[] searching = owner.getFields();
+		int current = 0;
+		for(Field field : searching) {
+			if(field.getName().startsWith(fieldName)) {
+				fields.put(name + current, field);
+				current++;
+			}
+		}
+		return this;
+	}
+
 }
