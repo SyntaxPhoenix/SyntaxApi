@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
 
 import com.syntaxphoenix.syntaxapi.utils.java.Reflections;
@@ -48,6 +49,22 @@ public abstract class AbstractReflect {
 			fields.remove("owner");
 		} catch (NoSuchFieldException | SecurityException e) {
 		}
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public Collection<Constructor<?>> getConstructors() {
+		return constructors.values();
+	}
+	
+	public Collection<Method> getMethods() {
+		return methods.values();
+	}
+	
+	public Collection<Field> getFields() {
+		return fields.values();
 	}
 	
 	/*
