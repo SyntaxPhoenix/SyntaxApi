@@ -41,6 +41,7 @@ public class AsyncLogger implements ILogger {
 	@Override
 	public void close() {
 		try {
+			executor.shutdown();
 			executor.awaitTermination(60, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			logger.log(e);
