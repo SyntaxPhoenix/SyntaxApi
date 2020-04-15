@@ -19,7 +19,7 @@ import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
  */
 public class SyntaxExecutor extends Thread {
 
-	public static AsyncLogger LOGGER = new AsyncLogger(new SynLogger(AnsiConsole.out(), LoggerState.EXTENDED_FILE));
+	public static AsyncLogger LOGGER = new AsyncLogger(new SynLogger(AnsiConsole.out(), LoggerState.EXTENDED_STREAM));
 	public static PrintWriter WRITER;
 
 	private static final BlockingQueue<Runnable> QUEUE = new LinkedBlockingQueue<Runnable>();
