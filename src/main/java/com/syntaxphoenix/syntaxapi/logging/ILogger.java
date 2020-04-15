@@ -2,6 +2,8 @@ package com.syntaxphoenix.syntaxapi.logging;
 
 public interface ILogger {
 	
+	public void setState(LoggerState state);
+	
 	public LoggerState getState();
 	
 	public void log(String message);

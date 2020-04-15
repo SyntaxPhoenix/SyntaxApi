@@ -36,18 +36,22 @@ public class AsyncLogger implements ILogger {
 	public void setThreadName(String name) {
 		logger.setThreadName(name);
 	}
+
+	public void setState(LoggerState state) {
+		logger.setState(state);
+	}
 	
 	public String getThreadName() {
 		return logger.getThreadName();
+	}
+
+	public LoggerState getState() {
+		return logger.getState();
 	}
 	
 	/*
 	 * 
 	 */
-
-	public LoggerState getState() {
-		return logger.getState();
-	}
 
 	public void log(String message) {
 		queue(() -> logger.log(message));
