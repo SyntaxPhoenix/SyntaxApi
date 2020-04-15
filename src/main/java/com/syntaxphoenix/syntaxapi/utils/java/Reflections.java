@@ -1,11 +1,8 @@
 package com.syntaxphoenix.syntaxapi.utils.java;
 
 import java.io.File;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -30,42 +27,6 @@ public class Reflections {
 			}
 		}
 		return true;
-	}
-
-	public static ArrayList<Field> findFieldsByAnnotation(Class<?> clazz, Class<? extends Annotation> annotation,
-			boolean flag) {
-		ArrayList<Field> output = new ArrayList<>();
-		Field[] fields = clazz.getFields();
-		if (fields.length == 0)
-			return output;
-		for (Field field : fields) {
-			Annotation[] annotations = field.getAnnotations();
-			if (Arrays.contains(annotations, annotation, (a, b) -> a.annotationType().equals(annotation))) {
-				boolean modifier = Modifier.isStatic(field.getModifiers());
-				if (flag ? !modifier : modifier)
-					continue;
-				output.add(field);
-			}
-		}
-		return output;
-	}
-
-	public static ArrayList<Method> findMethodsByAnnotation(Class<?> clazz, Class<? extends Annotation> annotation,
-			boolean flag) {
-		ArrayList<Method> output = new ArrayList<>();
-		Method[] methods = clazz.getMethods();
-		if (methods.length == 0)
-			return output;
-		for (Method method : methods) {
-			Annotation[] annotations = method.getAnnotations();
-			if (Arrays.contains(annotations, annotation, (a, b) -> a.annotationType().equals(annotation))) {
-				boolean modifier = Modifier.isStatic(method.getModifiers());
-				if (flag ? !modifier : modifier)
-					continue;
-				output.add(method);
-			}
-		}
-		return output;
 	}
 
 	public static ArrayList<Class<?>> fromPackage(String name) {

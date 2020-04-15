@@ -5,6 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.fusesource.jansi.AnsiConsole;
+
+import com.syntaxphoenix.syntaxapi.logging.AsyncLogger;
+import com.syntaxphoenix.syntaxapi.logging.LoggerState;
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 import com.syntaxphoenix.syntaxapi.test.utils.Printer;
 import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
@@ -14,8 +18,8 @@ import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
  *
  */
 public class SyntaxExecutor extends Thread {
-	
-	public static SynLogger LOGGER = new SynLogger();
+
+	public static AsyncLogger LOGGER = new AsyncLogger(new SynLogger(AnsiConsole.out(), LoggerState.EXTENDED_FILE));
 	public static PrintWriter WRITER;
 
 	private static final BlockingQueue<Runnable> QUEUE = new LinkedBlockingQueue<Runnable>();
@@ -23,14 +27,17 @@ public class SyntaxExecutor extends Thread {
 	private static SyntaxTest test;
 
 	public static void main(String[] args) {
+		AnsiConsole.systemInstall();
+
 		test = new SyntaxTest(args);
-		
+
 		try {
-			LOGGER.setStream(WRITER = new PrintWriter(new File("debug.log"), LOGGER.getStream()));
+			((SynLogger) LOGGER.getLogger()).setStream(
+					WRITER = new PrintWriter(new File("debug.log"), ((SynLogger) LOGGER.getLogger()).getStream()));
 		} catch (FileNotFoundException e) {
 			LOGGER.log(e);
 		}
-		
+
 		while (true) {
 			try {
 				QUEUE.take().run();
@@ -43,6 +50,7 @@ public class SyntaxExecutor extends Thread {
 				continue;
 			}
 		}
+
 	}
 
 	/**

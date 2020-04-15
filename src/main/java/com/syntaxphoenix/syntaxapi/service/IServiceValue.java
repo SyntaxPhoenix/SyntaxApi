@@ -37,5 +37,9 @@ public interface IServiceValue {
 	public EventPriority getPriority();
 	
 	public Class<? extends IService> getService();
+	
+	public Object getOwnerInstance();
+	
+	public Class<? extends Object> getOwner();
 
 }

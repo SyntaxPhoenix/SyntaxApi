@@ -3,6 +3,7 @@ package com.syntaxphoenix.syntaxapi.logging;
 import java.awt.Color;
 import java.io.PrintStream;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import com.syntaxphoenix.syntaxapi.logging.color.ColorMap;
 import com.syntaxphoenix.syntaxapi.logging.color.ColorTools;
@@ -19,57 +20,104 @@ public final class SynLogger implements ILogger {
 	 */
 
 	private ColorMap colorMap = new ColorMap();
-	private PrintStream stream;
 	private boolean colored;
 	private String format;
 
+	private Consumer<String> console;
+	private PrintStream file;
+
+	private LoggerState state = LoggerState.FILE;
+	private String overrideThread;
+
 	public SynLogger() {
 		this(System.out);
+	}
+
+	public SynLogger(LoggerState state) {
+		this(System.out, state);
 	}
 
 	public SynLogger(String format) {
 		this(System.out, format);
 	}
 
-	public SynLogger(PrintStream stream) {
-		this(stream, DEFAULT_FORMAT);
+	public SynLogger(PrintStream file) {
+		this(file, DEFAULT_FORMAT);
 	}
 
-	public SynLogger(PrintStream stream, String format) {
+	public SynLogger(String format, LoggerState state) {
+		this(System.out, format, state);
+	}
+
+	public SynLogger(PrintStream file, LoggerState state) {
+		this(file, DEFAULT_FORMAT, state);
+	}
+
+	public SynLogger(PrintStream file, String format) {
 		setColored(true);
 		setFormat(format);
-		setStream(stream);
+		setStream(file);
 		setDefaultColors();
 	}
-	
+
+	public SynLogger(PrintStream file, String format, LoggerState state) {
+		setColored(true);
+		setFormat(format);
+		setStream(file);
+		setState(state);
+		setDefaultColors();
+	}
+
 	/*
 	 * 
 	 */
-	
+
+	public void setThreadName(String name) {
+		this.overrideThread = name;
+	}
+
+	public void setState(LoggerState state) {
+		this.state = state;
+	}
+
 	public void setColored(boolean colored) {
 		this.colored = colored;
 	}
-	
+
 	public void setStream(PrintStream stream) {
-		this.stream = stream;
+		this.file = stream;
 	}
-	
+
 	public void setFormat(String format) {
 		this.format = format;
 	}
-	
+
 	public boolean isColored() {
 		return colored;
 	}
-	
-	public PrintStream getStream() {
-		return stream;
+
+	@Override
+	public String getThreadName() {
+		if (overrideThread == null)
+			return Thread.currentThread().getName();
+		String name = overrideThread;
+		overrideThread = null;
+		return name;
 	}
-	
+
+	@Override
+	public LoggerState getState() {
+		return state;
+	}
+
+	public PrintStream getStream() {
+		return file;
+	}
+
 	public String getFormat() {
 		return format;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -80,15 +128,15 @@ public final class SynLogger implements ILogger {
 		setColor("warning", "#E89102");
 		setColor("error", "#FF0000");
 	}
-	
+
 	public void setColor(String name, String hex) {
 		setColor(name, ColorTools.hex2rgb(hex));
 	}
-	
+
 	public void setColor(String name, Color color) {
 		setColor(new LogColorType(name, color));
 	}
-	
+
 	public void setColor(LogColorType type) {
 		colorMap.override(type);
 	}
@@ -116,8 +164,7 @@ public final class SynLogger implements ILogger {
 
 	public void log(LogColorType type, String message) {
 		println(type.toAnsiColor(), format.replace("%date%", Times.getDate(".")).replace("%time%", Times.getTime(":"))
-				.replace("%thread%", Thread.currentThread().getName()).replace("%type%", type.getName())
-				.replace("%message%", message));
+				.replace("%thread%", getThreadName()).replace("%type%", type.getName()).replace("%message%", message));
 	}
 
 	/*
@@ -176,19 +223,27 @@ public final class SynLogger implements ILogger {
 	 */
 
 	public void println(String color, String message) {
-		println((colored ? color : "") +  message);
+		println((colored ? color : "") + message);
 	}
 
 	public void println(String message) {
-		stream.println(message);
+		if (state.logConsole())
+			if (console != null)
+				console.accept(message);
+		if (state.logFile())
+			file.println(message);
 	}
 
 	public void print(String color, String message) {
-		print((colored ? color : "") +  message);
+		print((colored ? color : "") + message);
 	}
 
 	public void print(String message) {
-		stream.print(message);
+		if (state.logConsole())
+			if (console != null)
+				console.accept(message);
+		if (state.logFile())
+			file.print(message);
 	}
 
 	/*

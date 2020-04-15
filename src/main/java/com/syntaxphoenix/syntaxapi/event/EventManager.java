@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
+import com.syntaxphoenix.syntaxapi.utils.general.Status;
 
 /**
  * 
@@ -47,11 +48,11 @@ public class EventManager {
 		return new EventCall(this, event, getExecutors(event.getClass(), true));
 	}
 
-	public EventResult call(Event event) {
+	public Status call(Event event) {
 		return call(generateCall(event));
 	}
 
-	public EventResult call(EventCall call) {
+	public Status call(EventCall call) {
 		return call.execute();
 	}
 

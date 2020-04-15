@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.syntaxphoenix.syntaxapi.utils.general.Status;
 import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
 
 public final class EventCall {
@@ -33,10 +34,10 @@ public final class EventCall {
 		return executors;
 	}
 	
-	public EventResult execute() {
+	public Status execute() {
 		int count = 0;
 		if(executors.isEmpty()) {
-			return new EventResult(count);
+			return new Status(count);
 		}
 		LinkedHashMap<EventPriority, ArrayList<EventMethod>> listeners = new LinkedHashMap<>();
 		for(EventPriority priority : EventPriority.values()) {
@@ -47,11 +48,11 @@ public final class EventCall {
 			count += methods.size();
 			listeners.put(priority, methods);
 		}
-		EventResult result = new EventResult(count);
+		Status result = new Status(count);
 		return event instanceof Cancelable ? callCancelable(result, listeners) : call(result, listeners);
 	}
 	
-	private EventResult callCancelable(EventResult result, LinkedHashMap<EventPriority, ArrayList<EventMethod>> listeners) {
+	private Status callCancelable(Status result, LinkedHashMap<EventPriority, ArrayList<EventMethod>> listeners) {
 		Cancelable cancel = (Cancelable) event;
 		for(EventPriority priority : EventPriority.ORDERED_VALUES) {
 			ArrayList<EventMethod> methods = listeners.get(priority);
@@ -60,14 +61,14 @@ public final class EventCall {
 			}
 			for(EventMethod method : methods) {
 				if(cancel.isCancelled() && !method.ignoresCancel()) {
-					result.cancelled();
+					result.cancel();
 					continue;
 				}
 				try {
 					method.execute(event);
 					result.success();
 				} catch(Throwable throwable) {
-					result.fail();
+					result.failed();
 					if(manager.hasLogger()) {
 						manager.getLogger().log(throwable);
 					} else {
@@ -79,7 +80,7 @@ public final class EventCall {
 		return result;
 	}
 	
-	private EventResult call(EventResult result, LinkedHashMap<EventPriority, ArrayList<EventMethod>> listeners) {
+	private Status call(Status result, LinkedHashMap<EventPriority, ArrayList<EventMethod>> listeners) {
 		for(EventPriority priority : EventPriority.ORDERED_VALUES) {
 			ArrayList<EventMethod> methods = listeners.get(priority);
 			if(methods.isEmpty()) {
@@ -90,7 +91,7 @@ public final class EventCall {
 					method.execute(event);
 					result.success();
 				} catch(Throwable throwable) {
-					result.fail();
+					result.failed();
 					if(manager.hasLogger()) {
 						manager.getLogger().log(throwable);
 					} else {

@@ -6,13 +6,41 @@ import com.syntaxphoenix.syntaxapi.event.EventPriority;
 
 public class ServiceFieldValue implements IServiceValue {
 	
+	private final Object instance;
+	private final Class<? extends Object> owner;
+	
 	private final Field field;
 	private final SubscribeService annotation;
 	
-	public ServiceFieldValue(Field field) {
+	public ServiceFieldValue(Class<? extends Object> owner, Field field) {
+		this(owner, field, null);
+	}
+	
+	public ServiceFieldValue(Class<? extends Object> owner, Field field, Object instance) {
+		this.owner = owner;
+		this.instance = instance;
+		
 		this.field = field;
 		this.annotation = field.getAnnotation(SubscribeService.class);
 	}
+	
+	/*
+	 * 
+	 */
+	
+	@Override
+	public Class<? extends Object> getOwner() {
+		return owner;
+	}
+	
+	@Override
+	public Object getOwnerInstance() {
+		return instance;
+	}
+	
+	/*
+	 * 
+	 */
 	
 	@Override
 	public ValueType getType() {
