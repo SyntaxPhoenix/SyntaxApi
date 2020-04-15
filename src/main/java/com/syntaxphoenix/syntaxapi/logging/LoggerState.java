@@ -3,46 +3,46 @@ package com.syntaxphoenix.syntaxapi.logging;
 public enum LoggerState {
 	
 	NONE(),
-	FILE(false, true, false),
-	EXTENDED_FILE(true, true, false),
-	CONSOLE(false, false, true),
-	EXTENDED_CONSOLE(true, false, true),
-	FILE_CONSOLE(false, true, true),
-	EXTENDED_FILE_CONSOLE(true, true, true);
+	STREAM(false, true, false),
+	EXTENDED_STREAM(true, true, false),
+	CUSTOM(false, false, true),
+	EXTENDED_CUSTOM(true, false, true),
+	STREAM_CUSTOM(false, true, true),
+	EXTENDED_STREAM_CUSTOM(true, true, true);
 	
 	private final boolean extended;
-	private final boolean file;
-	private final boolean console;
+	private final boolean stream;
+	private final boolean custom;
 	private final boolean logging;
 	
-	private LoggerState(boolean extended, boolean file, boolean console) {
+	private LoggerState(boolean extended, boolean stream, boolean custom) {
 		this.extended = extended;
-		this.file = file;
-		this.console = console;
+		this.stream = stream;
+		this.custom = custom;
 		this.logging = true;
 	}
 	
 	private LoggerState() {
 		this.extended = false;
-		this.file = false;
-		this.console = false;
+		this.stream = false;
+		this.custom = false;
 		this.logging = false;
 	}
 	
-	public boolean logConsole() {
-		return console;
+	public boolean useCustom() {
+		return custom;
 	}
 	
-	public boolean logFile() {
-		return file;
+	public boolean useStream() {
+		return stream;
 	}
 	
 	public boolean extendedInfo() {
 		return extended;
 	}
 	
-	public boolean noLogging() {
-		return !logging;
+	public boolean isEnabled() {
+		return logging;
 	}
 	
 	public static LoggerState byName(String name) {
@@ -58,13 +58,13 @@ public enum LoggerState {
 		if(extended) {
 			if(file) {
 				if(console) {
-					return LoggerState.EXTENDED_FILE_CONSOLE;
+					return LoggerState.EXTENDED_STREAM_CUSTOM;
 				} else {
-					return LoggerState.EXTENDED_FILE;
+					return LoggerState.EXTENDED_STREAM;
 				}
 			} else {
 				if(console) {
-					return LoggerState.EXTENDED_CONSOLE;
+					return LoggerState.EXTENDED_CUSTOM;
 				} else {
 					return LoggerState.NONE;
 				}
@@ -72,13 +72,13 @@ public enum LoggerState {
 		} else {
 			if(file) {
 				if(console) {
-					return LoggerState.FILE_CONSOLE;
+					return LoggerState.STREAM_CUSTOM;
 				} else {
-					return LoggerState.FILE;
+					return LoggerState.STREAM;
 				}
 			} else {
 				if(console) {
-					return LoggerState.CONSOLE;
+					return LoggerState.CUSTOM;
 				} else {
 					return LoggerState.NONE;
 				}

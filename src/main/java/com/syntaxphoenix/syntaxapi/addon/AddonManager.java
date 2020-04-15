@@ -8,7 +8,7 @@ import java.util.List;
 import com.syntaxphoenix.syntaxapi.config.json.JsonConfig;
 import com.syntaxphoenix.syntaxapi.exceptions.AddonException;
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
-import com.syntaxphoenix.syntaxapi.logging.LogType;
+import com.syntaxphoenix.syntaxapi.logging.LogTypeId;
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 import com.syntaxphoenix.syntaxapi.utils.alias.Alias;
 import com.syntaxphoenix.syntaxapi.utils.alias.AliasMap;
@@ -58,7 +58,7 @@ public abstract class AddonManager<E extends BaseAddon> {
 				throw new AddonException("Addon with the name " + name + " already exists!");
 			}
 			label = alias.get().removeConflicts(conflict);
-			logger.log(LogType.WARNING,
+			logger.log(LogTypeId.WARNING,
 					"Following aliases could not be used for addon \"" + name + "\": " + Strings.toString(conflict));
 		} else {
 			label = alias.get();

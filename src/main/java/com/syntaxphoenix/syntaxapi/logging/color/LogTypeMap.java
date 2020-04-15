@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class ColorMap {
+public class LogTypeMap {
 	
-	private final ArrayList<LogColorType> types = new ArrayList<>();
+	private final ArrayList<LogType> types = new ArrayList<>();
 	
 	/*
 	 * 
@@ -14,19 +14,19 @@ public class ColorMap {
 	 * 
 	 */
 	
-	public void register(final LogColorType type) {
+	public void register(final LogType type) {
 		if(contains(type)) {
 			return;
 		}
 		types.add(type);
 	}
 	
-	public void override(final LogColorType type) {
+	public void override(final LogType type) {
 		deleteById(type.getId());
 		types.add(type);
 	}
 	
-	public void delete(final LogColorType type) {
+	public void delete(final LogType type) {
 		if(contains(type)) {
 			types.remove(type);
 		} else {
@@ -35,7 +35,7 @@ public class ColorMap {
 	}
 	
 	public void deleteById(final String id) {
-		Optional<LogColorType> option = tryGetById(id);
+		Optional<LogType> option = tryGetById(id);
 		if(option.isPresent()) {
 			delete(option.get());
 		}
@@ -47,23 +47,23 @@ public class ColorMap {
 	 * 
 	 */
 	
-	public LogColorType getById(String id) {
+	public LogType getById(String id) {
 		return tryGetById(id).get();
 	}
 	
-	public LogColorType getByName(String name) {
+	public LogType getByName(String name) {
 		return tryGetById(name).get();
 	}
 	
-	public Optional<LogColorType> tryGetById(String id) {
+	public Optional<LogType> tryGetById(String id) {
 		return tryGet(type -> type.getId().equals(id));
 	}
 	
-	public Optional<LogColorType> tryGetByName(String name) {
+	public Optional<LogType> tryGetByName(String name) {
 		return tryGet(type -> type.getName().equals(name));
 	}
 	
-	public Optional<LogColorType> tryGet(Predicate<LogColorType> predicate) {
+	public Optional<LogType> tryGet(Predicate<LogType> predicate) {
 		return types.stream().filter(predicate).findFirst();
 	}
 	
@@ -73,7 +73,7 @@ public class ColorMap {
 	 * 
 	 */
 	
-	public boolean contains(LogColorType type) {
+	public boolean contains(LogType type) {
 		return type == null ? false : types.contains(type);
 	}
 	

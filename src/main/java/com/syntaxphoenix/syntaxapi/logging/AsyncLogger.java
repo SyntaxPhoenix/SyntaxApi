@@ -2,6 +2,10 @@ package com.syntaxphoenix.syntaxapi.logging;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
+
+import com.syntaxphoenix.syntaxapi.logging.color.LogType;
+import com.syntaxphoenix.syntaxapi.logging.color.LogTypeMap;
 
 public class AsyncLogger implements ILogger {
 
@@ -32,21 +36,65 @@ public class AsyncLogger implements ILogger {
 	/*
 	 * 
 	 */
-	
-	public void setThreadName(String name) {
+
+	@Override
+	public AsyncLogger setThreadName(String name) {
 		logger.setThreadName(name);
+		return this;
 	}
 
-	public void setState(LoggerState state) {
-		logger.setState(state);
-	}
-	
+	@Override
 	public String getThreadName() {
 		return logger.getThreadName();
 	}
+	
+	@Override
+	public AsyncLogger setState(LoggerState state) {
+		logger.setState(state);
+		return this;
+	}
 
+	@Override
 	public LoggerState getState() {
 		return logger.getState();
+	}
+
+	@Override
+	public AsyncLogger setCustom(BiConsumer<Boolean, String> custom) {
+		logger.setCustom(custom);
+		return this;
+	}
+
+	@Override
+	public BiConsumer<Boolean, String> getCustom() {
+		return logger.getCustom();
+	}
+
+	@Override
+	public AsyncLogger setType(LogType type) {
+		logger.setType(type);
+		return this;
+	}
+
+	@Override
+	public LogType getType(String typeId) {
+		return logger.getType(typeId);
+	}
+	
+	@Override
+	public ILogger setColored(boolean color) {
+		logger.setColored(color);
+		return this;
+	}
+	
+	@Override
+	public boolean isColored() {
+		return logger.isColored();
+	}
+	
+	@Override
+	public LogTypeMap getTypeMap() {
+		return logger.getTypeMap();
 	}
 	
 	/*
@@ -57,7 +105,7 @@ public class AsyncLogger implements ILogger {
 		queue(() -> logger.log(message));
 	}
 
-	public void log(LogType type, String message) {
+	public void log(LogTypeId type, String message) {
 		queue(() -> logger.log(type, message));
 	}
 
@@ -69,7 +117,7 @@ public class AsyncLogger implements ILogger {
 		queue(() -> logger.log(messages));
 	}
 
-	public void log(LogType type, String... messages) {
+	public void log(LogTypeId type, String... messages) {
 		queue(() -> logger.log(type, messages));
 	}
 
@@ -81,7 +129,7 @@ public class AsyncLogger implements ILogger {
 		queue(() -> logger.log(throwable));
 	}
 
-	public void log(LogType type, Throwable throwable) {
+	public void log(LogTypeId type, Throwable throwable) {
 		queue(() -> logger.log(type, throwable));
 	}
 

@@ -3,11 +3,12 @@ package com.syntaxphoenix.syntaxapi.logging;
 import java.awt.Color;
 import java.io.PrintStream;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
-import com.syntaxphoenix.syntaxapi.logging.color.ColorMap;
+import com.syntaxphoenix.syntaxapi.logging.color.LogTypeMap;
 import com.syntaxphoenix.syntaxapi.logging.color.ColorTools;
-import com.syntaxphoenix.syntaxapi.logging.color.LogColorType;
+import com.syntaxphoenix.syntaxapi.logging.color.LogType;
+import com.syntaxphoenix.syntaxapi.logging.color.LogTypeColor;
 import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
 import com.syntaxphoenix.syntaxapi.utils.java.Times;
 
@@ -19,14 +20,14 @@ public final class SynLogger implements ILogger {
 	 * 
 	 */
 
-	private ColorMap colorMap = new ColorMap();
+	private LogTypeMap typeMap = new LogTypeMap();
 	private boolean colored;
 	private String format;
+	
+	private BiConsumer<Boolean, String> custom;
+	private PrintStream stream;
 
-	private Consumer<String> console;
-	private PrintStream file;
-
-	private LoggerState state = LoggerState.FILE;
+	private LoggerState state = LoggerState.STREAM;
 	private String overrideThread;
 
 	public SynLogger() {
@@ -49,51 +50,33 @@ public final class SynLogger implements ILogger {
 		this(System.out, format, state);
 	}
 
-	public SynLogger(PrintStream file, LoggerState state) {
-		this(file, DEFAULT_FORMAT, state);
+	public SynLogger(PrintStream stream, LoggerState state) {
+		this(stream, DEFAULT_FORMAT, state);
 	}
 
-	public SynLogger(PrintStream file, String format) {
+	public SynLogger(PrintStream stream, String format) {
 		setColored(true);
 		setFormat(format);
-		setStream(file);
-		setDefaultColors();
+		setStream(stream);
+		setDefaultTypes();
 	}
 
-	public SynLogger(PrintStream file, String format, LoggerState state) {
+	public SynLogger(PrintStream stream, String format, LoggerState state) {
 		setColored(true);
 		setFormat(format);
-		setStream(file);
+		setStream(stream);
 		setState(state);
-		setDefaultColors();
+		setDefaultTypes();
 	}
 
 	/*
 	 * 
 	 */
 
-	public void setThreadName(String name) {
+	@Override
+	public SynLogger setThreadName(String name) {
 		this.overrideThread = name;
-	}
-
-	public void setState(LoggerState state) {
-		this.state = state;
-	}
-
-	public void setColored(boolean colored) {
-		this.colored = colored;
-	}
-
-	public void setStream(PrintStream stream) {
-		this.file = stream;
-	}
-
-	public void setFormat(String format) {
-		this.format = format;
-	}
-
-	public boolean isColored() {
-		return colored;
+		return this;
 	}
 
 	@Override
@@ -106,12 +89,69 @@ public final class SynLogger implements ILogger {
 	}
 
 	@Override
+	public SynLogger setCustom(BiConsumer<Boolean, String> custom) {
+		this.custom = custom;
+		return this;
+	}
+
+	@Override
+	public BiConsumer<Boolean, String> getCustom() {
+		return custom;
+	}
+
+	@Override
+	public SynLogger setState(LoggerState state) {
+		this.state = state;
+		return this;
+	}
+
+	@Override
 	public LoggerState getState() {
 		return state;
 	}
 
+	@Override
+	public SynLogger setColored(boolean colored) {
+		this.colored = colored;
+		return this;
+	}
+
+	@Override
+	public boolean isColored() {
+		return colored;
+	}
+
+	@Override
+	public SynLogger setType(LogType type) {
+		typeMap.override(type);
+		return this;
+	}
+
+	@Override
+	public LogType getType(String typeId) {
+		Optional<LogType> option = typeMap.tryGetById(typeId);
+		return option.isPresent() ? option.get() : LogTypeColor.DEFAULT;
+	}
+
+	@Override
+	public LogTypeMap getTypeMap() {
+		return typeMap;
+	}
+	
+	/*
+	 * 
+	 */
+
+	public void setStream(PrintStream stream) {
+		this.stream = stream;
+	}
+
 	public PrintStream getStream() {
-		return file;
+		return stream;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}
 
 	public String getFormat() {
@@ -122,23 +162,19 @@ public final class SynLogger implements ILogger {
 	 * 
 	 */
 
-	public void setDefaultColors() {
-		setColor("debug", "#F000FF");
-		setColor("info", "#2FE4E7");
-		setColor("warning", "#E89102");
-		setColor("error", "#FF0000");
+	public void setDefaultTypes() {
+		setType("debug", "#F000FF");
+		setType("info", "#2FE4E7");
+		setType("warning", "#E89102");
+		setType("error", "#FF0000");
 	}
 
-	public void setColor(String name, String hex) {
-		setColor(name, ColorTools.hex2rgb(hex));
+	public void setType(String name, String hex) {
+		setType(name, ColorTools.hex2rgb(hex));
 	}
 
-	public void setColor(String name, Color color) {
-		setColor(new LogColorType(name, color));
-	}
-
-	public void setColor(LogColorType type) {
-		colorMap.override(type);
+	public void setType(String name, Color color) {
+		setType(new LogTypeColor(name, color));
 	}
 
 	/*
@@ -149,11 +185,11 @@ public final class SynLogger implements ILogger {
 
 	@Override
 	public void log(String message) {
-		log(LogType.INFO, message);
+		log(LogTypeId.INFO, message);
 	}
 
 	@Override
-	public void log(LogType type, String message) {
+	public void log(LogTypeId type, String message) {
 		log(type.id(), message);
 	}
 
@@ -162,8 +198,8 @@ public final class SynLogger implements ILogger {
 		log(getType(typeId), message);
 	}
 
-	public void log(LogColorType type, String message) {
-		println(type.toAnsiColor(), format.replace("%date%", Times.getDate(".")).replace("%time%", Times.getTime(":"))
+	public void log(LogType type, String message) {
+		println(type, format.replace("%date%", Times.getDate(".")).replace("%time%", Times.getTime(":"))
 				.replace("%thread%", getThreadName()).replace("%type%", type.getName()).replace("%message%", message));
 	}
 
@@ -173,11 +209,11 @@ public final class SynLogger implements ILogger {
 
 	@Override
 	public void log(String... messages) {
-		log(LogType.INFO, messages);
+		log(LogTypeId.INFO, messages);
 	}
 
 	@Override
-	public void log(LogType type, String... messages) {
+	public void log(LogTypeId type, String... messages) {
 		log(type.id(), messages);
 	}
 
@@ -186,7 +222,7 @@ public final class SynLogger implements ILogger {
 		log(getType(typeId), messages);
 	}
 
-	public void log(LogColorType type, String... messages) {
+	public void log(LogType type, String... messages) {
 		if (messages == null || messages.length == 0) {
 			return;
 		}
@@ -201,11 +237,11 @@ public final class SynLogger implements ILogger {
 
 	@Override
 	public void log(Throwable throwable) {
-		log(LogType.ERROR, throwable);
+		log(LogTypeId.ERROR, throwable);
 	}
 
 	@Override
-	public void log(LogType type, Throwable throwable) {
+	public void log(LogTypeId type, Throwable throwable) {
 		log(type.id(), throwable);
 	}
 
@@ -214,7 +250,7 @@ public final class SynLogger implements ILogger {
 		log(getType(typeId), throwable);
 	}
 
-	public void log(LogColorType type, Throwable throwable) {
+	public void log(LogType type, Throwable throwable) {
 		log(type, Exceptions.stackTraceToStringArray(throwable));
 	}
 
@@ -222,43 +258,48 @@ public final class SynLogger implements ILogger {
 	 * 
 	 */
 
-	public void println(String color, String message) {
-		println((colored ? color : "") + message);
+	public void println(LogType type, String message) {
+		if(!colored) {
+			print(message);
+			return;
+		}
+		if (state.useCustom())
+			if (custom != null)
+				custom.accept(true, type.asColorString(false) + message);
+		if (state.useStream())
+			if(stream != null)
+				stream.println(type.asColorString(true) + message);
 	}
 
 	public void println(String message) {
-		if (state.logConsole())
-			if (console != null)
-				console.accept(message);
-		if (state.logFile())
-			file.println(message);
+		if (state.useCustom())
+			if (custom != null)
+				custom.accept(true, message);
+		if (state.useStream())
+			if(stream != null)
+				stream.println(message);
 	}
 
-	public void print(String color, String message) {
-		print((colored ? color : "") + message);
+	public void print(LogType type, String message) {
+		if(!colored) {
+			print(message);
+			return;
+		}
+		if (state.useCustom())
+			if (custom != null)
+				custom.accept(false, type.asColorString(false) + message);
+		if (state.useStream())
+			if(stream != null)
+				stream.print(type.asColorString(true) + message);
 	}
 
 	public void print(String message) {
-		if (state.logConsole())
-			if (console != null)
-				console.accept(message);
-		if (state.logFile())
-			file.print(message);
-	}
-
-	/*
-	 * 
-	 * 
-	 * 
-	 */
-
-	public ColorMap getColorMap() {
-		return colorMap;
-	}
-
-	public LogColorType getType(String typeId) {
-		Optional<LogColorType> option = colorMap.tryGetById(typeId);
-		return option.isPresent() ? option.get() : LogColorType.DEFAULT;
+		if (state.useCustom())
+			if (custom != null)
+				custom.accept(false, message);
+		if (state.useStream())
+			if(stream != null)
+				stream.print(message);
 	}
 
 }
