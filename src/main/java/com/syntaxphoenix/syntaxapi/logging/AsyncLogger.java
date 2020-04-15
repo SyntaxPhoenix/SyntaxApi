@@ -2,6 +2,7 @@ package com.syntaxphoenix.syntaxapi.logging;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 
 import com.syntaxphoenix.syntaxapi.logging.color.LogType;
@@ -39,6 +40,11 @@ public class AsyncLogger implements ILogger {
 	
 	@Override
 	public void close() {
+		try {
+			executor.awaitTermination(60, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			logger.log(e);
+		}
 		logger.close();
 	}
 	
