@@ -36,6 +36,15 @@ public class AsyncLogger implements ILogger {
 	/*
 	 * 
 	 */
+	
+	@Override
+	public void close() {
+		logger.close();
+	}
+	
+	/*
+	 * 
+	 */
 
 	@Override
 	public AsyncLogger setThreadName(String name) {

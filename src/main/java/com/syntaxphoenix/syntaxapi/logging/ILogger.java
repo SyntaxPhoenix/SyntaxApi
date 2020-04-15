@@ -7,6 +7,8 @@ import com.syntaxphoenix.syntaxapi.logging.color.LogTypeMap;
 
 public interface ILogger {
 	
+	public void close();
+	
 	public LogTypeMap getTypeMap();
 	
 	public ILogger setCustom(BiConsumer<Boolean, String> custom);

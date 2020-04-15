@@ -68,6 +68,18 @@ public final class SynLogger implements ILogger {
 		setState(state);
 		setDefaultTypes();
 	}
+	
+	/*
+	 * 
+	 */
+	
+	@Override
+	public void close() {
+		if(stream != null) {
+			stream.close();
+			stream = null;
+		}
+	}
 
 	/*
 	 * 
