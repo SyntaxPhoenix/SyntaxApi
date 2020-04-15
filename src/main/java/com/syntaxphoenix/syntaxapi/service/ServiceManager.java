@@ -15,7 +15,7 @@ public class ServiceManager {
 
 	private final LinkedList<ServiceContainer> containers = new LinkedList<>();
 	private final LinkedList<IService> services = new LinkedList<>();
-	private final ILogger logger;
+	private ILogger logger;
 
 	public ServiceManager() {
 		this(null);
@@ -35,6 +35,11 @@ public class ServiceManager {
 
 	public boolean hasLogger() {
 		return logger != null;
+	}
+	
+	public ServiceManager setLogger(ILogger logger) {
+		this.logger = logger;
+		return this;
 	}
 
 	/*
