@@ -17,8 +17,8 @@ import com.syntaxphoenix.syntaxapi.utils.java.Strings;
  */
 public class DefaultArgumentIdentifier extends ArgumentIdentifier {
 	
-	public static final Pattern LIST = Pattern.compile("\\A\\{{1}.*[, ]?.*\\}{1}\\z");
-	public static final Pattern ARRAY = Pattern.compile("\\A\\[{1}.*[, ]?.*\\]{1}\\z");
+	public static final Pattern LIST = Pattern.compile("\\A\\{{1}.*[,( )?]?.*\\}{1}\\z");
+	public static final Pattern ARRAY = Pattern.compile("\\A\\[{1}.*[,( )?]?.*\\]{1}\\z");
 
 	@Override
 	public ArrayList<BaseArgument> process(String... arguments) {

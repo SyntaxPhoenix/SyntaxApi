@@ -39,6 +39,8 @@ public abstract class ArgumentRangeSerializer {
 
 	public abstract String toString(NumberValueRange range);
 
+	public abstract String toString(NumberChooseRange range);
+
 	public abstract String toString(StateRange range);
 
 	public abstract String toString(TextSizeRange range);

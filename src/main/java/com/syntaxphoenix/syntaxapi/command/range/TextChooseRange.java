@@ -65,11 +65,7 @@ public class TextChooseRange extends BaseArgumentRange {
 	public boolean isInRange(BaseArgument argument) {
 		if (!hasType(argument))
 			return false;
-		
-		
-		
-		
-		return false;
+		return values.contains((CharSequence) argument.asObject());
 	}
 
 	/*
