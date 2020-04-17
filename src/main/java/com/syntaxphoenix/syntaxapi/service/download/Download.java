@@ -1,11 +1,13 @@
 package com.syntaxphoenix.syntaxapi.service.download;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Download {
 
 	private final String host;
 	private final HashMap<String, String> paths = new HashMap<>();
+	private final ArrayList<DownloadListener> listeners = new ArrayList<>();
 	
 	private int timeout = 30;
 
@@ -28,6 +30,24 @@ public class Download {
 
 	public void remove(String path) {
 		paths.remove(path);
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public void addListener(DownloadListener listener) {
+		if(listeners.contains(listener))
+			return;
+		listeners.add(listener);
+	}
+	
+	public void removeListener(DownloadListener listener) {
+		listeners.remove(listener);
+	}
+	
+	public ArrayList<DownloadListener> getListeners() {
+		return listeners;
 	}
 	
 	/*

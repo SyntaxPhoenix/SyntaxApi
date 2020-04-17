@@ -105,5 +105,18 @@ public class DefaultArgumentSerializer extends ArgumentSerializer {
 	public String toString(BooleanArgument argument) {
 		return argument.getValue().toString();
 	}
+
+	@Override
+	public String[] asStringArray(BaseArgument... arguments) {
+		if (arguments == null || arguments.length == 0) {
+			return new String[0];
+		}
+		int length = arguments.length;
+		String[] array = new String[length];
+		for (int index = 0; index < length; index++) {
+			array[index] = arguments[index].toString(this);
+		}
+		return array;
+	}
 	
 }

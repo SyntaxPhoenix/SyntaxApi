@@ -3,108 +3,115 @@ package com.syntaxphoenix.syntaxapi.command;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.syntaxphoenix.syntaxapi.command.arguments.ListArgument;
 import com.syntaxphoenix.syntaxapi.exceptions.ObjectLockedException;
 
-/**
- * @author Lauriichen
- *
- */
-public class Arguments implements Iterable<BaseArgument> {
-	
-	private final ArrayList<BaseArgument> arguments;
+public class Ranges implements Iterable<BaseArgumentRange> {
+
+	private final ArrayList<BaseArgumentRange> ranges;
 	private boolean locked = false;
-	
-	public Arguments() {
-		this.arguments = new ArrayList<>();
+
+	public Ranges() {
+		this.ranges = new ArrayList<>();
 	}
-	
-	public Arguments(ArrayList<BaseArgument> arguments) {
-		this.arguments = arguments;
+
+	public Ranges(ArrayList<BaseArgumentRange> ranges) {
+		this.ranges = ranges;
 	}
 
 	public int count() {
-		return arguments.size();
+		return ranges.size();
 	}
-	
-	public BaseArgument get(int position) {
-		if(position < 1) {
+
+	public BaseArgumentRange get(int position) {
+		if (position < 1) {
 			throw negativeOrZero();
 		}
-		if(position > count()) {
+		if (position > count()) {
 			throw outOfBounce(position);
 		}
-		return arguments.get(position - 1);
+		return ranges.get(position - 1);
 	}
-	
-	public void add(BaseArgument argument, int position) {
-		if(locked) {
+
+	public void add(BaseArgumentRange argument, int position) {
+		if (locked) {
 			throw locked();
 		}
-		if(position < 1) {
+		if (position < 1) {
 			throw negativeOrZero();
 		}
-		if(argument == null) {
+		if (argument == null) {
 			return;
 		}
-		arguments.add(position - 1, argument);
+		ranges.add(position - 1, argument);
 	}
-	
-	public void add(BaseArgument argument) {
-		if(locked) {
+
+	public void add(BaseArgumentRange argument) {
+		if (locked) {
 			throw locked();
 		}
-		if(argument == null) {
+		if (argument == null) {
 			return;
 		}
-		arguments.add(argument);
+		ranges.add(argument);
 	}
-	
-	public ArgumentType getType(int position) {
+
+	public Class<?> getInputType(int position) {
+		return get(position).getInputType();
+	}
+
+	public RangeType getType(int position) {
 		return get(position).getType();
 	}
 	
-	public ArgumentSuperType getSuperType(int position) {
+	public RangeSuperType getSuperType(int position) {
 		return getType(position).getSuperType();
 	}
-	
+
 	protected boolean isLocked() {
 		return locked;
 	}
-	
+
 	protected void setLocked(boolean locked) {
 		this.locked = locked;
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	@Override
 	public String toString() {
 		return toString(ArgumentSerializer.DEFAULT);
 	}
-	
+
 	public String toString(ArgumentSerializer serializer) {
-		return new ListArgument<>(arguments).toString(serializer);
+		return toString(ArgumentRangeSerializer.DEFAULT, serializer);
 	}
-	
+
+	public String toString(ArgumentRangeSerializer serializer) {
+		return toString(serializer, ArgumentSerializer.DEFAULT);
+	}
+
+	public String toString(ArgumentRangeSerializer range, ArgumentSerializer argument) {
+		return null;
+	}
+
 	/**
 	 * Exception Construction
 	 */
-	
+
 	private IllegalArgumentException negativeOrZero() {
 		return new IllegalArgumentException("Bound must be positive!");
 	}
-	
+
 	private IndexOutOfBoundsException outOfBounce(int position) {
 		return new IndexOutOfBoundsException("Index: " + position + " - Size: " + count());
 	}
-	
+
 	private ObjectLockedException locked() {
 		return new ObjectLockedException("Cannot edit a locked object!");
 	}
-	
+
 	/*
 	 * 
 	 * 
@@ -112,8 +119,8 @@ public class Arguments implements Iterable<BaseArgument> {
 	 */
 
 	@Override
-	public Iterator<BaseArgument> iterator() {
-		return arguments.iterator();
+	public Iterator<BaseArgumentRange> iterator() {
+		return ranges.iterator();
 	}
-	
+
 }

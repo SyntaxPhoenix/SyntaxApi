@@ -10,6 +10,10 @@ public abstract class BaseArgument {
 	
 	public abstract ArgumentType getType();
 	
+	public Class<?> getClassType() {
+		return getType().getClassType();
+	}
+	
 	public ArgumentSuperType getSuperType() {
 		return getType().getSuperType();
 	}

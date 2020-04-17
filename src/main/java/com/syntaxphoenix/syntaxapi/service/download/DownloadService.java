@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -51,10 +52,10 @@ public class DownloadService implements IService {
 		executor.submit(() -> {
 
 			IServiceValue[] subscriptions = services.getSubscriptions(getOwner(), ValueType.METHOD);
-			
-			if(services.hasLogger()) {
+
+			if (services.hasLogger()) {
 				ILogger logger = services.getLogger();
-				if(logger.getState().extendedInfo())
+				if (logger.getState().extendedInfo())
 					logger.log("Found " + subscriptions.length + " Subscriptions");
 			}
 
@@ -78,14 +79,21 @@ public class DownloadService implements IService {
 
 					Download download = (Download) Reflections.execute(subscription.getOwnerInstance(),
 							subscription.asMethod());
+					List<DownloadListener> listeners = download.getListeners();
+
+					if (!listeners.isEmpty())
+						listeners.forEach(listener -> listener.onConnect(download));
 
 					int timeout = download.getTimeout();
-					
+
 					String host = download.getHost();
 					HashMap<String, String> paths = download.getPaths();
 
-					if (paths.isEmpty())
+					if (paths.isEmpty()) {
+						if (!listeners.isEmpty())
+							listeners.forEach(listener -> listener.onDisconnect(download, DisconnectReason.ABORTED));
 						continue;
+					}
 
 					URL url = new URL(host);
 
@@ -95,29 +103,40 @@ public class DownloadService implements IService {
 
 					if (connection instanceof HttpURLConnection) {
 						HttpURLConnection http = (HttpURLConnection) connection;
-						
+
 						http.setReadTimeout(30000);
 						http.setConnectTimeout(12000);
 						http.setRequestMethod("GET");
-						
+
 						int code = http.getResponseCode();
-						
+
 						if (code != 200) {
+							if (!listeners.isEmpty())
+								listeners
+										.forEach(listener -> listener.onDisconnect(download, DisconnectReason.TIMEOUT));
 							while (status.failed())
 								;
 							continue;
 						}
-						
 					}
 
 					Set<Entry<String, String>> entries = paths.entrySet();
 
 					Throwable throwable;
+					if (!listeners.isEmpty())
+						listeners.forEach(listener -> listener.onDisconnect(download, DisconnectReason.DEFAULT));
 					for (Entry<String, String> entry : entries) {
 						if ((throwable = download(host, entry.getKey(), entry.getValue(), timeout)) == null) {
 							status.success();
+							if (!listeners.isEmpty())
+								listeners.forEach(
+										listener -> listener.onSuccess(download, entry.getKey(), entry.getValue()));
 						} else {
 							status.failed();
+
+							if (!listeners.isEmpty())
+								listeners.forEach(
+										listener -> listener.onFail(download, entry.getKey(), entry.getValue()));
 
 							if (services.hasLogger())
 								services.getLogger()
@@ -127,8 +146,12 @@ public class DownloadService implements IService {
 												throwable));
 						}
 					}
-
+					
+					if (!listeners.isEmpty())
+						listeners.forEach(listener -> listener.onDisconnect(download, DisconnectReason.DEFAULT));
+					
 				} catch (Throwable throwable) {
+					while (status.failed());
 					if (services.hasLogger())
 						services.getLogger().log(new DownloadFailedException(throwable));
 				}

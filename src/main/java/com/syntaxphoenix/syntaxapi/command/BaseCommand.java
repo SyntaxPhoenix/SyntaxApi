@@ -7,5 +7,13 @@ package com.syntaxphoenix.syntaxapi.command;
 public abstract class BaseCommand {
 	
 	protected abstract void execute(BaseInfo info, Arguments arguments);
+	
+	protected BaseCompletion complete(BaseInfo info, Arguments arguments) {
+		return null;
+	}
+	
+	protected Ranges range(BaseInfo info) {
+		return new Ranges();
+	}
 
 }

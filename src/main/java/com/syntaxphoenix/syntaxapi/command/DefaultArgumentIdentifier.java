@@ -15,7 +15,7 @@ import com.syntaxphoenix.syntaxapi.utils.java.Strings;
  * @author Lauriichen
  *
  */
-public class DefaultArgumentValidator extends ArgumentValidator {
+public class DefaultArgumentIdentifier extends ArgumentIdentifier {
 	
 	public static final Pattern LIST = Pattern.compile("\\A\\{{1}.*[, ]?.*\\}{1}\\z");
 	public static final Pattern ARRAY = Pattern.compile("\\A\\[{1}.*[, ]?.*\\]{1}\\z");
@@ -128,19 +128,6 @@ public class DefaultArgumentValidator extends ArgumentValidator {
 			continue;
 		}
 		return list;
-	}
-
-	@Override
-	public String[] asStringArray(BaseArgument... arguments) {
-		if (arguments == null || arguments.length == 0) {
-			return new String[0];
-		}
-		int length = arguments.length;
-		String[] array = new String[length];
-		for (int index = 0; index < length; index++) {
-			array[index] = arguments[index].toString();
-		}
-		return array;
 	}
 
 }

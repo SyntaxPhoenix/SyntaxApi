@@ -14,7 +14,7 @@ import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
 public class CommandManager {
 	
 	private final AliasMap<BaseCommand> commands = new AliasMap<>();
-	private ArgumentValidator validator = ArgumentValidator.DEFAULT;
+	private ArgumentIdentifier validator = ArgumentIdentifier.DEFAULT;
 	private SynLogger logger = null;
 	
 	private String splitter = " ";
@@ -63,11 +63,11 @@ public class CommandManager {
 		return this;
 	}
 	
-	public ArgumentValidator getValidator() {
+	public ArgumentIdentifier getValidator() {
 		return validator;
 	}
 	
-	public CommandManager setValidator(ArgumentValidator validator) {
+	public CommandManager setValidator(ArgumentIdentifier validator) {
 		this.validator = validator;
 		return this;
 	}
