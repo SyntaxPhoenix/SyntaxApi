@@ -3,6 +3,17 @@ package com.syntaxphoenix.syntaxapi.command;
 import com.syntaxphoenix.syntaxapi.command.range.*;
 
 public abstract class BaseArgumentRange {
+	
+	private String label;
+	
+	public String getLabel() {
+		return label;
+	}
+	
+	public BaseArgumentRange setLabel(String label) {
+		this.label = label;
+		return this;
+	}
 
 	public abstract RangeType getType();
 

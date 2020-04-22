@@ -7,8 +7,8 @@ import com.syntaxphoenix.syntaxapi.exceptions.ObjectLockedException;
 public class CommandProcess {
 	
 	private final CommandManager manager;
+	private BiFunction<CommandManager, String, ? extends BaseInfo> infoConstructor;
 	
-	private BiFunction<CommandManager, String, ? extends BaseInfo> info = ((manager, label) -> new DefaultInfo(manager, label));
 	private boolean locked = false;
 	private boolean valid = false;
 	private BaseCommand command;
@@ -17,6 +17,7 @@ public class CommandProcess {
 	
 	public CommandProcess(CommandManager manager) {
 		this.manager = manager;
+		this.infoConstructor = manager.getInfoConstructor();
 	}
 	
 	public CommandProcess setValid(boolean valid) {
@@ -72,12 +73,12 @@ public class CommandProcess {
 	}
 	
 	public CommandProcess setInfoConstructor(BiFunction<CommandManager, String, ? extends BaseInfo> info) {
-		this.info = info;
+		this.infoConstructor = info;
 		return this;
 	}
 	
 	public BaseInfo constructInfo() {
-		return info.apply(manager, label == null ? "" : label);
+		return infoConstructor.apply(manager, label == null ? "" : label);
 	}
 	
 	public ExecutionState asState() {

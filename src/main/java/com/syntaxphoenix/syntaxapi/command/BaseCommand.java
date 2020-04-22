@@ -12,8 +12,4 @@ public abstract class BaseCommand {
 		return null;
 	}
 	
-	protected Ranges range(BaseInfo info) {
-		return new Ranges();
-	}
-
 }

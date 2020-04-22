@@ -1,6 +1,7 @@
 package com.syntaxphoenix.syntaxapi.command;
 
 import java.util.Map.Entry;
+import java.util.function.BiFunction;
 
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 import com.syntaxphoenix.syntaxapi.utils.alias.Alias;
@@ -12,6 +13,8 @@ import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
  *
  */
 public class CommandManager {
+	
+	private BiFunction<CommandManager, String, ? extends BaseInfo> infoConstructor = ((manager, label) -> new DefaultInfo(manager, label));
 	
 	private final AliasMap<BaseCommand> commands = new AliasMap<>();
 	private ArgumentIdentifier validator = ArgumentIdentifier.DEFAULT;
@@ -60,6 +63,15 @@ public class CommandManager {
 	
 	public CommandManager setSplitter(String splitter) {
 		this.splitter = splitter;
+		return this;
+	}
+	
+	public BiFunction<CommandManager, String, ? extends BaseInfo> getInfoConstructor() {
+		return infoConstructor;
+	}
+	
+	public CommandManager setInfoConstructor(BiFunction<CommandManager, String, ? extends BaseInfo> infoConstructor) {
+		this.infoConstructor = infoConstructor;
 		return this;
 	}
 	
