@@ -1,5 +1,7 @@
 package com.syntaxphoenix.syntaxapi.logging.color;
 
+import java.awt.Color;
+
 import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 
 public abstract class LogType {
@@ -53,6 +55,8 @@ public abstract class LogType {
 	 */
 	
 	public abstract ColorProcessor getColorProcessor();
+	
+	public abstract Color asColor();
 	
 	public abstract String asColorString();
 	

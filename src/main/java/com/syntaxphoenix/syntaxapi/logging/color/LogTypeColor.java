@@ -49,25 +49,20 @@ public class LogTypeColor extends LogType {
 	 * 
 	 * 
 	 */
-	
-	public Color getColor() {
-		return color;
-	}
-	
-	/*
-	 * 
-	 * 
-	 * 
-	 */
 
 	@Override
 	public ColorProcessor getColorProcessor() {
 		return PROCESSOR;
 	}
+	
+	@Override
+	public Color asColor() {
+		return color;
+	}
 
 	@Override
 	public String asColorString() {
-		return ColorTools.toAnsiColor(getColor());
+		return ColorTools.toAnsiColor(asColor());
 	}
 
 	@Override
