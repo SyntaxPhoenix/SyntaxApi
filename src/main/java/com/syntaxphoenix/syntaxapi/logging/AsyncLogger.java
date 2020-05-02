@@ -39,7 +39,7 @@ public class AsyncLogger implements ILogger {
 	 */
 	
 	@Override
-	public void close() {
+	public AsyncLogger close() {
 		try {
 			executor.shutdown();
 			executor.awaitTermination(60, TimeUnit.SECONDS);
@@ -47,6 +47,7 @@ public class AsyncLogger implements ILogger {
 			logger.log(e);
 		}
 		logger.close();
+		return this;
 	}
 	
 	/*
@@ -117,40 +118,49 @@ public class AsyncLogger implements ILogger {
 	 * 
 	 */
 
-	public void log(String message) {
+	public AsyncLogger log(String message) {
 		queue(() -> logger.log(message));
+		return this;
 	}
 
-	public void log(LogTypeId type, String message) {
+	public AsyncLogger log(LogTypeId type, String message) {
 		queue(() -> logger.log(type, message));
+		return this;
 	}
 
-	public void log(String typeId, String message) {
+	public AsyncLogger log(String typeId, String message) {
 		queue(() -> logger.log(typeId, message));
+		return this;
 	}
 
-	public void log(String... messages) {
+	public AsyncLogger log(String... messages) {
 		queue(() -> logger.log(messages));
+		return this;
 	}
 
-	public void log(LogTypeId type, String... messages) {
+	public AsyncLogger log(LogTypeId type, String... messages) {
 		queue(() -> logger.log(type, messages));
+		return this;
 	}
 
-	public void log(String typeId, String... messages) {
+	public AsyncLogger log(String typeId, String... messages) {
 		queue(() -> logger.log(typeId, messages));
+		return this;
 	}
 
-	public void log(Throwable throwable) {
+	public AsyncLogger log(Throwable throwable) {
 		queue(() -> logger.log(throwable));
+		return this;
 	}
 
-	public void log(LogTypeId type, Throwable throwable) {
+	public AsyncLogger log(LogTypeId type, Throwable throwable) {
 		queue(() -> logger.log(type, throwable));
+		return this;
 	}
 
-	public void log(String typeId, Throwable throwable) {
+	public AsyncLogger log(String typeId, Throwable throwable) {
 		queue(() -> logger.log(typeId, throwable));
+		return this;
 	}
 	
 	/*

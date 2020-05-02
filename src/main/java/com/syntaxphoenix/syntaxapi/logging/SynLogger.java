@@ -74,11 +74,12 @@ public final class SynLogger implements ILogger {
 	 */
 	
 	@Override
-	public void close() {
+	public SynLogger close() {
 		if(stream != null) {
 			stream.close();
 			stream = null;
 		}
+		return this;
 	}
 
 	/*
@@ -154,16 +155,18 @@ public final class SynLogger implements ILogger {
 	 * 
 	 */
 
-	public void setStream(PrintStream stream) {
+	public SynLogger setStream(PrintStream stream) {
 		this.stream = stream;
+		return this;
 	}
 
 	public PrintStream getStream() {
 		return stream;
 	}
 
-	public void setFormat(String format) {
+	public SynLogger setFormat(String format) {
 		this.format = format;
+		return this;
 	}
 
 	public String getFormat() {
@@ -174,19 +177,20 @@ public final class SynLogger implements ILogger {
 	 * 
 	 */
 
-	public void setDefaultTypes() {
+	public SynLogger setDefaultTypes() {
 		setType("debug", "#F000FF");
 		setType("info", "#2FE4E7");
 		setType("warning", "#E89102");
 		setType("error", "#FF0000");
+		return this;
 	}
 
-	public void setType(String name, String hex) {
-		setType(name, ColorTools.hex2rgb(hex));
+	public SynLogger setType(String name, String hex) {
+		return setType(name, ColorTools.hex2rgb(hex));
 	}
 
-	public void setType(String name, Color color) {
-		setType(new LogTypeColor(name, color));
+	public SynLogger setType(String name, Color color) {
+		return setType(new LogTypeColor(name, color));
 	}
 
 	/*
@@ -196,22 +200,22 @@ public final class SynLogger implements ILogger {
 	 */
 
 	@Override
-	public void log(String message) {
-		log(LogTypeId.INFO, message);
+	public SynLogger log(String message) {
+		return log(LogTypeId.INFO, message);
 	}
 
 	@Override
-	public void log(LogTypeId type, String message) {
-		log(type.id(), message);
+	public SynLogger log(LogTypeId type, String message) {
+		return log(type.id(), message);
 	}
 
 	@Override
-	public void log(String typeId, String message) {
-		log(getType(typeId), message);
+	public SynLogger log(String typeId, String message) {
+		return log(getType(typeId), message);
 	}
 
-	public void log(LogType type, String message) {
-		println(type, format.replace("%date%", Times.getDate(".")).replace("%time%", Times.getTime(":"))
+	public SynLogger log(LogType type, String message) {
+		return println(type, format.replace("%date%", Times.getDate(".")).replace("%time%", Times.getTime(":"))
 				.replace("%thread%", getThreadName()).replace("%type%", type.getName()).replace("%message%", message));
 	}
 
@@ -220,27 +224,28 @@ public final class SynLogger implements ILogger {
 	 */
 
 	@Override
-	public void log(String... messages) {
-		log(LogTypeId.INFO, messages);
+	public SynLogger log(String... messages) {
+		return log(LogTypeId.INFO, messages);
 	}
 
 	@Override
-	public void log(LogTypeId type, String... messages) {
-		log(type.id(), messages);
+	public SynLogger log(LogTypeId type, String... messages) {
+		return log(type.id(), messages);
 	}
 
 	@Override
-	public void log(String typeId, String... messages) {
-		log(getType(typeId), messages);
+	public SynLogger log(String typeId, String... messages) {
+		return log(getType(typeId), messages);
 	}
 
-	public void log(LogType type, String... messages) {
+	public SynLogger log(LogType type, String... messages) {
 		if (messages == null || messages.length == 0) {
-			return;
+			return this;
 		}
 		for (String message : messages) {
 			log(type, message);
 		}
+		return this;
 	}
 
 	/*
@@ -248,32 +253,31 @@ public final class SynLogger implements ILogger {
 	 */
 
 	@Override
-	public void log(Throwable throwable) {
-		log(LogTypeId.ERROR, throwable);
+	public SynLogger log(Throwable throwable) {
+		return log(LogTypeId.ERROR, throwable);
 	}
 
 	@Override
-	public void log(LogTypeId type, Throwable throwable) {
-		log(type.id(), throwable);
+	public SynLogger log(LogTypeId type, Throwable throwable) {
+		return log(type.id(), throwable);
 	}
 
 	@Override
-	public void log(String typeId, Throwable throwable) {
-		log(getType(typeId), throwable);
+	public SynLogger log(String typeId, Throwable throwable) {
+		return log(getType(typeId), throwable);
 	}
 
-	public void log(LogType type, Throwable throwable) {
-		log(type, Exceptions.stackTraceToStringArray(throwable));
+	public SynLogger log(LogType type, Throwable throwable) {
+		return log(type, Exceptions.stackTraceToStringArray(throwable));
 	}
 
 	/*
 	 * 
 	 */
 
-	public void println(LogType type, String message) {
+	public SynLogger println(LogType type, String message) {
 		if(!colored) {
-			print(message);
-			return;
+			return println(message);
 		}
 		if (state.useCustom())
 			if (custom != null)
@@ -281,21 +285,22 @@ public final class SynLogger implements ILogger {
 		if (state.useStream())
 			if(stream != null)
 				stream.println(type.asColorString(true) + message);
+		return this;
 	}
 
-	public void println(String message) {
+	public SynLogger println(String message) {
 		if (state.useCustom())
 			if (custom != null)
 				custom.accept(true, message);
 		if (state.useStream())
 			if(stream != null)
 				stream.println(message);
+		return this;
 	}
 
-	public void print(LogType type, String message) {
+	public SynLogger print(LogType type, String message) {
 		if(!colored) {
-			print(message);
-			return;
+			return print(message);
 		}
 		if (state.useCustom())
 			if (custom != null)
@@ -303,15 +308,17 @@ public final class SynLogger implements ILogger {
 		if (state.useStream())
 			if(stream != null)
 				stream.print(type.asColorString(true) + message);
+		return this;
 	}
 
-	public void print(String message) {
+	public SynLogger print(String message) {
 		if (state.useCustom())
 			if (custom != null)
 				custom.accept(false, message);
 		if (state.useStream())
 			if(stream != null)
 				stream.print(message);
+		return this;
 	}
 
 }

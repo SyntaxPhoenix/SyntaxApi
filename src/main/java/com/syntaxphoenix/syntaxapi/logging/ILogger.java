@@ -7,7 +7,7 @@ import com.syntaxphoenix.syntaxapi.logging.color.LogTypeMap;
 
 public interface ILogger {
 	
-	public void close();
+	public ILogger close();
 	
 	public LogTypeMap getTypeMap();
 	
@@ -31,22 +31,22 @@ public interface ILogger {
 	
 	public boolean isColored();
 	
-	public void log(String message);
+	public ILogger log(String message);
 	
-	public void log(LogTypeId type, String message);
+	public ILogger log(LogTypeId type, String message);
 	
-	public void log(String typeId, String message);
+	public ILogger log(String typeId, String message);
 	
-	public void log(String... messages);
+	public ILogger log(String... messages);
 	
-	public void log(LogTypeId type, String... messages);
+	public ILogger log(LogTypeId type, String... messages);
 	
-	public void log(String typeId, String... messages);
+	public ILogger log(String typeId, String... messages);
 	
-	public void log(Throwable throwable);
+	public ILogger log(Throwable throwable);
 	
-	public void log(LogTypeId type, Throwable throwable);
+	public ILogger log(LogTypeId type, Throwable throwable);
 	
-	public void log(String typeId, Throwable throwable);
+	public ILogger log(String typeId, Throwable throwable);
 	
 }
