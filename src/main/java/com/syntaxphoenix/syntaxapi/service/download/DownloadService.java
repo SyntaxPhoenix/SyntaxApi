@@ -66,12 +66,14 @@ public class DownloadService implements IService {
 				try {
 
 					if (!annotation.returnsObject()) {
+						status.add();
 						status.skip();
 						Reflections.execute(subscription.getOwnerInstance(), subscription.asMethod());
 						continue;
 					}
 
 					if (!annotation.returnType().isAssignableFrom(Download.class)) {
+						status.add();
 						status.skip();
 						Reflections.execute(subscription.getOwnerInstance(), subscription.asMethod());
 						continue;
@@ -94,28 +96,33 @@ public class DownloadService implements IService {
 							listeners.forEach(listener -> listener.onDisconnect(download, DisconnectReason.ABORTED));
 						continue;
 					}
+					
+					status.add(paths.size());
 
 					URL url = new URL(host);
 
 					URLConnection connection = url.openConnection();
-
-					status.add(paths.size());
-
+					
 					if (connection instanceof HttpURLConnection) {
 						HttpURLConnection http = (HttpURLConnection) connection;
-
-						http.setReadTimeout(30000);
-						http.setConnectTimeout(12000);
+						
+						http.setReadTimeout(15000);
+						http.setConnectTimeout(10000);
 						http.setRequestMethod("GET");
-
+						
 						int code = http.getResponseCode();
-
+						
 						if (code != 200) {
 							if (!listeners.isEmpty())
 								listeners
 										.forEach(listener -> listener.onDisconnect(download, DisconnectReason.TIMEOUT));
 							while (status.failed())
 								;
+							if (services.hasLogger()) {
+								ILogger logger = services.getLogger();
+								if (logger.getState().extendedInfo())
+									logger.log("Failed to connect to '" + host + "'!");
+							}
 							continue;
 						}
 					}
