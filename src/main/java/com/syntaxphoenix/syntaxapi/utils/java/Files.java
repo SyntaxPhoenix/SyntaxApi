@@ -6,6 +6,58 @@ import java.util.ArrayList;
 
 public class Files {
 
+	/*
+	 * File / Folder creation
+	 */
+
+	public static File folder(File folder) {
+		if (!folder.exists()) {
+			if (!folder.mkdirs())
+				return null;
+			return folder;
+		} else if (!folder.isDirectory()) {
+			if (folder.delete()) {
+				if (!folder.mkdirs())
+					return null;
+				return folder;
+			}
+			return null;
+		}
+		return folder;
+	}
+
+	public static File file(File file) {
+		if (file.getParent() != null && !file.getParent().trim().isEmpty())
+			if (folder(file.getParentFile()) == null)
+				return null;
+
+		if (!file.exists()) {
+			if (!createFile(file))
+				return null;
+			return file;
+		} else if (!file.isFile()) {
+			if (file.delete()) {
+				if (!createFile(file))
+					return null;
+				return file;
+			}
+			return null;
+		}
+		return file;
+	}
+
+	public static boolean createFile(File file) {
+		try {
+			return file.createNewFile();
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	/*
+	 * File Listing
+	 */
+
 	public static ArrayList<File> listFiles(File directory) {
 		ArrayList<File> list = new ArrayList<>();
 		for (File file : directory.listFiles()) {
@@ -83,7 +135,11 @@ public class Files {
 		}
 		return list;
 	}
-	
+
+	/*
+	 * Zip Files
+	 */
+
 	public static void zipFileToFolderTime(File file, File folder) {
 		if (!file.exists()) {
 			return;
