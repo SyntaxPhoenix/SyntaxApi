@@ -157,5 +157,12 @@ public abstract class AddonManager<E extends BaseAddon> {
 		}
 		return null;
 	}
+	
+	public void shutdown() {
+		for (Addon<E> addon : addons.values()) {
+			addon.getAddon().onDisable();
+			addon.delete();
+		}
+	}
 
 }
