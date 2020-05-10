@@ -20,7 +20,7 @@ import com.syntaxphoenix.syntaxapi.utils.java.Strings;
  */
 public abstract class AddonManager<E extends BaseAddon> {
 
-	protected final AddonLoader<E> loader = new AddonLoader<>(this, this.getClass().getClassLoader());
+	protected final AddonLoader<E> loader;
 	protected final ArrayList<File> directories = new ArrayList<>();
 	protected final AliasMap<Addon<E>> addons = new AliasMap<>();
 	private final Class<E> addonClass;
@@ -31,6 +31,7 @@ public abstract class AddonManager<E extends BaseAddon> {
 	}
 
 	public AddonManager(Class<E> addonClass, ILogger logger) {
+		this.loader = new AddonLoader<>(this, this.getClass().getClassLoader(), logger);
 		this.addonClass = addonClass;
 		this.logger = logger;
 	}

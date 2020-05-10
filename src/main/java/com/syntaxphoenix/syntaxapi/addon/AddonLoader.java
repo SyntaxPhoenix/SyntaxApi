@@ -26,10 +26,10 @@ public final class AddonLoader<E extends BaseAddon> {
 	private final ClassLoader loader;
 	private final ILogger logger;
 
-	AddonLoader(AddonManager<E> manager, ClassLoader loader) {
-		this.logger = manager.getLogger();
+	AddonLoader(AddonManager<E> manager, ClassLoader loader, ILogger logger) {
 		this.manager = manager;
 		this.loader = loader;
+		this.logger = logger;
 	}
 
 	public AddonManager<E> getManager() {
