@@ -116,7 +116,7 @@ public final class AddonLoader<E extends BaseAddon> {
 
 		try {
 			Class<?> rawClass = jarLoader.loadClass(mainPath);
-			if (rawClass.isAssignableFrom(manager.getAddonClass())) {
+			if (manager.getAddonClass().isAssignableFrom(rawClass)) {
 				mainClass = rawClass.asSubclass(manager.getAddonClass());
 				try {
 					baseAddon = mainClass.newInstance();
@@ -130,7 +130,7 @@ public final class AddonLoader<E extends BaseAddon> {
 				config.clear();
 				jar.close();
 				input.close();
-				throw new AddonException(file.getName() + " -> main class does not implement BaseAddon!");
+				throw new AddonException(file.getName() + " -> main class does not implement " + manager.getAddonClass().getSimpleName() + "!");
 			}
 		} catch (Throwable throwable) {
 			if (throwable instanceof AddonException) {
