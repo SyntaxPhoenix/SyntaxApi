@@ -152,7 +152,7 @@ public abstract class AddonManager<E extends BaseAddon> {
 			try {
 				addon.getAddon().onEnable();
 			} catch(Throwable throwable) {
-				logger.log(new AddonException("Couldn't enable addon \"" + addon.getAddonInfo().get("name", String.class) + "\"!"));
+				logger.log(new AddonException("Couldn't enable addon \"" + addon.getAddonInfo().get("name", String.class) + "\"!", throwable));
 				addon.delete();
 			}
 		}
@@ -180,6 +180,8 @@ public abstract class AddonManager<E extends BaseAddon> {
 	
 	public void shutdown() {
 		for (Addon<E> addon : addons.values()) {
+			if(!addon.state.isInitialized())
+				continue;
 			addon.getAddon().onDisable();
 			addon.delete();
 		}
