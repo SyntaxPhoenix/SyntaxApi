@@ -2,6 +2,8 @@ package com.syntaxphoenix.syntaxapi.addon;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,8 +112,10 @@ public final class AddonLoader<E extends BaseAddon> {
 		E baseAddon;
 		Class<? extends E> mainClass;
 
+		URLClassLoader jarLoader = URLClassLoader.newInstance(new URL[] { new URL("jar:file:" + jar + "!/") }, loader);
+
 		try {
-			Class<?> rawClass = loader.loadClass(mainPath);
+			Class<?> rawClass = jarLoader.loadClass(mainPath);
 			if (rawClass.isAssignableFrom(manager.getAddonClass())) {
 				mainClass = rawClass.asSubclass(manager.getAddonClass());
 				try {
@@ -139,7 +143,7 @@ public final class AddonLoader<E extends BaseAddon> {
 			}
 		}
 
-		Addon<E> addon = new Addon<>(mainClass, baseAddon, config, file);
+		Addon<E> addon = new Addon<>(mainClass, jarLoader, baseAddon, config, file);
 		Map<String, Class<?>> classes = addon.classes();
 
 		Set<String> keySet = entries.keySet();
@@ -149,7 +153,7 @@ public final class AddonLoader<E extends BaseAddon> {
 			}
 			key = key.substring(0, key.length() - 6);
 			try {
-				classes.put(key, loader.loadClass(key));
+				classes.put(key, jarLoader.loadClass(key));
 			} catch (ClassNotFoundException throwable) {
 				classes.clear();
 				config.clear();
@@ -157,6 +161,7 @@ public final class AddonLoader<E extends BaseAddon> {
 				input.close();
 				keySet.clear();
 				addon.delete();
+				jarLoader.close();
 				throw new AddonException(file.getName() + " -> failed to find class \"" + key + "\"", throwable);
 			}
 		}
