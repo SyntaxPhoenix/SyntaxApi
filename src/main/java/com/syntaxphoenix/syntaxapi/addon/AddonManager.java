@@ -151,6 +151,7 @@ public abstract class AddonManager<E extends BaseAddon> {
 				continue;
 			try {
 				addon.getAddon().onEnable();
+				enabled++;
 			} catch(Throwable throwable) {
 				logger.log(new AddonException("Couldn't enable addon \"" + addon.getAddonInfo().get("name", String.class) + "\"!", throwable));
 				addon.delete();
