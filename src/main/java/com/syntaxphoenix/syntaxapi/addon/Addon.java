@@ -26,7 +26,7 @@ public final class Addon<E extends BaseAddon> {
 	private final File addonFile;
 	private final E addon;
 	
-	private AddonState state;
+	protected AddonState state;
 
 	public Addon(Class<? extends E> mainClass, URLClassLoader classLoader, E addon, JsonConfig addonInfo, File addonFile) {
 		this.classLoader = classLoader;

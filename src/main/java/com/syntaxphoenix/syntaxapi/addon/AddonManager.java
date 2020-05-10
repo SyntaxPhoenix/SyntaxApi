@@ -126,7 +126,7 @@ public abstract class AddonManager<E extends BaseAddon> {
 	public int loadAddons() {
 		if (!addons.isEmpty()) {
 			addons.values().forEach(addon -> {
-				addon.classes().clear();
+				addon.delete();
 			});
 			addons.clear();
 		}
@@ -138,6 +138,25 @@ public abstract class AddonManager<E extends BaseAddon> {
 			addons += loader.loadAddons(directory);
 		}
 		return addons;
+	}
+	
+	public int enableAddons() {
+		if (addons.isEmpty())
+			return 0;
+		int enabled = 0;
+		for(Addon<E> addon : addons.values()) {
+			if(addon.state.isEnabled())
+				continue;
+			if(!addon.state.isInitialized())
+				continue;
+			try {
+				addon.getAddon().onEnable();
+			} catch(Throwable throwable) {
+				logger.log(new AddonException("Couldn't enable addon \"" + addon.getAddonInfo().get("name", String.class) + "\"!"));
+				addon.delete();
+			}
+		}
+		return enabled;
 	}
 
 	public E getAddon(String label) {

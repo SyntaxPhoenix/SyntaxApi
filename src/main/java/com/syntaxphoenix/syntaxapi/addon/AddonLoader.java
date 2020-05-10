@@ -112,7 +112,8 @@ public final class AddonLoader<E extends BaseAddon> {
 		E baseAddon;
 		Class<? extends E> mainClass;
 
-		URLClassLoader jarLoader = URLClassLoader.newInstance(new URL[] { new URL("jar:file:" + file.getPath() + "!/") }, loader);
+		URLClassLoader jarLoader = URLClassLoader
+				.newInstance(new URL[] { new URL("jar:file:" + file.getPath() + "!/") }, loader);
 
 		try {
 			Class<?> rawClass = jarLoader.loadClass(mainPath);
@@ -130,7 +131,8 @@ public final class AddonLoader<E extends BaseAddon> {
 				config.clear();
 				jar.close();
 				input.close();
-				throw new AddonException(file.getName() + " -> main class does not implement " + manager.getAddonClass().getSimpleName() + "!");
+				throw new AddonException(file.getName() + " -> main class does not implement "
+						+ manager.getAddonClass().getSimpleName() + "!");
 			}
 		} catch (Throwable throwable) {
 			if (throwable instanceof AddonException) {
@@ -145,6 +147,8 @@ public final class AddonLoader<E extends BaseAddon> {
 
 		Addon<E> addon = new Addon<>(mainClass, jarLoader, baseAddon, config, file);
 		Map<String, Class<?>> classes = addon.classes();
+		
+		addon.state = AddonState.LOADED;
 
 		Set<String> keySet = entries.keySet();
 		for (String key : keySet) {
@@ -167,6 +171,15 @@ public final class AddonLoader<E extends BaseAddon> {
 		}
 		keySet.clear();
 		entries.clear();
+
+		try {
+			baseAddon.onLoad();
+			addon.state = AddonState.INITIALIZED;
+		} catch (Throwable throwable) {
+			addon.delete();
+			logger.log(new AddonException(
+					"Failed to start onLoad method on addon \"" + config.get("name", String.class) + "\"!", throwable));
+		}
 
 		try {
 			jar.close();
