@@ -7,6 +7,7 @@ import java.util.Set;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.internal.LazilyParsedNumber;
 import com.syntaxphoenix.syntaxapi.command.DefaultArgumentIdentifier;
 import com.syntaxphoenix.syntaxapi.config.BaseSection;
 import com.syntaxphoenix.syntaxapi.reflections.ClassCache;
@@ -91,7 +92,13 @@ public class JsonConfigSection extends BaseSection {
 							set(entry.getKey(), number.floatValue());
 						} else if (number instanceof Double) {
 							set(entry.getKey(), number.doubleValue());
+						} else if(number instanceof LazilyParsedNumber) {
+							set(entry.getKey(), DefaultArgumentIdentifier.DEFAULT.process(number.toString()).get(0).asObject());
 						}
+					} else if(primitive.isString()) {
+						set(entry.getKey(), primitive.getAsString());
+					} else {
+						set(entry.getKey(), DefaultArgumentIdentifier.DEFAULT.process(current.getAsString()).get(0).asObject());
 					}
 				} else {
 					set(entry.getKey(), DefaultArgumentIdentifier.DEFAULT.process(current.getAsString()).get(0).asObject());
