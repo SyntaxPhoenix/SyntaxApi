@@ -112,7 +112,7 @@ public final class AddonLoader<E extends BaseAddon> {
 		E baseAddon;
 		Class<? extends E> mainClass;
 
-		URLClassLoader jarLoader = URLClassLoader.newInstance(new URL[] { new URL("jar:" + jar + "!/") }, loader);
+		URLClassLoader jarLoader = URLClassLoader.newInstance(new URL[] { new URL("jar:" + file.getPath() + "!/") }, loader);
 
 		try {
 			Class<?> rawClass = jarLoader.loadClass(mainPath);
