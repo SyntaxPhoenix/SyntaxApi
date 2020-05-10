@@ -21,7 +21,7 @@ import com.syntaxphoenix.syntaxapi.utils.java.Streams;
  *
  */
 public final class AddonLoader<E extends BaseAddon> {
-	
+
 	private final AddonManager<E> manager;
 	private final ClassLoader loader;
 	private final ILogger logger;
@@ -56,7 +56,8 @@ public final class AddonLoader<E extends BaseAddon> {
 			try {
 				addon = loadAddon(jarFiles.get(index));
 			} catch (Throwable throwable) {
-				logger.log((throwable instanceof AddonException) ? throwable : new AddonException(throwable));
+				if (logger != null)
+					logger.log((throwable instanceof AddonException) ? throwable : new AddonException(throwable));
 				loaded--;
 				continue;
 			}
@@ -64,12 +65,13 @@ public final class AddonLoader<E extends BaseAddon> {
 				manager.register(addon);
 			} catch (AddonException e) {
 				addon.delete();
-				logger.log(e);
+				if (logger != null)
+					logger.log(e);
 			}
 		}
 		return loaded;
 	}
-	
+
 	Addon<E> loadAddon(File file) throws Throwable {
 
 		JarInputStream input = new JarInputStream(new FileInputStream(file));
@@ -139,7 +141,7 @@ public final class AddonLoader<E extends BaseAddon> {
 
 		Addon<E> addon = new Addon<>(mainClass, baseAddon, config, file);
 		Map<String, Class<?>> classes = addon.classes();
-		
+
 		Set<String> keySet = entries.keySet();
 		for (String key : keySet) {
 			if (!key.endsWith(".class")) {

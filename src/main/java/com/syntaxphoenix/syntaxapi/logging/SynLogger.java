@@ -242,7 +242,9 @@ public final class SynLogger implements ILogger {
 		if (messages == null || messages.length == 0) {
 			return this;
 		}
+		String thread = getThreadName();
 		for (String message : messages) {
+			setThreadName(thread);
 			log(type, message);
 		}
 		return this;
