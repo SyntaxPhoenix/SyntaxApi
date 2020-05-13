@@ -18,7 +18,7 @@ public class ByteArgument extends NumericArgument {
 	
 	@Override
 	public ArgumentType getType() {
-		return ArgumentType.INTEGER;
+		return ArgumentType.BYTE;
 	}
 
 	@Override
