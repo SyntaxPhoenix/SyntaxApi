@@ -27,6 +27,8 @@ public class DefaultArgumentIdentifier extends ArgumentIdentifier {
 			return list;
 		}
 		for (String argument : arguments) {
+			if(argument.trim().isEmpty())
+				continue;
 			if (Strings.isBoolean(argument)) {
 				list.add(new BooleanArgument(Boolean.valueOf(argument)));
 				continue;
