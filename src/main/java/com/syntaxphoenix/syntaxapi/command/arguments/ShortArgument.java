@@ -18,7 +18,7 @@ public class ShortArgument extends NumericArgument {
 	
 	@Override
 	public ArgumentType getType() {
-		return ArgumentType.INTEGER;
+		return ArgumentType.SHORT;
 	}
 
 	@Override
