@@ -14,10 +14,10 @@ public abstract class ArgumentSerializer {
 			output = toString(argument.asBoolean());
 			break;
 		case BYTE:
-			output = toString(argument.asArray());
+			output = toString(argument.asByte());
 			break;
 		case SHORT:
-			output = toString(argument.asBigInteger());
+			output = toString(argument.asShort());
 			break;
 		case ARRAY:
 			output = toString(argument.asArray());
