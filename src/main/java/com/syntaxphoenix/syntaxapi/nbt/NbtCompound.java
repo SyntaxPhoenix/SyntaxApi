@@ -64,6 +64,18 @@ public final class NbtCompound extends NbtTag {
         if(!(tag instanceof NbtNumber)) return null;
         return (NbtNumber) tag;
     }
+    
+    /**
+     * Removes a value with given Key
+     * 
+     * @param key the key
+     * @return value
+     */
+    public NbtTag remove(String key) {
+    	if(hasKey(key))
+    		return value.remove(key);
+    	return null;
+    }
 
     /**
      * Returns a tag named with the given key.
