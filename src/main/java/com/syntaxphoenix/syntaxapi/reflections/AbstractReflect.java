@@ -393,5 +393,34 @@ public abstract class AbstractReflect {
 		}
 		return this;
 	}
+	
+	public AbstractReflect searchField(String name, Class<?> type) {
+		if (containsField(name)) {
+			return this;
+		}
+		Field[] searching = owner.getFields();
+		for (Field field : searching) {
+			if (field.getType() == type) {
+				fields.put(name, field);
+				return this;
+			}
+		}
+		return this;
+	}
+
+	public AbstractReflect searchFields(String name, Class<?> type) {
+		if (containsField(name)) {
+			return this;
+		}
+		Field[] searching = owner.getFields();
+		int current = 0;
+		for (Field field : searching) {
+			if (field.getType() == type) {
+				fields.put(name + current, field);
+				current++;
+			}
+		}
+		return this;
+	}
 
 }
