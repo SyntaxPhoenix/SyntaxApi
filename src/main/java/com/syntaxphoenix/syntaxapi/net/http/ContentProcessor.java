@@ -2,35 +2,27 @@ package com.syntaxphoenix.syntaxapi.net.http;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Map;
 import java.util.Map.Entry;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 @FunctionalInterface
 public interface ContentProcessor {
 
-	public static final ContentProcessor JSON = parameters -> {
-		JsonObject object = new JsonObject();
-
-		if (!parameters.isEmpty())
-			for (Entry<String, String> parameter : parameters.entrySet())
-				object.addProperty(parameter.getKey(), parameter.getValue());
-
-		return object.toString();
-	};
+	public static final ContentProcessor JSON = parameters -> parameters.toString();
 	
 	public static final ContentProcessor URL_ENCODED = parameters -> {
-		if (parameters.isEmpty())
+		if (parameters.entrySet().isEmpty())
 			return "";
 
 		StringBuilder builder = new StringBuilder();
 
 		try {
-			for (Entry<String, String> parameter : parameters.entrySet()) {
+			for (Entry<String, JsonElement> parameter : parameters.entrySet()) {
 				builder.append(URLEncoder.encode(parameter.getKey(), "UTF-8"));
 				builder.append('=');
-				builder.append(parameter.getValue());
+				builder.append(URLEncoder.encode(parameter.getValue().toString(), "UTF-8"));
 				builder.append('&');
 			}
 		} catch (UnsupportedEncodingException ignore) {
@@ -44,6 +36,6 @@ public interface ContentProcessor {
 	 * 
 	 */
 
-	public String process(Map<String, String> parameters);
+	public String process(JsonObject parameters);
 
 }

@@ -1,6 +1,6 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
-import java.util.HashMap;
+import com.google.gson.JsonObject;
 
 public enum ContentType {
 	
@@ -28,10 +28,10 @@ public enum ContentType {
 	 * 
 	 */
 	
-	public String process(HashMap<String, String> map) {
+	public String process(JsonObject object) {
 		if(processor == null)
 			return "";
-		return processor.process(map);
+		return processor.process(object);
 	}
 	
 	public ContentType processor(ContentProcessor processor) {

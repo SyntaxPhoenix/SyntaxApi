@@ -1,5 +1,8 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
+import com.google.gson.JsonObject;
+import com.syntaxphoenix.syntaxapi.utils.config.JsonTools;
+
 public class Response {
 	
 	private final int responseCode;
@@ -20,6 +23,10 @@ public class Response {
 	
 	public String getResponse() {
 		return response; 
+	}
+	
+	public JsonObject getResponseAsJson() {
+		return JsonTools.readJson(response);
 	}
 
 }
