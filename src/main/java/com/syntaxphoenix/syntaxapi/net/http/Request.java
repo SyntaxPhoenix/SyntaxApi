@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -54,7 +55,7 @@ public class Request {
 			parameters.remove(key);
 		return this;
 	}
-	
+
 	public Request parameter(JsonObject object) {
 		parameters = object;
 		return this;
@@ -78,6 +79,14 @@ public class Request {
 	 * 
 	 */
 
+	public boolean hasParameters() {
+		return !parameters.keySet().isEmpty();
+	}
+
+	/*
+	 * 
+	 */
+
 	public Response execute(String url, ContentType content) throws IOException {
 		return execute(new URL(url), content);
 	}
@@ -87,18 +96,38 @@ public class Request {
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
 		connection.setRequestMethod(request.name());
-		connection.setDoOutput(true);
 
-		byte[] data = content.process(parameters).getBytes(StandardCharsets.UTF_8);
+		byte[] data = null;
+		int length = 0;
 
-		connection.setFixedLengthStreamingMode(data.length);
-		connection.setRequestProperty("Content-Type", content.type() + "; charset=UTF-8");
+		if (hasParameters()) {
+
+			data = content.process(parameters).getBytes(StandardCharsets.UTF_8);
+			length = data.length;
+
+			connection.setDoOutput(true);
+
+		}
+
+		connection.setFixedLengthStreamingMode(length);
+
+		for (Entry<String, String> header : headers.entrySet()) {
+			connection.setRequestProperty(header.getKey(), header.getValue());
+		}
+
+		if (content != ContentType.CUSTOM)
+			connection.setRequestProperty("Content-Type", content.type() + "; charset=UTF-8");
+
 		connection.connect();
-		
-		OutputStream output = connection.getOutputStream();
-		output.write(data);
-		output.flush();
-		output.close();
+
+		if (connection.getDoOutput()) {
+
+			OutputStream output = connection.getOutputStream();
+			output.write(data);
+			output.flush();
+			output.close();
+
+		}
 
 		InputStream input = connection.getInputStream();
 
