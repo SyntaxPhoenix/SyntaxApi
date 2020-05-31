@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.function.Predicate;
 
 import com.syntaxphoenix.syntaxapi.utils.java.Reflections;
 
@@ -50,23 +51,23 @@ public abstract class AbstractReflect {
 		} catch (NoSuchFieldException | SecurityException e) {
 		}
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public Collection<Constructor<?>> getConstructors() {
 		return constructors.values();
 	}
-	
+
 	public Collection<Method> getMethods() {
 		return methods.values();
 	}
-	
+
 	public Collection<Field> getFields() {
 		return fields.values();
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -260,6 +261,10 @@ public abstract class AbstractReflect {
 	 * 
 	 */
 
+	public AbstractReflect searchConstructor(Predicate<AbstractReflect> predicate, String name, Class<?>... args) {
+		return predicate.test(this) ? searchConstructor(name, args) : this;
+	}
+
 	public AbstractReflect searchConstructor(String name, Class<?>... args) {
 		if (containsMethod(name)) {
 			return this;
@@ -298,6 +303,11 @@ public abstract class AbstractReflect {
 	/*
 	 * 
 	 */
+
+	public AbstractReflect searchMethod(Predicate<AbstractReflect> predicate, String name, String methodName,
+			Class<?>... arguments) {
+		return predicate.test(this) ? searchMethod(name, methodName, arguments) : this;
+	}
 
 	public AbstractReflect searchMethod(String name, String methodName, Class<?>... arguments) {
 		if (containsMethod(name)) {
@@ -344,6 +354,10 @@ public abstract class AbstractReflect {
 	 * 
 	 */
 
+	public AbstractReflect searchField(Predicate<AbstractReflect> predicate, String name, String fieldName) {
+		return predicate.test(this) ? searchField(name, fieldName) : this;
+	}
+
 	public AbstractReflect searchField(String name, String fieldName) {
 		if (containsField(name)) {
 			return this;
@@ -371,8 +385,8 @@ public abstract class AbstractReflect {
 		}
 		Field[] searching = owner.getFields();
 		int current = 0;
-		for(Field field : searching) {
-			if(field.getName().startsWith(fieldName)) {
+		for (Field field : searching) {
+			if (field.getName().startsWith(fieldName)) {
 				fields.put(name + current, field);
 				current++;
 			}
