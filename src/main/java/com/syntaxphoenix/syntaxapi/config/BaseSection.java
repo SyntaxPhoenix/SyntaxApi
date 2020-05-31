@@ -11,7 +11,7 @@ import com.syntaxphoenix.syntaxapi.utils.config.SectionMap;
  * @author Lauriichen
  *
  */
-public abstract class BaseSection {
+public abstract class BaseSection implements IBaseSection {
 
 	protected final SectionMap<String, Object> values = new SectionMap<>();;
 	private final String name;

@@ -1,4 +1,4 @@
-package com.syntaxphoenix.syntaxapi.http;
+package com.syntaxphoenix.syntaxapi.net.http;
 
 public enum RequestType {
 	

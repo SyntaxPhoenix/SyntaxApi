@@ -4,7 +4,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public final class SynThreadPool extends ThreadPoolExecutor {
+public final class SynThreadPool extends ThreadPoolExecutor implements SynReportThrower {
 
 	private final SynThreadReporter reporter;
 	
@@ -25,6 +25,15 @@ public final class SynThreadPool extends ThreadPoolExecutor {
 	
 	public final String getName() {
 		return getThreadFactory().getName();
+	}
+	
+	/*
+	 * 
+	 */
+
+	@Override
+	public final boolean isPool() {
+		return true;
 	}
 	
 	/*
