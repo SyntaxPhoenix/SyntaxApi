@@ -15,7 +15,7 @@ public abstract class BaseSection implements IBaseSection {
 
 	protected final SectionMap<String, Object> values = new SectionMap<>();;
 	private final String name;
-
+	
 	/**
 	 * @param String {name}
 	 */

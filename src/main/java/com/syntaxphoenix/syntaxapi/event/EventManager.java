@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
 import com.syntaxphoenix.syntaxapi.utils.general.Status;
@@ -20,12 +21,23 @@ public class EventManager {
 	private final LinkedHashMap<Class<? extends Event>, ArrayList<EventExecutor>> listeners = new LinkedHashMap<>();
 	private final ILogger logger;
 
+	private final ExecutorService service;
+
 	public EventManager() {
-		this.logger = null;
+		this(null, null);
+	}
+
+	public EventManager(ExecutorService service) {
+		this(null, service);
 	}
 
 	public EventManager(ILogger logger) {
+		this(logger, null);
+	}
+
+	public EventManager(ILogger logger, ExecutorService service) {
 		this.logger = logger;
+		this.service = service;
 	}
 
 	/*
@@ -38,6 +50,14 @@ public class EventManager {
 
 	public ILogger getLogger() {
 		return logger;
+	}
+
+	public boolean isAsync() {
+		return service != null;
+	}
+
+	public ExecutorService getExecutorService() {
+		return service;
 	}
 
 	/*
@@ -53,7 +73,22 @@ public class EventManager {
 	}
 
 	public Status call(EventCall call) {
-		return call.execute();
+		if (isAsync())
+			return call.executeAsync(service);
+		else
+			return call.execute();
+	}
+
+	/*
+	 * 
+	 */
+
+	public Status callAsync(Event event, ExecutorService service) {
+		return callAsync(generateCall(event), service);
+	}
+
+	public Status callAsync(EventCall call, ExecutorService service) {
+		return call.executeAsync(service);
 	}
 
 	/*
@@ -121,8 +156,8 @@ public class EventManager {
 		}
 		ArrayList<EventExecutor> executors = new ArrayList<>();
 		Set<Class<? extends Event>> keys = listeners.keySet();
-		for(Class<? extends Event> assign : keys) {
-			if(assign.isAssignableFrom(event)) {
+		for (Class<? extends Event> assign : keys) {
+			if (assign.isAssignableFrom(event)) {
 				executors.addAll(listeners.get(assign));
 			}
 		}
