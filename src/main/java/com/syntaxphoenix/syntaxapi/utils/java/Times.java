@@ -21,7 +21,6 @@ public class Times {
 		Calendar calendar = (Calendar) Calendar.getInstance().clone();
 		calendar.add(Calendar.DATE, days);
 		return new SimpleDateFormat("dd" + x + "MM" + x + "yyyy").format(calendar.getTime());
-
 	}
 
 }
