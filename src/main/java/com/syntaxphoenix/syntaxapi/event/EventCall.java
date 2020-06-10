@@ -103,6 +103,7 @@ public final class EventCall {
 				}
 			}
 		}
+		result.done();
 		return result;
 	}
 
@@ -126,6 +127,7 @@ public final class EventCall {
 				}
 			}
 		}
+		result.done();
 		return result;
 	}
 
