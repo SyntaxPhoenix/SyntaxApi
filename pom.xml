@@ -4,13 +4,21 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.syntaxphoenix</groupId>
 	<artifactId>syntaxapi</artifactId>
-	<version>0.1</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>SyntaxApi</name>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>SyntaxPhoenix Software</name>
+			<url>http://maven.syntaxphoenix.com/repository/software</url>
+		</repository>
+	</distributionManagement>
 
 	<repositories>
 		<repository>
@@ -20,12 +28,6 @@
 	</repositories>
 
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>13.0-rc1</version>
-		</dependency>
 		<dependency>
 			<groupId>com.github.TheElectronWill</groupId>
 			<artifactId>TOML-javalib</artifactId>

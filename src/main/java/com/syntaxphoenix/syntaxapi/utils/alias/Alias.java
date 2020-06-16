@@ -1,10 +1,9 @@
 package com.syntaxphoenix.syntaxapi.utils.alias;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-import com.syntaxphoenix.syntaxapi.utils.java.Lists;
 
 public class Alias {
 	
@@ -16,7 +15,7 @@ public class Alias {
 	
 	public Alias(String name, String... aliases) {
 		this.name = name.toLowerCase();
-		this.aliases = ImmutableList.copyOf(Lists.asList(aliases));
+		this.aliases = Collections.unmodifiableList(Arrays.asList(aliases));
 	}
 	
 	public String[] getAliases() {

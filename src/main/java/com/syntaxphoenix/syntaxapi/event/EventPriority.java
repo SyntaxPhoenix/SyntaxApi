@@ -1,8 +1,8 @@
 package com.syntaxphoenix.syntaxapi.event;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
 
 public enum EventPriority {
 
@@ -12,7 +12,7 @@ public enum EventPriority {
 	 * 
 	 */
 	
-	public static final List<EventPriority> ORDERED_VALUES = ImmutableList.of(HIGHEST, HIGH, NORMAL, LOW, LOWEST);
+	public static final List<EventPriority> ORDERED_VALUES = Collections.unmodifiableList(Arrays.asList(HIGHEST, HIGH, NORMAL, LOW, LOWEST));
 	
 	/*
 	 * 

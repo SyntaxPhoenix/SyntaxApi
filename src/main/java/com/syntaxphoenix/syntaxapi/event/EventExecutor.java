@@ -1,10 +1,9 @@
 package com.syntaxphoenix.syntaxapi.event;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
 
 public final class EventExecutor implements Comparable<EventExecutor> {
 
@@ -52,9 +51,9 @@ public final class EventExecutor implements Comparable<EventExecutor> {
 	
 	public List<EventMethod> getMethodsByPriority(EventPriority priority) {
 		if(!methods.containsKey(priority)) {
-			return ImmutableList.of();
+			return Collections.emptyList();
 		}
-		return ImmutableList.copyOf(methods.get(priority));
+		return Collections.unmodifiableList(methods.get(priority));
 	}
 	
 	public List<EventMethod> getMethods() {
