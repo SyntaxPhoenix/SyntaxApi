@@ -8,15 +8,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 @FunctionalInterface
-public interface ContentProcessor {
+public interface ContentSerializer {
 
-	public static final ContentProcessor JSON = parameters -> parameters.toString();
+	public static final ContentSerializer JSON = parameters -> parameters.toString();
 	
-	public static final ContentProcessor URL_ENCODED = parameters -> {
+	public static final ContentSerializer URL_ENCODED = parameters -> {
 		if (parameters.entrySet().isEmpty())
 			return "";
-
-		StringBuilder builder = new StringBuilder();
+		
+		StringBuilder builder = new StringBuilder('?');
 
 		try {
 			for (Entry<String, JsonElement> parameter : parameters.entrySet()) {

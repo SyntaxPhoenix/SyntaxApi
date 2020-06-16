@@ -102,7 +102,7 @@ public class Request {
 
 		if (hasParameters()) {
 
-			data = content.process(parameters).getBytes(StandardCharsets.UTF_8);
+			data = content.serialize(parameters).getBytes(StandardCharsets.UTF_8);
 			length = data.length;
 
 			connection.setDoOutput(true);

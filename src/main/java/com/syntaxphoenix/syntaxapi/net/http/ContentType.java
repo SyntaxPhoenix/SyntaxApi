@@ -4,12 +4,13 @@ import com.google.gson.JsonObject;
 
 public enum ContentType {
 	
-	X_WWW_FORM_URLENCODED(ContentProcessor.URL_ENCODED), JSON(ContentProcessor.JSON), CUSTOM;
+	X_WWW_FORM_URLENCODED(ContentSerializer.URL_ENCODED, ContentDeserializer.URL_ENCODED), JSON(ContentSerializer.JSON, ContentDeserializer.JSON), CUSTOM;
 	
-	private ContentProcessor processor;
+	private ContentSerializer serializer;
+	private ContentDeserializer deserializer;
 	
-	private ContentType(ContentProcessor processor) {
-		this.processor = processor;
+	private ContentType(ContentSerializer serializer, ContentDeserializer deserializer) {
+		this.serializer = serializer;
 	}
 	
 	private ContentType() {
@@ -28,15 +29,31 @@ public enum ContentType {
 	 * 
 	 */
 	
-	public String process(JsonObject object) {
-		if(processor == null)
+	public String serialize(JsonObject object) {
+		if(serializer == null)
 			return "";
-		return processor.process(object);
+		return serializer.process(object);
 	}
 	
-	public ContentType processor(ContentProcessor processor) {
-		if(this.processor == null)
-			this.processor = processor;
+	public JsonObject deserialize(String value) { 
+		if(deserializer == null)
+			return null;
+		return deserializer.process(value);
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public ContentType serializer(ContentSerializer serializer) {
+		if(this.serializer == null)
+			this.serializer = serializer;
+		return this;
+	}
+	
+	public ContentType deserializer(ContentDeserializer deserializer) {
+		if(this.deserializer == null)
+			this.deserializer = deserializer;
 		return this;
 	}
 
