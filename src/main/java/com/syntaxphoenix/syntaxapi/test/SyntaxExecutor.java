@@ -7,7 +7,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.fusesource.jansi.AnsiConsole;
 
-import com.syntaxphoenix.syntaxapi.logging.AsyncLogger;
 import com.syntaxphoenix.syntaxapi.logging.LoggerState;
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 import com.syntaxphoenix.syntaxapi.test.utils.Printer;
@@ -19,7 +18,7 @@ import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
  */
 public class SyntaxExecutor extends Thread {
 
-	public static AsyncLogger LOGGER = new AsyncLogger(new SynLogger(AnsiConsole.out(), LoggerState.EXTENDED_STREAM));
+	public static SynLogger LOGGER = new SynLogger(AnsiConsole.out(), LoggerState.EXTENDED_STREAM);
 	public static PrintWriter WRITER;
 
 	private static final BlockingQueue<Runnable> QUEUE = new LinkedBlockingQueue<Runnable>();
@@ -32,8 +31,8 @@ public class SyntaxExecutor extends Thread {
 		test = new SyntaxTest(args);
 
 		try {
-			((SynLogger) LOGGER.getLogger()).setStream(
-					WRITER = new PrintWriter(new File("debug.log"), ((SynLogger) LOGGER.getLogger()).getStream()));
+			LOGGER.setStream(
+					WRITER = new PrintWriter(new File("debug.log"), LOGGER.getStream()));
 		} catch (FileNotFoundException e) {
 			LOGGER.log(e);
 		}

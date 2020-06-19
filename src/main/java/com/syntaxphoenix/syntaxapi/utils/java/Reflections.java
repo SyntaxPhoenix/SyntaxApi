@@ -1,12 +1,40 @@
 package com.syntaxphoenix.syntaxapi.utils.java;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class Reflections {
+
+	public static Object getValue(Field field, Object source) {
+		if (field != null) {
+			boolean access = field.isAccessible();
+			if (!access) {
+				field.setAccessible(true);
+			}
+			Object output = null;
+			try {
+				output = field.get(source);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				if (!access) {
+					field.setAccessible(access);
+				}
+				e.printStackTrace();
+			}
+			if (!access) {
+				field.setAccessible(access);
+			}
+			return output;
+		}
+		return null;
+	}
+
+	public static Object getValue(Field field) {
+		return getValue(field, null);
+	}
 
 	public static boolean hasSameArguments(Class<?>[] compare1, Class<?>[] compare2) {
 		if (compare1.length == 0 && compare2.length == 0) {

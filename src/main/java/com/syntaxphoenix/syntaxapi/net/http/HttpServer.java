@@ -1,17 +1,20 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 
 import com.syntaxphoenix.syntaxapi.net.AsyncSocketServer;
 import com.syntaxphoenix.syntaxapi.threading.SynThreadFactory;
-import com.syntaxphoenix.syntaxapi.utils.java.Streams;
 
 public class HttpServer extends AsyncSocketServer {
 
+	private RequestGate gate;
 	private RequestHandler handler;
+	private RequestSerializer serializer;
 
 	public HttpServer() {
 		super();
@@ -45,6 +48,22 @@ public class HttpServer extends AsyncSocketServer {
 		super(port, factory, service);
 	}
 
+	public HttpServer(int port, InetAddress address) {
+		super(port, address);
+	}
+
+	public HttpServer(int port, InetAddress address, SynThreadFactory factory) {
+		super(port, address, factory);
+	}
+
+	public HttpServer(int port, InetAddress address, ExecutorService service) {
+		super(port, address, service);
+	}
+
+	public HttpServer(int port, InetAddress address, SynThreadFactory factory, ExecutorService service) {
+		super(port, address, factory, service);
+	}
+
 	/*
 	 * 
 	 */
@@ -61,30 +80,119 @@ public class HttpServer extends AsyncSocketServer {
 	 * 
 	 */
 
+	public void setGate(RequestGate gate) {
+		this.gate = gate;
+	}
+
+	public RequestGate getGate() {
+		return gate;
+	}
+
+	/*
+	 * 
+	 */
+
+	public void setSerializer(RequestSerializer serializer) {
+		this.serializer = serializer;
+	}
+
+	public RequestSerializer getSerializer() {
+		return serializer;
+	}
+
+	/*
+	 * 
+	 */
+
 	@Override
 	protected void handleClientAsync(Socket socket) throws Throwable {
-//		if(handler == null) {
-//			socket.close();
-//			return;
-//		}
 
-		String address = socket.getInetAddress().toString().replace(':', '_').replace('.', '_');
-		File file = new File(address + ".txt");
-		int run = 0;
-		while (file.exists()) {
-			file = new File(address + "-" + run + ".txt");
-			run++;
+		HttpWriter writer = new HttpWriter(new PrintStream(socket.getOutputStream()));
+
+		if (serializer == null) {
+			Answer.SERVER_ERROR.respond("error", "No message serializer was registered, Sorry!").write(writer)
+					.clearResponse();
+			writer.close();
+			socket.close();
+			throw new IllegalStateException("Serializer can't be null!");
 		}
 
-		System.out.println(file.getAbsolutePath());
+		if (handler == null) {
+			Answer.SERVER_ERROR.respond("error", "No message handler was registered, Sorry!").write(writer)
+					.clearResponse();
+			writer.close();
+			socket.close();
+			throw new IllegalStateException("Handler can't be null!");
+		}
 
-		file.createNewFile();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-		FileWriter writer = new FileWriter(file);
-		writer.write(Streams.toString(socket.getInputStream()));
+		String line = reader.readLine();
 
-		writer.close();
-		socket.close();
+		if (line == null) {
+			socket.close();
+			return;
+		}
+
+		String[] info = line.split(" ");
+
+		ReceivedRequest request = new ReceivedRequest(RequestType.fromString(info[0]),
+				info[1].replaceFirst("/", "").split("/"));
+
+		while ((line = reader.readLine()) != null) {
+			request.parseHeader(line);
+			if (line.isEmpty())
+				break;
+		}
+
+		/*
+		 * 
+		 */
+
+		if (gate != null) {
+			RequestState state = gate.acceptRequest(writer, request);
+			if (state.accepted()) {
+				Answer.CONTINUE.write(writer);
+			} else {
+				if (!state.message())
+					Answer.NO_CONTENT.write(writer);
+				reader.close();
+				writer.close();
+				socket.close();
+				return;
+			}
+		} else {
+			Answer.CONTINUE.write(writer);
+		}
+
+		/*
+		 * 
+		 */
+
+		int length = ((Number) request.getHeader("Content-Length")).intValue();
+
+		StringBuilder builder = new StringBuilder();
+
+		if (length != 0) {
+			char[] buffer;
+			if (length <= 1024) {
+				buffer = new char[length];
+				reader.read(buffer, 0, length);
+				builder.append(buffer);
+			} else {
+				buffer = new char[1024];
+				while (reader.read(buffer, 0, buffer.length) != -1) {
+					builder.append(buffer);
+				}
+			}
+		}
+
+		reader.close();
+
+		if (handler.handleRequest(socket, writer, request)) {
+			writer.close();
+			socket.close();
+		}
 
 	}
 

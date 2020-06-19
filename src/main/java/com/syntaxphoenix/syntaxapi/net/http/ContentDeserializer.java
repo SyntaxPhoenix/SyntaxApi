@@ -7,10 +7,10 @@ import com.syntaxphoenix.syntaxapi.utils.config.JsonTools;
 public interface ContentDeserializer {
 
 	public static final ContentDeserializer JSON = value -> JsonTools.readJson(value);
-	
-	public static final ContentDeserializer URL_ENCODED = value -> {
-		return null;
-	};
+
+	public static final ContentDeserializer URL_ENCODED = value -> null;
+
+	public static final ContentDeserializer PLAIN = value -> null;
 
 	/*
 	 * 

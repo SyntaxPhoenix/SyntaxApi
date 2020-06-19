@@ -1,6 +1,7 @@
 package com.syntaxphoenix.syntaxapi.net;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -20,6 +21,7 @@ public abstract class SocketServer {
 	 */
 
 	private final ExecutorService serverThread;
+	private final InetAddress address;
 	private final int port;
 
 	private ServerSocket serverSocket;
@@ -33,11 +35,20 @@ public abstract class SocketServer {
 	}
 
 	public SocketServer(int port) {
-		this(port, new SynThreadFactory(Keys.generateKey(8)));
+		this(port, null, new SynThreadFactory(Keys.generateKey(8)));
+	}
+
+	public SocketServer(int port, InetAddress address) {
+		this(port, address, new SynThreadFactory(Keys.generateKey(8)));
 	}
 
 	public SocketServer(int port, SynThreadFactory factory) {
+		this(port, null, factory);
+	}
+
+	public SocketServer(int port, InetAddress address, SynThreadFactory factory) {
 		this.port = port;
+		this.address = address;
 		this.serverThread = Executors.newSingleThreadExecutor(factory);
 	}
 	
@@ -73,7 +84,7 @@ public abstract class SocketServer {
 		if (serverSocket != null)
 			return;
 
-		serverSocket = new ServerSocket(port);
+		serverSocket = address == null ? new ServerSocket(port) : new ServerSocket(port, 50, address);
 		serverThread.submit(() -> {
 			try {
 				handleServer();
@@ -86,7 +97,7 @@ public abstract class SocketServer {
 	public void stop() throws IOException {
 		if (serverSocket == null)
 			return;
-
+		
 		serverSocket.close();
 		serverSocket = null;
 	}

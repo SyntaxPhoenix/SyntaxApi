@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 public enum ContentType {
 	
-	X_WWW_FORM_URLENCODED(ContentSerializer.URL_ENCODED, ContentDeserializer.URL_ENCODED), JSON(ContentSerializer.JSON, ContentDeserializer.JSON), CUSTOM;
+	X_WWW_FORM_URLENCODED(ContentSerializer.URL_ENCODED, ContentDeserializer.URL_ENCODED), PLAIN(ContentSerializer.PLAIN, ContentDeserializer.PLAIN), JSON(ContentSerializer.JSON, ContentDeserializer.JSON), CUSTOM;
 	
 	private ContentSerializer serializer;
 	private ContentDeserializer deserializer;

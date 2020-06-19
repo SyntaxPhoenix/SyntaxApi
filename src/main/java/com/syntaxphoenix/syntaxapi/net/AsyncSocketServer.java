@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.net;
 
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,6 +43,24 @@ public abstract class AsyncSocketServer extends SocketServer {
 
 	public AsyncSocketServer(int port, SynThreadFactory factory, ExecutorService service) {
 		super(port, factory);
+		this.service = service;
+	}
+
+	public AsyncSocketServer(int port, InetAddress address) {
+		this(port, address, new SynThreadFactory(Keys.generateKey(8)));
+	}
+
+	public AsyncSocketServer(int port, InetAddress address, SynThreadFactory factory) {
+		this(port, address, factory, Executors.newCachedThreadPool(factory));
+	}
+
+	public AsyncSocketServer(int port, InetAddress address, ExecutorService service) {
+		super(port, address);
+		this.service = service;
+	}
+
+	public AsyncSocketServer(int port, InetAddress address, SynThreadFactory factory, ExecutorService service) {
+		super(port, address, factory);
 		this.service = service;
 	}
 
