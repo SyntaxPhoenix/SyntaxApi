@@ -5,6 +5,6 @@ import com.google.gson.JsonObject;
 @FunctionalInterface
 public interface RequestSerializer {
 
-	public JsonObject serialize(String raw);
+	public JsonObject serialize(String raw) throws Exception;
 	
 }
