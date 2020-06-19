@@ -152,7 +152,7 @@ public class HttpServer extends AsyncSocketServer {
 		if (gate != null) {
 			RequestState state = gate.acceptRequest(writer, request);
 			if (state.accepted()) {
-				Answer.CONTINUE.write(writer);
+				Answer.CONTINUE.respond("info", "waiting for body...").write(writer).clearResponse();
 			} else {
 				if (!state.message())
 					Answer.NO_CONTENT.write(writer);
@@ -187,9 +187,9 @@ public class HttpServer extends AsyncSocketServer {
 			}
 		}
 
-		reader.close();
 
 		if (handler.handleRequest(socket, writer, request)) {
+			reader.close();
 			writer.close();
 			socket.close();
 		}
