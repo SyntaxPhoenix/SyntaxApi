@@ -29,7 +29,7 @@ public class Answer {
 	private final HashMap<String, String> headers = new HashMap<>();
 	private final ContentType type;
 	
-	private JsonObject object;
+	private JsonObject object = new JsonObject();
 	private int code = 404;
 
 	/*
