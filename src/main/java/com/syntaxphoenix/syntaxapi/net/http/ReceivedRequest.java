@@ -9,10 +9,11 @@ import com.syntaxphoenix.syntaxapi.command.ArgumentIdentifier;
 public class ReceivedRequest {
 
 	private final HashMap<String, Object> headers = new HashMap<>();
-	private final JsonObject data = new JsonObject();
 
 	private final RequestType type;
 	private final String[] path;
+
+	private JsonObject data = new JsonObject();
 
 	public ReceivedRequest(RequestType type, String... path) {
 		this.type = type;
@@ -63,6 +64,15 @@ public class ReceivedRequest {
 
 	public final boolean hasHeader(String key) {
 		return headers.containsKey(key);
+	}
+	
+	/*
+	 * 
+	 */
+	
+	public final ReceivedRequest setData(JsonObject data) {
+		this.data = data;
+		return this;
 	}
 
 	/*

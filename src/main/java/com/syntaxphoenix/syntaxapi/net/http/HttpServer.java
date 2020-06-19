@@ -130,6 +130,7 @@ public class HttpServer extends AsyncSocketServer {
 		String line = reader.readLine();
 
 		if (line == null) {
+			Answer.NO_CONTENT.write(writer);
 			socket.close();
 			return;
 		}
@@ -152,7 +153,7 @@ public class HttpServer extends AsyncSocketServer {
 		if (gate != null) {
 			RequestState state = gate.acceptRequest(writer, request);
 			if (state.accepted()) {
-				Answer.CONTINUE.respond("info", "waiting for body...").write(writer).clearResponse();
+				Answer.CONTINUE.write(writer);
 			} else {
 				if (!state.message())
 					Answer.NO_CONTENT.write(writer);
@@ -186,7 +187,8 @@ public class HttpServer extends AsyncSocketServer {
 				}
 			}
 		}
-
+		
+		request.setData(serializer.serialize(builder.toString()));
 
 		if (handler.handleRequest(socket, writer, request)) {
 			reader.close();
