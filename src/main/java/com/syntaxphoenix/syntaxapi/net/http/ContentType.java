@@ -56,5 +56,16 @@ public enum ContentType {
 			this.deserializer = deserializer;
 		return this;
 	}
+	
+	/*
+	 * 
+	 */
+	
+	public static ContentType fromString(String value) {
+		for(ContentType type : values())
+			if(type.type().equals(value))
+				return type;
+		return ContentType.CUSTOM;
+	}
 
 }
