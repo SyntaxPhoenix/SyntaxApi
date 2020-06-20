@@ -26,7 +26,7 @@ public class ServiceManager {
 	}
 
 	/*
-	 * 
+	 * Logger
 	 */
 
 	public ILogger getLogger() {
@@ -43,7 +43,7 @@ public class ServiceManager {
 	}
 
 	/*
-	 * 
+	 * Service Handling
 	 */
 
 	public boolean register(IService service) {
@@ -81,7 +81,7 @@ public class ServiceManager {
 	}
 
 	/*
-	 * 
+	 * Execution
 	 */
 
 	public Status run(String id) {
@@ -96,9 +96,11 @@ public class ServiceManager {
 	}
 
 	/*
-	 * 
+	 * Subscription
 	 */
 
+	// subscribe
+	
 	public void subscribe(Object object) {
 		boolean flag = object instanceof Class;
 		Class<?> clazz = flag ? (Class<?>) object : object.getClass();
@@ -127,7 +129,9 @@ public class ServiceManager {
 			return;
 		containers.add(container);
 	}
-
+	
+	// Unsubscribe
+	
 	public void unsubscribe(Object object) {
 		ServiceContainer[] containers = this.containers.stream()
 				.filter(container -> container.getOwner().equals(object)).toArray(size -> new ServiceContainer[size]);
@@ -137,11 +141,19 @@ public class ServiceManager {
 			this.containers.remove(container);
 		}
 	}
-
-	/*
-	 * 
-	 */
-
+	
+	public void unsubscribe(Class<?> clazz) {
+		ServiceContainer[] containers = this.containers.stream()
+				.filter(container -> container.getOwner().getClass() == clazz).toArray(size -> new ServiceContainer[size]);
+		if (containers.length == 0)
+			return;
+		for (ServiceContainer container : containers) {
+			this.containers.remove(container);
+		}
+	}
+	
+	// Getter
+	
 	public IServiceValue[] getSubscriptions(String id) {
 		Optional<IService> service = findService(id);
 		return service.isPresent() ? getSubscriptions(service.get()) : new IServiceValue[0];

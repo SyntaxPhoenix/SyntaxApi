@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.net;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -78,10 +79,15 @@ public abstract class AsyncSocketServer extends SocketServer {
 
 	@Override
 	protected void handleClient(Socket socket) throws Throwable {
-		service.submit(() -> {
+		service.execute(() -> {
 			try {
 				handleClientAsync(socket);
 			} catch (Throwable throwable) {
+				try {
+					if(!socket.isClosed())
+						socket.close();
+				} catch (IOException e) {
+				}
 				handleExceptionAsync(throwable);
 			}
 		});

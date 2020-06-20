@@ -2,13 +2,16 @@ package com.syntaxphoenix.syntaxapi.event;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
 import com.syntaxphoenix.syntaxapi.utils.general.Status;
+import com.syntaxphoenix.syntaxapi.utils.java.Collect;
 
 /**
  * 
@@ -41,7 +44,7 @@ public class EventManager {
 	}
 
 	/*
-	 * 
+	 * Getter / Infos
 	 */
 
 	public boolean hasLogger() {
@@ -61,11 +64,11 @@ public class EventManager {
 	}
 
 	/*
-	 * 
+	 * Event calls
 	 */
 
 	public EventCall generateCall(Event event) {
-		return new EventCall(this, event, getExecutors(event.getClass(), true));
+		return new EventCall(this, event, getExecutorsForEvent(event.getClass(), true));
 	}
 
 	public Status call(Event event) {
@@ -79,10 +82,6 @@ public class EventManager {
 			return call.execute();
 	}
 
-	/*
-	 * 
-	 */
-
 	public Status callAsync(Event event, ExecutorService service) {
 		return callAsync(generateCall(event), service);
 	}
@@ -92,9 +91,11 @@ public class EventManager {
 	}
 
 	/*
-	 * 
+	 * Registration
 	 */
 
+	// Register
+	
 	public EventManager registerEvents(EventListener listener) {
 		EventAnalyser analyser = new EventAnalyser(listener);
 		analyser.registerEvents(this);
@@ -110,10 +111,6 @@ public class EventManager {
 		registerExecutor(executor);
 		return this;
 	}
-
-	/*
-	 * 
-	 */
 
 	public EventManager registerExecutors(Collection<EventExecutor> executors) {
 		executors.forEach(executor -> registerExecutor(executor));
@@ -137,17 +134,79 @@ public class EventManager {
 		}
 		return this;
 	}
+	
+	// Unregister
+	
+	public EventManager unregisterEvents(Class<? extends EventListener> listener) {
+		return unregisterExecutors(getExecutorsFromOwner(listener));
+	}
+	
+	public EventManager unregisterEvents(EventListener listener) {
+		return unregisterExecutors(getExecutorsFromOwner(listener));
+	}
+	
+	public EventManager unregisterExecutors(Iterable<EventExecutor> executors) {
+		return unregisterExecutors(executors.iterator());
+	}
+	
+	public EventManager unregisterExecutors(Iterator<EventExecutor> executors) {
+		while(executors.hasNext())
+			unregisterExecutor(executors.next());
+		return this;
+	}
+	
+	public EventManager unregisterExecutors(EventExecutor... executors) {
+		for(EventExecutor executor : executors)
+			unregisterExecutor(executor);
+		return this;
+	}
+	
+	public EventManager unregisterExecutor(EventExecutor executor) {
+		ArrayList<EventExecutor> list = listeners.get(executor.getEvent());
+		if(list != null && list.contains(executor))
+			list.remove(executor);
+		return this;
+	}
 
 	/*
-	 * 
+	 * Owners
 	 */
 
-	public List<EventExecutor> getExecutors(Class<? extends Event> event) {
-		return getExecutors(event, false);
+	public List<? extends EventListener> getOwners() {
+		return getExecutors().stream().collect(Collect.collectList((output, input) -> {
+			if (!output.contains(input.getListener()))
+				output.add(input.getListener());
+		}));
+	}
+
+	public List<Class<? extends EventListener>> getOwnerClasses() {
+		return getOwners().stream().collect(Collect.collectList((output, input) -> output.add(input.getClass())));
+	}
+
+	/*
+	 * Executors
+	 */
+
+	public List<EventExecutor> getExecutors() {
+		return listeners.values().stream().collect(Collect.combineList());
+	}
+
+	public List<EventExecutor> getExecutorsFromOwner(EventListener listener) {
+		return getExecutors().stream().filter(executor -> executor.getListener() == listener)
+				.collect(Collectors.toList());
+	}
+
+	public List<EventExecutor> getExecutorsFromOwner(Class<? extends EventListener> listener) {
+		return getExecutors().stream().filter(executor -> executor.getListener().getClass() == listener)
+				.collect(Collectors.toList());
+	}
+
+	public List<EventExecutor> getExecutorsForEvent(Class<? extends Event> event) {
+		return getExecutorsForEvent(event, false);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<EventExecutor> getExecutors(Class<? extends Event> event, boolean allowAssignableClasses) {
+	public List<EventExecutor> getExecutorsForEvent(Class<? extends Event> event, boolean allowAssignableClasses) {
 		if (!allowAssignableClasses) {
 			if (!listeners.containsKey(event)) {
 				return new ArrayList<>();
