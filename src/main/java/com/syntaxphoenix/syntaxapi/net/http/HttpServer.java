@@ -153,22 +153,38 @@ public class HttpServer extends AsyncSocketServer {
 		if (gate != null) {
 			RequestState state = gate.acceptRequest(writer, request);
 			if (state.accepted()) {
-				Answer.CONTINUE.write(writer);
+				if (request.hasHeader("expect")) {
+					if (((String) request.getHeader("expect")).contains("100-continue"))
+						Answer.CONTINUE.write(writer);
+				}
 			} else {
 				if (!state.message())
-					Answer.NO_CONTENT.write(writer);
+					new Answer(ContentType.JSON).code(ResponseCode.BAD_REQUEST)
+							.respond("error", "method or contenttype is not supported").write(writer);
 				reader.close();
 				writer.close();
 				socket.close();
 				return;
 			}
 		} else {
-			Answer.CONTINUE.write(writer);
+			if (request.hasHeader("expect")) {
+				if (((String) request.getHeader("expect")).contains("100-continue"))
+					Answer.CONTINUE.write(writer);
+			}
 		}
 
 		/*
 		 * 
 		 */
+
+		if (!request.hasHeader("Content-Length")) {
+			new Answer(ContentType.JSON).code(ResponseCode.LENGTH_REQUIRED).respond("error", "no content length given")
+					.write(writer);
+			reader.close();
+			writer.close();
+			socket.close();
+			return;
+		}
 
 		int length = ((Number) request.getHeader("Content-Length")).intValue();
 
@@ -187,7 +203,7 @@ public class HttpServer extends AsyncSocketServer {
 				}
 			}
 		}
-		
+
 		request.setData(serializer.serialize(builder.toString()));
 
 		if (handler.handleRequest(socket, writer, request)) {

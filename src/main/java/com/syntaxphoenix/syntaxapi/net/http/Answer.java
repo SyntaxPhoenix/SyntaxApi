@@ -153,6 +153,8 @@ public class Answer {
 
 		if(type == ContentType.CUSTOM)
 			writer.writeType(headers.get("Content-Type"));
+		else
+			writer.writeType(type);
 		
 		writer.line();
 		
