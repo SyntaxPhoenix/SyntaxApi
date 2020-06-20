@@ -46,7 +46,7 @@ public class ReceivedRequest {
 		if (!header.contains(":"))
 			return this;
 		String[] parts = header.split(":", 2);
-		headers.put(parts[0], ArgumentIdentifier.DEFAULT.process(parts[1].trim()).get(0).asObject());
+		headers.put(parts[0].toLowerCase(), ArgumentIdentifier.DEFAULT.process(parts[1].trim()).get(0).asObject());
 		return this;
 	}
 
@@ -59,11 +59,11 @@ public class ReceivedRequest {
 	}
 
 	public final Object getHeader(String key) {
-		return headers.get(key);
+		return headers.get(key.toLowerCase());
 	}
 
 	public final boolean hasHeader(String key) {
-		return headers.containsKey(key);
+		return headers.containsKey(key.toLowerCase());
 	}
 	
 	/*
