@@ -6,9 +6,9 @@ import java.util.function.Consumer;
 
 import com.syntaxphoenix.syntaxapi.random.NumberGeneratorType;
 import com.syntaxphoenix.syntaxapi.random.RandomNumberGenerator;
-import com.syntaxphoenix.syntaxapi.test.PrintWriter;
 import com.syntaxphoenix.syntaxapi.test.SyntaxExecutor;
 import com.syntaxphoenix.syntaxapi.test.utils.Printer;
+import com.syntaxphoenix.syntaxapi.utils.io.PrintWriter;
 
 public class RandomTest implements Consumer<String[]>, Printer {
 

@@ -10,6 +10,7 @@ import org.fusesource.jansi.AnsiConsole;
 import com.syntaxphoenix.syntaxapi.logging.LoggerState;
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 import com.syntaxphoenix.syntaxapi.test.utils.Printer;
+import com.syntaxphoenix.syntaxapi.utils.io.PrintWriter;
 import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
 
 /**

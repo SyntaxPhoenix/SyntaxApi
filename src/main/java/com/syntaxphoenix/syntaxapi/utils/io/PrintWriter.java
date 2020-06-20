@@ -1,4 +1,4 @@
-package com.syntaxphoenix.syntaxapi.test;
+package com.syntaxphoenix.syntaxapi.utils.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
