@@ -24,9 +24,17 @@ public interface Printer {
 		SyntaxExecutor.LOGGER.log(input);
 	}
 	
+	public static void prints(Throwable throwable) {
+		SyntaxExecutor.LOGGER.log(throwable);
+	}
+	
 	/*
 	 * 
 	 */
+	
+	public default void print(Throwable throwable) {
+		SyntaxExecutor.LOGGER.log(throwable);
+	}
 	
 	public default void print(Object input) {
 		print(input.toString());

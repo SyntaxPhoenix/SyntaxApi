@@ -117,7 +117,7 @@ public class Request {
 
 		if (content != ContentType.CUSTOM)
 			connection.setRequestProperty("Content-Type", content.type() + "; charset=UTF-8");
-
+		
 		connection.connect();
 
 		if (connection.getDoOutput()) {
@@ -129,12 +129,18 @@ public class Request {
 
 		}
 
-		InputStream input = connection.getInputStream();
+		InputStream stream = null;
+		
+		try {
+			stream = connection.getInputStream();
+		} catch(IOException ignore) {
+			stream = connection.getErrorStream();
+		}
 
 		String response = "";
-
-		if (input != null)
-			response = Streams.toString(input);
+		
+		if (stream != null)
+			response = Streams.toString(stream);
 
 		return new Response(connection.getResponseCode(), response);
 

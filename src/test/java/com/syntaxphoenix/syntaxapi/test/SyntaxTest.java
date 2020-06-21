@@ -61,6 +61,7 @@ public class SyntaxTest implements Executor, Printer {
 		menu.register("DownloadTest", "Tests the DownloadService", new DownloadTest());
 		menu.register("ThreadTest", "Tests the new Threading Stuff", new ThreadTest(), "amount=<Number>", "threadsMin=<Number>", "threadsMax=<Number>");
 		menu.register("SocketTest", "Tests the socket server", new SocketTest(), "port=<Number>");
+		menu.register("RequestTest", "Tests the Request util", new RequestTest());
 		
 		return menu;
 	}
