@@ -141,8 +141,8 @@ public class Request {
 		
 		if (stream != null)
 			response = Streams.toString(stream);
-
-		return new Response(connection.getResponseCode(), response);
+		
+		return new Response(connection.getResponseCode(), response, connection.getHeaderFields());
 
 	}
 

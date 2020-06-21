@@ -18,11 +18,11 @@ public final class Collect {
 			.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 
 	@SuppressWarnings("unchecked")
-	private static <I, R> Function<I, R> castingIdentity() {
+	public static <I, R> Function<I, R> castingIdentity() {
 		return i -> (R) i;
 	}
 
-	private static <T> Function<T, T> passthrough() {
+	public static <T> Function<T, T> passthrough() {
 		return i -> i;
 	}
 
@@ -32,14 +32,14 @@ public final class Collect {
 	 * @param <T> the type of elements to be collected
 	 * @param <R> the type of the result
 	 */
-	static class CollectorImpl<T, A, R> implements Collector<T, A, R> {
+	public static class CollectorImpl<T, A, R> implements Collector<T, A, R> {
 		private final Supplier<A> supplier;
 		private final BiConsumer<A, T> accumulator;
 		private final BinaryOperator<A> combiner;
 		private final Function<A, R> finisher;
 		private final Set<Characteristics> characteristics;
 
-		CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner,
+		public CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner,
 				Function<A, R> finisher, Set<Characteristics> characteristics) {
 			this.supplier = supplier;
 			this.accumulator = accumulator;
@@ -48,7 +48,7 @@ public final class Collect {
 			this.characteristics = characteristics;
 		}
 
-		CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner,
+		public CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner,
 				Set<Characteristics> characteristics) {
 			this(supplier, accumulator, combiner, castingIdentity(), characteristics);
 		}
@@ -124,8 +124,8 @@ public final class Collect {
 	 * {@link #toCollection(Supplier)}.
 	 *
 	 * @param <T> the type of the input elements
-	 * @return a {@code Collector} which collects all the transformed elements into a
-	 *         {@code List}, in encounter order
+	 * @return a {@code Collector} which collects all the transformed elements into
+	 *         a {@code List}, in encounter order
 	 */
 	public static <T, A> Collector<T, List<A>, List<A>> collectList(BiConsumer<List<A>, T> consumer) {
 		return new CollectorImpl<>((Supplier<List<A>>) ArrayList::new, consumer, (left, right) -> {
