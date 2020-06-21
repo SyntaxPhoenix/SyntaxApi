@@ -3,13 +3,13 @@ package com.syntaxphoenix.syntaxapi.service;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
 import com.syntaxphoenix.syntaxapi.utils.general.Status;
-import com.syntaxphoenix.syntaxapi.utils.java.Lists;
 
 public class ServiceManager {
 
@@ -169,7 +169,7 @@ public class ServiceManager {
 		
 		ArrayList<IServiceValue> services = new ArrayList<>();
 		for (ServiceContainer container : containers) 
-			services.addAll(Lists.asList(container.getValues(service)));
+			services.addAll(Arrays.asList(container.getValues(service)));
 		
 		return services.toArray(new IServiceValue[0]);
 	}
@@ -187,7 +187,7 @@ public class ServiceManager {
 		IServiceValue[] valueArray = getSubscriptions(service);
 		if (valueArray.length == 0)
 			return valueArray;
-		List<IServiceValue> values = Lists.asList(valueArray);
+		List<IServiceValue> values = Arrays.asList(valueArray);
 		return values.stream().filter(value -> value.getType() == type).toArray(size -> new IServiceValue[size]);
 	}
 

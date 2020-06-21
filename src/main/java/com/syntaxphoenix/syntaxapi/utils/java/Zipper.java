@@ -8,14 +8,15 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-public class Zipper {
+public final class Zipper {
 
 	public static File[] unzip(File zip, File directory, boolean deleteZipOnEnd) throws IOException {
 		if (!zip.exists() || !zip.isFile()) {
 			return null;
 		}
 		if (!directory.exists()) {
-			directory.mkdirs();
+			if (Files.createFolder(directory) == null)
+				return null;
 		} else if (!directory.isDirectory()) {
 			return null;
 		}
@@ -34,39 +35,33 @@ public class Zipper {
 		}
 		inputStream.closeEntry();
 		inputStream.close();
-		if(deleteZipOnEnd) zip.delete();
+		if (deleteZipOnEnd)
+			zip.delete();
 		return directory.listFiles();
-	}
-
-	public File[] unzipp(File zip, File directory, boolean deleteZipOnEnd) throws IOException {
-		return Zipper.unzip(zip, directory, deleteZipOnEnd);
 	}
 
 	public static void zip(String zipName, File directory, File... toZip) throws IOException {
 		if (!directory.exists()) {
-			directory.mkdirs();
+			if (Files.createFolder(directory) == null)
+				return;
 		} else if (!directory.isDirectory()) {
 			return;
 		}
 		zip(new File(directory, zipName));
 	}
 
-	public void zipp(String zipName, File directory, File... toZip) throws IOException {
-		Zipper.zip(zipName, directory, toZip);
-	}
-	
 	public static void zip(File zipFile, File... toZip) throws IOException {
-		if(toZip == null) return;
-		if(toZip.length == 0) return;
-		if (!zipFile.exists()) {
-			zipFile.createNewFile();
-		}
+		if (toZip == null || toZip.length == 0)
+			return;
+		if (Files.createFile(zipFile) == null)
+			return;
+
 		FileOutputStream fileOutput = new FileOutputStream(zipFile);
 		ZipOutputStream zipOutput = new ZipOutputStream(fileOutput);
 		int failed = 0;
 		for (int index = 0; index < toZip.length; index++) {
 			File file = toZip[index];
-			if(file == null) {
+			if (file == null) {
 				failed += 1;
 				continue;
 			}
@@ -82,13 +77,9 @@ public class Zipper {
 		}
 		zipOutput.close();
 		fileOutput.close();
-		if(failed == toZip.length) {
+		if (failed == toZip.length) {
 			zipFile.delete();
 		}
-	}
-
-	public void zipp(File zipFile, File... toZip) throws IOException {
-		Zipper.zip(zipFile, toZip);
 	}
 
 }

@@ -3,28 +3,9 @@ package com.syntaxphoenix.syntaxapi.utils.java;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.function.Consumer;
 
 public class Lists {
-
-	@SuppressWarnings("unchecked")
-	public static <E> ArrayList<E> asList(E... array) {
-		ArrayList<E> list = new ArrayList<>();
-		for (int index = 0; index < array.length; index++) {
-			list.add(array[index]);
-		}
-		return list;
-	}
-
-	public static <E> ArrayList<E> asList(Collection<E> collection) {
-		ArrayList<E> output = new ArrayList<>();
-		Iterator<E> iterator = collection.iterator();
-		while (iterator.hasNext()) {
-			output.add(iterator.next());
-		}
-		return output;
-	}
 	
 	public static String getEqualsIgnoreCase(String equals, List<String> list) {
 		if(list.isEmpty()) return equals;

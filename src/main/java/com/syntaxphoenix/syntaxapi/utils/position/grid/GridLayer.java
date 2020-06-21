@@ -3,8 +3,6 @@ package com.syntaxphoenix.syntaxapi.utils.position.grid;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.syntaxphoenix.syntaxapi.utils.java.Numbers;
-
 public final class GridLayer<V> {
 	
 	private final ArrayList<GridRow<V>> rows = new ArrayList<>();
@@ -49,7 +47,7 @@ public final class GridLayer<V> {
 				lowest = depth;
 			}
 		}
-		return Numbers.toPlus(lowest - heighest).intValue();
+		return Math.abs(lowest - heighest);
 	}
 	
 	public int getDepth() {
@@ -66,7 +64,7 @@ public final class GridLayer<V> {
 				lowest = depth;
 			}
 		}
-		return Numbers.toPlus(lowest - heighest).intValue();
+		return Math.abs(lowest - heighest);
 	}
 	
 	/*

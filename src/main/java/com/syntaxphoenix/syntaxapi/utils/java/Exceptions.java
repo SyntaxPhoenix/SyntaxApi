@@ -12,7 +12,7 @@ public class Exceptions {
 		List<String> out = new ArrayList<>();
 		StringBuilder builder = new StringBuilder();
 		String next = "\r\n";
-		for (StackTraceElement stack : cause.getStackTrace()) {
+		java.util.Arrays.stream(cause.getStackTrace()).forEach(stack -> {
 			builder.append(next);
 			builder.append("Error Type: " + cause.getClass().getSimpleName());
 			builder.append(next);
@@ -26,7 +26,7 @@ public class Exceptions {
 			builder.append(next);
 			builder.append("Line: " + stack.getLineNumber());
 			out.add(builder.toStringClear());
-		}
+		});
 		Collections.reverse(out);
 		return out.toArray(new String[0]);
 	}

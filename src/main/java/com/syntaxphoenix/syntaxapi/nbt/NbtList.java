@@ -1,10 +1,9 @@
 package com.syntaxphoenix.syntaxapi.nbt;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
-import com.syntaxphoenix.syntaxapi.utils.java.Lists;
 
 /**
  * The {@code TAG_List} tag.
@@ -44,7 +43,7 @@ public final class NbtList<T extends NbtTag> extends NbtAbstractList<T> {
     	if(array.length == 0) {
     		return;
     	}
-        addAll(Lists.asList(array));
+        addAll(Arrays.asList(array));
         type = array[0].getType();
     }
     

@@ -2,13 +2,13 @@ package com.syntaxphoenix.syntaxapi.net.http;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.syntaxphoenix.syntaxapi.utils.java.Lists;
 
 public class Answer {
 	
@@ -20,7 +20,7 @@ public class Answer {
 	 * 
 	 */
 	
-	public static final List<String> BLOCKED = Lists.asList("Content-Type", "Server", "Date", "Content-Length");
+	public static final List<String> BLOCKED = Arrays.asList("Content-Type", "Server", "Date", "Content-Length");
 	
 	/*
 	 * 

@@ -1,12 +1,12 @@
 package com.syntaxphoenix.syntaxapi.command.range;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.syntaxphoenix.syntaxapi.command.ArgumentRangeSerializer;
 import com.syntaxphoenix.syntaxapi.command.BaseArgument;
 import com.syntaxphoenix.syntaxapi.command.BaseArgumentRange;
 import com.syntaxphoenix.syntaxapi.command.RangeType;
-import com.syntaxphoenix.syntaxapi.utils.java.Lists;
 
 public class TextChooseRange extends BaseArgumentRange {
 
@@ -18,7 +18,7 @@ public class TextChooseRange extends BaseArgumentRange {
 	}
 
 	public TextChooseRange(boolean blacklist, CharSequence... values) {
-		this(blacklist, Lists.asList(values));
+		this(blacklist, Arrays.asList(values));
 	}
 
 	public TextChooseRange(List<CharSequence> values) {
