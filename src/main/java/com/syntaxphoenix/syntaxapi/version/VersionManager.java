@@ -1,5 +1,7 @@
 package com.syntaxphoenix.syntaxapi.version;
 
+import static com.syntaxphoenix.syntaxapi.version.VersionState.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -7,17 +9,39 @@ import java.util.EnumMap;
 @SuppressWarnings("unchecked")
 public class VersionManager<V extends Version> {
 
-	private final EnumMap<VersionState, ArrayList<V>> versions = new EnumMap<>(VersionState.class);
-
-	private final VersionState unknown = VersionState.NOT_COMPATIBLE;
-	private final VersionState higher = VersionState.NOT_COMPATIBLE;
-	private final VersionState lower = VersionState.NOT_COMPATIBLE;
+	protected final EnumMap<VersionState, ArrayList<V>> versions = new EnumMap<>(VersionState.class);
+	
+	protected final VersionState unknown, higher, lower;
 
 	public VersionManager() {
+		this(NOT_COMPATIBLE, NOT_COMPATIBLE, NOT_COMPATIBLE);
+	}
+
+	public VersionManager(VersionState unknown, VersionState higher, VersionState lower) {
 		versions.put(VersionState.SUPPORTED, new ArrayList<>());
 		versions.put(VersionState.NOT_SUPPORTED, new ArrayList<>());
 		versions.put(VersionState.NOT_TESTED, new ArrayList<>());
 		versions.put(VersionState.NOT_COMPATIBLE, new ArrayList<>());
+		
+		this.unknown = unknown;
+		this.higher = higher;
+		this.lower = lower;
+	}
+
+	/*
+	 * 
+	 */
+
+	public VersionState getDefaultStateForUnknownVersions() {
+		return unknown;
+	}
+
+	public VersionState getDefaultStateForHigherVersions() {
+		return higher;
+	}
+
+	public VersionState getDefaultStateForLowerVersions() {
+		return lower;
 	}
 
 	/*
@@ -182,18 +206,6 @@ public class VersionManager<V extends Version> {
 		if (highest != null && highest.isHigher(version))
 			return higher;
 		return unknown;
-	}
-
-	/*
-	 * 
-	 */
-
-	public VersionState getDefaultStateForHigherVersions() {
-		return higher;
-	}
-
-	public VersionState getDefaultStateForLowerVersions() {
-		return lower;
 	}
 
 }
