@@ -40,9 +40,9 @@ public class Lists {
 		return output.toArray(new String[0]);
 	}
 
-	public static <E> ArrayList<ArrayList<E>> partition(List<E> list, int amount) {
-		ArrayList<ArrayList<E>> parition = new ArrayList<>();
-		ArrayList<E> current = new ArrayList<>();
+	public static <E> List<List<E>> partition(List<E> list, int amount) {
+		List<List<E>> parition = new ArrayList<>();
+		List<E> current = new ArrayList<>();
 		for (int index = 0; index < list.size(); index++) {
 			if (current.size() == amount) {
 				parition.add(current);
