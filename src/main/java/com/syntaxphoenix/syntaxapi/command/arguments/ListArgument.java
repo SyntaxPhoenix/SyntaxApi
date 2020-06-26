@@ -1,6 +1,7 @@
 package com.syntaxphoenix.syntaxapi.command.arguments;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.syntaxphoenix.syntaxapi.command.ArgumentSerializer;
 import com.syntaxphoenix.syntaxapi.command.ArgumentType;
@@ -12,13 +13,13 @@ import com.syntaxphoenix.syntaxapi.command.BaseArgument;
  */
 public class ListArgument<E extends BaseArgument> extends BaseArgument {
 	
-	private ArrayList<E> value;
+	private List<E> value;
 	
 	public ListArgument() {
 		this.value = new ArrayList<>();
 	}
 	
-	public ListArgument(ArrayList<E> value) {
+	public ListArgument(List<E> value) {
 		this.value = value;
 	}
 	
@@ -32,7 +33,7 @@ public class ListArgument<E extends BaseArgument> extends BaseArgument {
 		return value;
 	}
 	
-	public ArrayList<E> getValue() {
+	public List<E> getValue() {
 		return value;
 	}
 

@@ -85,8 +85,24 @@ public class Arguments implements Iterable<BaseArgument> {
 		return toString(ArgumentSerializer.DEFAULT);
 	}
 	
+	public String toString(int start) {
+		return toString(start, arguments.size());
+	}
+	
+	public String toString(int start, int end) {
+		return toString(start, end, ArgumentSerializer.DEFAULT);
+	}
+	
 	public String toString(ArgumentSerializer serializer) {
 		return new ListArgument<>(arguments).toString(serializer);
+	}
+	
+	public String toString(int start, ArgumentSerializer serializer) {
+		return toString(start, serializer);
+	}
+	
+	public String toString(int start, int end, ArgumentSerializer serializer) {
+		return new ListArgument<>(arguments.subList(start, end)).toString(serializer);
 	}
 	
 	/**

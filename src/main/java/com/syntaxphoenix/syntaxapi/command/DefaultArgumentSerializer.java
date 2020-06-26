@@ -1,8 +1,8 @@
 package com.syntaxphoenix.syntaxapi.command;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import com.syntaxphoenix.syntaxapi.command.arguments.*;
 
@@ -69,7 +69,7 @@ public class DefaultArgumentSerializer extends ArgumentSerializer {
 
 	@Override
 	public String toString(ListArgument<BaseArgument> argument) {
-		ArrayList<BaseArgument> value = argument.getValue();
+		List<BaseArgument> value = argument.getValue();
 		if(value == null || value.isEmpty()) {
 			return "{}";
 		}
