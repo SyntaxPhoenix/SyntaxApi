@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
 import com.syntaxphoenix.syntaxapi.utils.general.Status;
@@ -63,6 +64,10 @@ public class ServiceManager {
 	public IService getService(String id) {
 		Optional<IService> option = findService(id);
 		return option.isPresent() ? option.get() : null;
+	}
+	
+	public List<IService> getServices() {
+		return services.stream().collect(Collectors.toList());
 	}
 
 	public Optional<IService> findService(String id) {
@@ -132,6 +137,12 @@ public class ServiceManager {
 	
 	// Unsubscribe
 	
+	public void unsubscribe(ServiceContainer container) {
+		if(containers.isEmpty())
+			return;
+		containers.remove(container);
+	}
+	
 	public void unsubscribe(Object object) {
 		ServiceContainer[] containers = this.containers.stream()
 				.filter(container -> container.getOwner().equals(object)).toArray(size -> new ServiceContainer[size]);
@@ -152,7 +163,13 @@ public class ServiceManager {
 		}
 	}
 	
-	// Getter
+	// ServiceContainer Getter
+	
+	public List<ServiceContainer> getContainers() {
+		return containers.stream().collect(Collectors.toList());
+	}
+	
+	// Subscription Getter
 	
 	public IServiceValue[] getSubscriptions(String id) {
 		Optional<IService> service = findService(id);

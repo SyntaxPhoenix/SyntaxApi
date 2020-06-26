@@ -95,7 +95,7 @@ public class EventManager {
 	 */
 
 	// Register
-	
+
 	public EventManager registerEvents(EventListener listener) {
 		EventAnalyser analyser = new EventAnalyser(listener);
 		analyser.registerEvents(this);
@@ -134,36 +134,41 @@ public class EventManager {
 		}
 		return this;
 	}
-	
+
 	// Unregister
-	
+
+	public EventManager unregisterEvent(Class<? extends Event> event) {
+		listeners.remove(event);
+		return this;
+	}
+
 	public EventManager unregisterEvents(Class<? extends EventListener> listener) {
 		return unregisterExecutors(getExecutorsFromOwner(listener));
 	}
-	
+
 	public EventManager unregisterEvents(EventListener listener) {
 		return unregisterExecutors(getExecutorsFromOwner(listener));
 	}
-	
+
 	public EventManager unregisterExecutors(Iterable<EventExecutor> executors) {
 		return unregisterExecutors(executors.iterator());
 	}
-	
+
 	public EventManager unregisterExecutors(Iterator<EventExecutor> executors) {
-		while(executors.hasNext())
+		while (executors.hasNext())
 			unregisterExecutor(executors.next());
 		return this;
 	}
-	
+
 	public EventManager unregisterExecutors(EventExecutor... executors) {
-		for(EventExecutor executor : executors)
+		for (EventExecutor executor : executors)
 			unregisterExecutor(executor);
 		return this;
 	}
-	
+
 	public EventManager unregisterExecutor(EventExecutor executor) {
 		ArrayList<EventExecutor> list = listeners.get(executor.getEvent());
-		if(list != null && list.contains(executor))
+		if (list != null && list.contains(executor))
 			list.remove(executor);
 		return this;
 	}
@@ -181,6 +186,14 @@ public class EventManager {
 
 	public List<Class<? extends EventListener>> getOwnerClasses() {
 		return getOwners().stream().collect(Collect.collectList((output, input) -> output.add(input.getClass())));
+	}
+
+	/*
+	 * Events
+	 */
+
+	public List<Class<? extends Event>> getEvents() {
+		return listeners.keySet().stream().collect(Collectors.toList());
 	}
 
 	/*
