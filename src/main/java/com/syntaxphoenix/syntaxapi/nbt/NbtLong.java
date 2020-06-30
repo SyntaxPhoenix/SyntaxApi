@@ -16,11 +16,6 @@ public final class NbtLong extends NbtTag implements Cloneable, NbtNumber {
     }
     
     @Override
-    public Number asNumber() {
-		return value;
-    }
-    
-    @Override
     public void setValue(Number number) {
     	this.value = number.longValue();
     }

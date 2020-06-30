@@ -4,48 +4,48 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public final class GridRow<V> {
-	
+
 	private final ArrayList<GridValue<V>> values = new ArrayList<>();
 	private int x;
-	
+
 	/*
 	 * 
 	 */
-	
+
 	@SuppressWarnings("unchecked")
 	public GridValue<V>[] getValues() {
 		return values.toArray(new GridValue[0]);
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public int getX() {
 		return x;
 	}
-	
+
 	protected void setX(int x) {
 		this.x = x;
 	}
-	
+
 	public int getDepth() {
-		if(values.isEmpty()) {
+		if (values.isEmpty()) {
 			return 0;
 		}
 		int lowest = 0;
 		int heighest = 0;
-		for(GridValue<V> value : values) {
+		for (GridValue<V> value : values) {
 			int depth = value.getZ();
-			if(depth > heighest) {
+			if (depth > heighest) {
 				heighest = depth;
-			} else if(depth < lowest) {
+			} else if (depth < lowest) {
 				lowest = depth;
 			}
 		}
 		return Math.abs(lowest - heighest);
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -53,11 +53,11 @@ public final class GridRow<V> {
 	public void clear() {
 		values.clear();
 	}
-	
+
 	public GridRow<V> set(int z, V value) {
-		Optional<GridValue<V>> option = getValue(z);
+		Optional<GridValue<V>> option = getOptionalValue(z);
 		GridValue<V> grid;
-		if(!option.isPresent()) {
+		if (!option.isPresent()) {
 			grid = new GridValue<>();
 			grid.setZ(z);
 			values.add(grid);
@@ -67,33 +67,33 @@ public final class GridRow<V> {
 		grid.setValue(value);
 		return this;
 	}
-	
+
 	public GridRow<V> remove(int z) {
-		Optional<GridValue<V>> option = getValue(z);
-		if(option.isPresent()) {
+		Optional<GridValue<V>> option = getOptionalValue(z);
+		if (option.isPresent()) {
 			values.remove(option.get());
 		}
 		return this;
 	}
-	
+
 	public boolean contains(int z) {
-		return getValue(z).isPresent();
+		return getOptionalValue(z).isPresent();
 	}
-	
+
 	public boolean contains(V value) {
-		return getValue(value).isPresent();
+		return values.stream().anyMatch(grid -> grid.getValue().equals(value));
 	}
-	
+
 	/*
 	 * 
 	 */
-	
-	private Optional<GridValue<V>> getValue(int z) {
+
+	public Optional<GridValue<V>> getOptionalValue(int z) {
 		return values.stream().filter(value -> value.getZ() == z).findFirst();
 	}
-	
-	private Optional<GridValue<V>> getValue(V value) {
-		return values.stream().filter(grid -> grid.getValue().equals(value)).findFirst();
+
+	public GridValue<V> getValue(int z) {
+		return getOptionalValue(z).orElse(null);
 	}
-	
+
 }

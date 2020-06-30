@@ -7,23 +7,27 @@ import java.util.Optional;
 public class ClassCache {
 	
 	public static final HashMap<String, Class<?>> CLASSES = new HashMap<>();
-    
-    public static Class<?> getClass(String classPath) {
+	
+	public static Optional<Class<?>> getOptionalClass(String classPath) {
     	if(CLASSES.containsKey(classPath)) {
-    		return CLASSES.get(classPath);
+    		return Optional.of(CLASSES.get(classPath));
     	}
         try {
         	Class<?> clz = Class.forName(classPath);
         	if(clz != null) {
         		CLASSES.put(classPath, clz);
-        		return clz;
+        		return Optional.of(clz);
         	}
-    		return null;
+    		return Optional.empty();
         }
         catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
+    		return Optional.empty();
         }
+    }
+    
+    public static Class<?> getClass(String classPath) {
+    	Optional<Class<?>> option = getOptionalClass(classPath);
+    	return option.orElse(null);
     }
     
     public static void uncache(AbstractReflect reflect) {

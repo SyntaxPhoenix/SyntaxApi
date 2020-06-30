@@ -5,40 +5,40 @@ import java.math.BigInteger;
 
 public interface NbtNumber {
 	
-	public Number asNumber();
+	public Number getValue();
 	
 	public void setValue(Number number);
 	
 	public default byte asByte() {
-		return asNumber().byteValue();
+		return getValue().byteValue();
 	}
 	
 	public default short asShort() {
-		return asNumber().shortValue();
+		return getValue().shortValue();
 	}
 	
 	public default int asInt() {
-		return asNumber().intValue();
+		return getValue().intValue();
 	}
 	
 	public default float asFloat() {
-		return asNumber().floatValue();
+		return getValue().floatValue();
 	}
 	
 	public default long asLong() {
-		return asNumber().longValue();
+		return getValue().longValue();
 	}
 	
 	public default double asDouble() {
-		return asNumber().doubleValue();
+		return getValue().doubleValue();
 	}
 	
 	public default BigInteger asBigInteger() {
-		return new BigInteger(asNumber().toString());
+		return new BigInteger(getValue().toString());
 	}
 	
 	public default BigDecimal asBigDecimal() {
-		return new BigDecimal(asNumber().toString());
+		return new BigDecimal(getValue().toString());
 	}
 
 	public static NbtTag fromNumber(Number raw) {

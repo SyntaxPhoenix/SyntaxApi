@@ -17,11 +17,6 @@ public final class NbtDouble extends NbtTag implements Cloneable, NbtNumber {
     }
     
     @Override
-    public Number asNumber() {
-		return value;
-    }
-    
-    @Override
     public void setValue(Number number) {
     	this.value = number.doubleValue();
     }
