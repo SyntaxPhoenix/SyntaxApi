@@ -48,7 +48,7 @@ public class Keys {
 	public String makeKey(int length) {
 		StringBuilder builder = new StringBuilder();
 		for (int current = 0; current < length; ++current)
-			builder.append(NUMBERS.charAt(RANDOM.nextInt(NUMBERS.length())));
+			builder.append(ALPHABET.charAt(RANDOM.nextInt(DEFAULT_STRING_LENGTH)));
 		return builder.toStringClear();
 	}
 

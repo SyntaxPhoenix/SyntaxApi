@@ -41,6 +41,24 @@ public class Arrays {
 		return output;
 	}
 
+	public static Object[] subArray(Object[] args, int index, int length) {
+		if (index < 0 || index >= args.length) {
+			return new Object[0];
+		}
+		Object[] output = new Object[length];
+		System.arraycopy(args, index, output, 0, length);
+		return output;
+	}
+
+	public static <E> E[] subArray(IntFunction<E[]> function, E[] args, int index, int length) {
+		if (index < 0 || index >= args.length) {
+			return function.apply(0);
+		}
+		E[] output = function.apply(length);
+		System.arraycopy(args, index, output, 0, length);
+		return output;
+	}
+
 	public static <A> boolean contains(A[] values, A find) {
 		return java.util.Arrays.stream(values).anyMatch(value -> value.equals(find));
 	}
