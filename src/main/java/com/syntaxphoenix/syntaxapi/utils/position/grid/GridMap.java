@@ -34,10 +34,79 @@ public class GridMap<V> {
 	 * 
 	 */
 
-	public int getHeight() {
-		if (layers.isEmpty()) {
+	public int getHeighestY() {
+		if (layers.isEmpty())
 			return 0;
-		}
+		int heighest = 0;
+		int buffer;
+		for (GridLayer<V> layer : layers)
+			if ((buffer = layer.getY()) > heighest)
+				heighest = buffer;
+		return heighest;
+	}
+
+	public int getLowestY() {
+		if (layers.isEmpty())
+			return 0;
+		int lowest = 0;
+		int buffer;
+		for (GridLayer<V> layer : layers)
+			if ((buffer = layer.getY()) < lowest)
+				lowest = buffer;
+		return lowest;
+	}
+
+	public int getHeighestX() {
+		if (layers.isEmpty())
+			return 0;
+		int heighest = 0;
+		int buffer;
+		for (GridLayer<V> layer : layers)
+			if ((buffer = layer.getHeighestX()) > heighest)
+				heighest = buffer;
+		return heighest;
+	}
+
+	public int getLowestX() {
+		if (layers.isEmpty())
+			return 0;
+		int lowest = 0;
+		int buffer;
+		for (GridLayer<V> layer : layers)
+			if ((buffer = layer.getLowestX()) < lowest)
+				lowest = buffer;
+		return lowest;
+	}
+
+	public int getHeighestZ() {
+		if (layers.isEmpty())
+			return 0;
+		int heighest = 0;
+		int buffer;
+		for (GridLayer<V> layer : layers)
+			if ((buffer = layer.getHeighestZ()) > heighest)
+				heighest = buffer;
+		return heighest;
+	}
+
+	public int getLowestZ() {
+		if (layers.isEmpty())
+			return 0;
+		int lowest = 0;
+		int buffer;
+		for (GridLayer<V> layer : layers)
+			if ((buffer = layer.getLowestZ()) < lowest)
+				lowest = buffer;
+		return lowest;
+	}
+
+	/*
+	 * 
+	 */
+
+	public int getHeight() {
+		if (layers.isEmpty())
+			return 0;
 		int lowest = 0;
 		int heighest = 0;
 		for (GridLayer<V> layer : layers) {
@@ -52,9 +121,8 @@ public class GridMap<V> {
 	}
 
 	public int getWidth() {
-		if (layers.isEmpty()) {
+		if (layers.isEmpty())
 			return 0;
-		}
 		int lowest = 0;
 		int heighest = 0;
 		for (GridLayer<V> layer : layers) {

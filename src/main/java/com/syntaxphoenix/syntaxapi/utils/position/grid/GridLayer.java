@@ -33,6 +33,54 @@ public final class GridLayer<V> {
 	 * 
 	 */
 
+	public int getHeighestX() {
+		if (rows.isEmpty())
+			return 0;
+		int heighest = 0;
+		int buffer;
+		for (GridRow<V> row : rows)
+			if ((buffer = row.getX()) > heighest)
+				heighest = buffer;
+		return heighest;
+	}
+
+	public int getLowestX() {
+		if (rows.isEmpty())
+			return 0;
+		int lowest = 0;
+		int buffer;
+		for (GridRow<V> row : rows)
+			if ((buffer = row.getX()) < lowest)
+				lowest = buffer;
+		return lowest;
+	}
+
+	public int getHeighestZ() {
+		if (rows.isEmpty())
+			return 0;
+		int heighest = 0;
+		int buffer;
+		for (GridRow<V> row : rows)
+			if ((buffer = row.getHeighestZ()) > heighest)
+				heighest = buffer;
+		return heighest;
+	}
+
+	public int getLowestZ() {
+		if (rows.isEmpty())
+			return 0;
+		int lowest = 0;
+		int buffer;
+		for (GridRow<V> row : rows)
+			if ((buffer = row.getLowestZ()) < lowest)
+				lowest = buffer;
+		return lowest;
+	}
+	
+	/*
+	 * 
+	 */
+
 	public int getWidth() {
 		if (rows.isEmpty()) {
 			return 0;

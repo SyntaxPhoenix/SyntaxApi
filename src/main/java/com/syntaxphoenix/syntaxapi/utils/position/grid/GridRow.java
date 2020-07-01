@@ -29,6 +29,36 @@ public final class GridRow<V> {
 		this.x = x;
 	}
 
+	/*
+	 * 
+	 */
+
+	public int getHeighestZ() {
+		if (values.isEmpty())
+			return 0;
+		int heighest = 0;
+		int buffer;
+		for (GridValue<V> value : values)
+			if ((buffer = value.getZ()) > heighest)
+				heighest = buffer;
+		return heighest;
+	}
+
+	public int getLowestZ() {
+		if (values.isEmpty())
+			return 0;
+		int lowest = 0;
+		int buffer;
+		for (GridValue<V> value : values)
+			if ((buffer = value.getZ()) < lowest)
+				lowest = buffer;
+		return lowest;
+	}
+
+	/*
+	 * 
+	 */
+
 	public int getDepth() {
 		if (values.isEmpty()) {
 			return 0;
