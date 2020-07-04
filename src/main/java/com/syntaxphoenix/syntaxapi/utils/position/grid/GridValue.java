@@ -27,6 +27,8 @@ public final class GridValue<V> {
 	}
 	
 	protected GridValue<V> setValue(V value) {
+		if(value == null)
+			return this;
 		this.value = value;
 		return this;
 	}

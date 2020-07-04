@@ -125,6 +125,8 @@ public final class GridLayer<V> {
 	}
 
 	public GridLayer<V> set(int x, int z, V value) {
+		if(value == null)
+			return this;
 		Optional<GridRow<V>> option = getOptionalRow(x);
 		GridRow<V> row;
 		if (!option.isPresent()) {

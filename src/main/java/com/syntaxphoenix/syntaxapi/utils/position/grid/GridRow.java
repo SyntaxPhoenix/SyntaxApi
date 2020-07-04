@@ -85,6 +85,8 @@ public final class GridRow<V> {
 	}
 
 	public GridRow<V> set(int z, V value) {
+		if(value == null)
+			return this;
 		Optional<GridValue<V>> option = getOptionalValue(z);
 		GridValue<V> grid;
 		if (!option.isPresent()) {

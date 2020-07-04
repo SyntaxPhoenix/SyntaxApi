@@ -173,6 +173,8 @@ public class GridMap<V> {
 	}
 
 	public GridMap<V> set(int y, int x, int z, V value) {
+		if(value == null)
+			return this;
 		GridLayer<V> layer;
 		if (type.is2D()) {
 			if (layers.isEmpty()) {
