@@ -2,10 +2,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.syntaxphoenix</groupId>
-	<artifactId>syntaxapi</artifactId>
-	<version>1.4.1-SNAPSHOT</version>
-	<name>SyntaxApi</name>
+	<groupId>com.syntaxphoenix.syntaxapi</groupId>
+	<artifactId>SyntaxApi</artifactId>
+	<version>2.0</version>
+	<packaging>pom</packaging>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -28,38 +29,25 @@
 	</repositories>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.github.TheElectronWill</groupId>
-			<artifactId>TOML-javalib</artifactId>
-			<version>v1.2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.trendafilov.confucius</groupId>
-			<artifactId>confucius</artifactId>
-			<version>1.2.2</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>1.25</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.eclipse.jdt/org.eclipse.jdt.annotation -->
-		<dependency>
-			<groupId>org.eclipse.jdt</groupId>
-			<artifactId>org.eclipse.jdt.annotation</artifactId>
-			<version>2.2.300</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.8.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.fusesource.jansi</groupId>
-			<artifactId>jansi</artifactId>
-			<version>1.18</version>
-		</dependency>
+		
 	</dependencies>
+	
+	<modules>
+		<module>net</module>
+		<module>command</module>
+		<module>reflection</module>
+		<module>utils</module>
+		<module>random</module>
+		<module>exception</module>
+		<module>logging</module>
+		<module>event</module>
+		<module>service</module>
+		<module>nbt</module>
+		<module>thread</module>
+		<module>version</module>
+		<module>config</module>
+		<module>data</module>
+		<module>test</module>
+	</modules>
+	
 </project>
