@@ -8,6 +8,7 @@
 		<version>2.0</version>
 	</parent>
 	<artifactId>config-json</artifactId>
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>

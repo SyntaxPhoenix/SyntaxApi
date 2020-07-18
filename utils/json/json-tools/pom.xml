@@ -8,6 +8,7 @@
 		<version>2.0</version>
 	</parent>
 	<artifactId>json-tools</artifactId>
+	<packaging>jar</packaging>
 
 	<dependencies>
 		<dependency>
