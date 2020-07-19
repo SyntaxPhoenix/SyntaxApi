@@ -10,7 +10,7 @@ import com.syntaxphoenix.syntaxapi.config.BaseConfig;
 public class YamlConfig extends YamlConfigSection implements BaseConfig {
 
 	@Override
-	public void load(File file) throws IOException {
+	public void load(File file) throws IOException, RuntimeException {
 
 		if (file.exists()) {
 

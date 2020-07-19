@@ -66,11 +66,11 @@ public class YamlConfigSection extends BaseSection {
 		try {
 			input = (Map<String, Object>) yaml.load(contents);
 		} catch (YAMLException | ClassCastException e) {
-			e.printStackTrace();
+			throw e;
 		}
 
 		if (input == null) {
-			return;
+			throw new NullPointerException("No content!");
 		}
 
 		fromEntrySet(input.entrySet());		
