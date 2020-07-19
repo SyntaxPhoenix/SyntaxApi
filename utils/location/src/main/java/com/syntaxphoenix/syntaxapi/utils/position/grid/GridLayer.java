@@ -16,6 +16,19 @@ public final class GridLayer<V> {
 	public GridRow<V>[] getRows() {
 		return rows.toArray(new GridRow[0]);
 	}
+	
+	/*
+	 * 
+	 */
+	
+	public long getEntryCount() {
+		if (rows.isEmpty())
+			return 0;
+		long output = 0;
+		for (GridRow<V> row : rows)
+			output =+ row.getEntryCount();
+		return output;
+	}
 
 	/*
 	 * 
