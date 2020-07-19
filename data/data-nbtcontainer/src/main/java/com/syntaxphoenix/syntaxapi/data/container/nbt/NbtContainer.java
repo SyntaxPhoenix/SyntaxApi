@@ -8,6 +8,7 @@ import com.syntaxphoenix.syntaxapi.data.DataType;
 import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
 import com.syntaxphoenix.syntaxapi.nbt.NbtTag;
 import com.syntaxphoenix.syntaxapi.nbt.utils.NbtStorage;
+import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 
 public class NbtContainer extends DataContainer implements DataAdapterContext, NbtStorage<NbtCompound> {
 
@@ -29,6 +30,10 @@ public class NbtContainer extends DataContainer implements DataAdapterContext, N
 		return this;
 	}
 
+	public NbtAdapterRegistry getAdapterRegistry() {
+		return registry;
+	}
+
 	public NbtCompound getRoot() {
 		return root;
 	}
@@ -39,6 +44,17 @@ public class NbtContainer extends DataContainer implements DataAdapterContext, N
 		if (tag == null)
 			return tag;
 		return registry.extract(tag);
+	}
+
+	public void set(String key, NbtTag tag) {
+		root.set(key, tag);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void set(String key, Object primitive) {
+		if (!Primitives.isInstance(primitive))
+			return;
+		root.set(key, registry.wrap(Primitives.fromPrimitive((Class<Object>) primitive.getClass()), primitive));
 	}
 
 	@Override

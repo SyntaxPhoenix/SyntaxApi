@@ -33,4 +33,8 @@ public abstract class DataAdapterRegistry<B> {
 		return adapter == null ? null : adapter.isInstance(base);
 	}
 
+	public boolean hasAdapter(Class<?> type) {
+		return adapters.containsKey(type);
+	}
+	
 }

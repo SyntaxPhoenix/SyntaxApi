@@ -29,7 +29,7 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 	@SuppressWarnings("rawtypes")
 	protected static DataAdapter<?, ?, NbtTag> createAdapter(Class<?> type) {
 		type = Primitives.fromPrimitive(type);
-		
+
 		/*
 		 * Numbers
 		 */
@@ -65,7 +65,7 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		if (Objects.equals(BigDecimal.class, type))
 			return new NbtAdapter<BigDecimal, NbtBigDecimal>(BigDecimal.class, NbtBigDecimal.class, NbtBigDecimal::new,
 					value -> value.getDecimal());
-		
+
 		/*
 		 * String
 		 */
@@ -73,7 +73,7 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		if (Objects.equals(String.class, type))
 			return new NbtAdapter<String, NbtString>(String.class, NbtString.class, NbtString::new,
 					value -> value.getValue());
-		
+
 		/*
 		 * Number Arrays
 		 */
@@ -89,7 +89,7 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		if (Objects.equals(long[].class, type))
 			return new NbtAdapter<long[], NbtLongArray>(long[].class, NbtLongArray.class, NbtLongArray::new,
 					value -> value.getValue());
-		
+
 		/*
 		 * Complex Arrays
 		 */
@@ -97,7 +97,7 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		if (Objects.equals(DataContainer[].class, type))
 			return new NbtAdapter<DataContainer[], NbtList>(DataContainer[].class, NbtList.class, containers -> {
 				NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
-				
+
 				return list;
 			}, list -> {
 				return null;
@@ -107,13 +107,19 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		 * Complex
 		 */
 
-
 		if (Objects.equals(DataContainer.class, type))
 			return new NbtAdapter<DataContainer, NbtCompound>(DataContainer.class, NbtCompound.class, container -> {
 				return null;
 			}, compound -> {
 				return null;
 			});
+
+		/*
+		 * NbtTag
+		 */
+
+		if (Objects.equals(NbtTag.class, type))
+			return new NbtAdapter<NbtTag, NbtTag>(NbtTag.class, NbtTag.class, tag -> tag, tag -> tag);
 
 		return null;
 	}

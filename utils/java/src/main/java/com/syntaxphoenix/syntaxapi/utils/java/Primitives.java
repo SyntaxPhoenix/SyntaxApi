@@ -31,8 +31,17 @@ public final class Primitives {
 		COMPLEX_TO_PRIMITIVE = Collections.unmodifiableMap(collect);
 	}
 
+	public static boolean isInstance(Object object) {
+		return isComplex(object) || isPrimitive(object);
+	}
+
+	public static boolean isInstance(Class<?> type) {
+		return isComplex(type) || isPrimitive(type);
+	}
+
 	public static boolean isComplex(Object object) {
-		return object == null ? false : isComplex(object.getClass());
+		return object == null ? false
+				: (object instanceof Class ? isComplex((Class<?>) object) : isComplex(object.getClass()));
 	}
 
 	public static boolean isComplex(Class<?> type) {
@@ -40,7 +49,8 @@ public final class Primitives {
 	}
 
 	public static boolean isPrimitive(Object object) {
-		return object == null ? false : isPrimitive(object.getClass());
+		return object == null ? false
+				: (object instanceof Class ? isPrimitive((Class<?>) object) : isPrimitive(object.getClass()));
 	}
 
 	public static boolean isPrimitive(Class<?> type) {
