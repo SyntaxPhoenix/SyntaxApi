@@ -13,8 +13,8 @@ public class UrlReflection {
 	public static void applyQuery(URL url, String query) {
 		Objects.requireNonNull(url);
 		Objects.requireNonNull(query);
-		URL_REFLECT.setFieldValue("file", url.getPath() + query);
-		URL_REFLECT.setFieldValue("query", query.startsWith("?") ? query.replaceFirst("?", "") : query);
+		URL_REFLECT.setFieldValue(url, "file", url.getPath() + query);
+		URL_REFLECT.setFieldValue(url, "query", query.startsWith("?") ? query.replaceFirst("?", "") : query);
 	}
 
 }
