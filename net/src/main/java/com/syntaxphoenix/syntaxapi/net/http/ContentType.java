@@ -6,9 +6,9 @@ import com.google.gson.JsonObject;
 
 public enum ContentType {
 
-	X_WWW_FORM_URLENCODED(ContentSerializer.URL_ENCODED, ContentDeserializer.URL_ENCODED,
-			ContentToUrlModifier.URL_ENCODED),
-	PLAIN(ContentSerializer.PLAIN, ContentDeserializer.PLAIN), JSON(ContentSerializer.JSON, ContentDeserializer.JSON),
+	X_WWW_FORM_URLENCODED(ContentSerializer.URL_ENCODED, ContentDeserializer.URL_ENCODED, ContentToUrlModifier.URL_ENCODED),
+	PLAIN(ContentSerializer.PLAIN, ContentDeserializer.PLAIN), 
+	JSON(ContentSerializer.JSON, ContentDeserializer.JSON),
 	CUSTOM;
 
 	private ContentSerializer serializer;
@@ -16,8 +16,7 @@ public enum ContentType {
 
 	private ContentToUrlModifier urlModifier;
 
-	private ContentType(ContentSerializer serializer, ContentDeserializer deserializer,
-			ContentToUrlModifier urlModifier) {
+	private ContentType(ContentSerializer serializer, ContentDeserializer deserializer, ContentToUrlModifier urlModifier) {
 		this.serializer = serializer;
 		this.deserializer = deserializer;
 		this.urlModifier = urlModifier;
