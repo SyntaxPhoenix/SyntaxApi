@@ -19,6 +19,7 @@ public class Request {
 	private final RequestType request;
 
 	private JsonObject parameters = new JsonObject();
+	private boolean modifyUrl = false;
 
 	/*
 	 * 
@@ -31,6 +32,11 @@ public class Request {
 	/*
 	 * 
 	 */
+
+	public Request modifyUrl(boolean modifyUrl) {
+		this.modifyUrl = modifyUrl;
+		return this;
+	}
 
 	public Request header(String key, String value) {
 		if (value != null)
@@ -79,6 +85,10 @@ public class Request {
 	 * 
 	 */
 
+	public boolean doesModifyUrl() {
+		return modifyUrl;
+	}
+
 	public boolean hasParameters() {
 		return !parameters.keySet().isEmpty();
 	}
@@ -88,28 +98,29 @@ public class Request {
 	 */
 
 	public Response execute(String url, ContentType content) throws IOException {
-		return execute(new URL(url), content);
+		return execute(new URL(
+				modifyUrl ? (content.supportsUrlModification() ? url + content.serialize(parameters) : url) : url),
+				content);
 	}
 
 	public Response execute(URL url, ContentType content) throws IOException {
+
+		byte[] data = null;
+		int length = 0;
+
+		if (hasParameters() && !modifyUrl) {
+
+			data = content.serialize(parameters).getBytes(StandardCharsets.UTF_8);
+			length = data.length;
+
+		}
 
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
 		connection.setRequestMethod(request.name());
 
-		byte[] data = null;
-		int length = 0;
-
-		if (hasParameters()) {
-
-			data = content.serialize(parameters).getBytes(StandardCharsets.UTF_8);
-			length = data.length;
-
-			connection.setDoOutput(true);
-
-		}
-
 		connection.setFixedLengthStreamingMode(length);
+		connection.setDoOutput(true);
 
 		for (Entry<String, String> header : headers.entrySet()) {
 			connection.setRequestProperty(header.getKey(), header.getValue());
@@ -120,7 +131,7 @@ public class Request {
 
 		connection.connect();
 
-		if (connection.getDoOutput()) {
+		if (data != null) {
 
 			OutputStream output = connection.getOutputStream();
 			output.write(data);
