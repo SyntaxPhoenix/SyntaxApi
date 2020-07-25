@@ -1,21 +1,31 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
+import java.net.URL;
+
 import com.google.gson.JsonObject;
 
 public enum ContentType {
 
-	X_WWW_FORM_URLENCODED(ContentSerializer.URL_ENCODED, ContentDeserializer.URL_ENCODED, true),
-	PLAIN(ContentSerializer.PLAIN, ContentDeserializer.PLAIN, false),
-	JSON(ContentSerializer.JSON, ContentDeserializer.JSON, false), CUSTOM;
+	X_WWW_FORM_URLENCODED(ContentSerializer.URL_ENCODED, ContentDeserializer.URL_ENCODED,
+			ContentToUrlModifier.URL_ENCODED),
+	PLAIN(ContentSerializer.PLAIN, ContentDeserializer.PLAIN), JSON(ContentSerializer.JSON, ContentDeserializer.JSON),
+	CUSTOM;
 
 	private ContentSerializer serializer;
 	private ContentDeserializer deserializer;
 
-	private boolean urlModification = false;
+	private ContentToUrlModifier urlModifier;
 
-	private ContentType(ContentSerializer serializer, ContentDeserializer deserializer, boolean urlModification) {
+	private ContentType(ContentSerializer serializer, ContentDeserializer deserializer,
+			ContentToUrlModifier urlModifier) {
 		this.serializer = serializer;
-		this.urlModification = urlModification;
+		this.deserializer = deserializer;
+		this.urlModifier = urlModifier;
+	}
+
+	private ContentType(ContentSerializer serializer, ContentDeserializer deserializer) {
+		this.serializer = serializer;
+		this.deserializer = deserializer;
 	}
 
 	private ContentType() {
@@ -27,7 +37,7 @@ public enum ContentType {
 	 */
 
 	public boolean supportsUrlModification() {
-		return urlModification;
+		return urlModifier != null;
 	}
 
 	public String type() {
@@ -37,6 +47,12 @@ public enum ContentType {
 	/*
 	 * 
 	 */
+	
+	public void modifyUrl(URL url, JsonObject object) {
+		if(urlModifier == null)
+			return;
+		urlModifier.apply(url, object, serializer);
+	}
 
 	public String serialize(JsonObject object) {
 		if (serializer == null)
@@ -54,8 +70,9 @@ public enum ContentType {
 	 * 
 	 */
 
-	public ContentType urlModification(boolean urlModification) {
-		this.urlModification = urlModification;
+	public ContentType urlModifier(ContentToUrlModifier urlModifier) {
+		if (this.urlModifier == null)
+			this.urlModifier = urlModifier;
 		return this;
 	}
 

@@ -98,9 +98,7 @@ public class Request {
 	 */
 
 	public Response execute(String url, ContentType content) throws IOException {
-		return execute(new URL(
-				modifyUrl ? (content.supportsUrlModification() ? url + content.serialize(parameters) : url) : url),
-				content);
+		return execute(new URL(url), content);
 	}
 
 	public Response execute(URL url, ContentType content) throws IOException {
@@ -108,11 +106,13 @@ public class Request {
 		byte[] data = null;
 		int length = 0;
 
-		if (hasParameters() && !modifyUrl) {
-
-			data = content.serialize(parameters).getBytes(StandardCharsets.UTF_8);
-			length = data.length;
-
+		if (hasParameters()) {
+			if (!modifyUrl) {
+				data = content.serialize(parameters).getBytes(StandardCharsets.UTF_8);
+				length = data.length;
+			} else if (content.supportsUrlModification()) {
+				content.modifyUrl(url, parameters);
+			}
 		}
 
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();

@@ -19,6 +19,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
+			<artifactId>reflection</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>exception</artifactId>
 			<version>2.0.1</version>
 		</dependency>
