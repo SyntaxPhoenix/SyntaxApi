@@ -10,7 +10,7 @@ import java.util.EnumMap;
 public class VersionManager<V extends Version> {
 
 	protected final EnumMap<VersionState, ArrayList<V>> versions = new EnumMap<>(VersionState.class);
-	
+
 	protected final VersionState unknown, higher, lower;
 
 	public VersionManager() {
@@ -22,7 +22,7 @@ public class VersionManager<V extends Version> {
 		versions.put(VersionState.NOT_SUPPORTED, new ArrayList<>());
 		versions.put(VersionState.NOT_TESTED, new ArrayList<>());
 		versions.put(VersionState.NOT_COMPATIBLE, new ArrayList<>());
-		
+
 		this.unknown = unknown;
 		this.higher = higher;
 		this.lower = lower;
@@ -165,11 +165,41 @@ public class VersionManager<V extends Version> {
 		return versions.get(versions.size() - 1);
 	}
 
+	public V getHighestVersionOf(VersionState... states) {
+		if (states == null || states.length == 0)
+			return null;
+		if (states.length == 1)
+			return getLowestVersion(states[0]);
+		V highest = null;
+		for (int index = 0; index < states.length; index++) {
+			V current = getHighestVersion(states[index]);
+			if (highest != null && !current.isHigher(highest))
+				continue;
+			highest = current;
+		}
+		return highest;
+	}
+
 	public V getLowestVersion(VersionState state) {
 		ArrayList<V> versions = this.versions.get(state);
 		if (versions.isEmpty())
 			return null;
 		return versions.get(0);
+	}
+
+	public V getLowestVersionOf(VersionState... states) {
+		if (states == null || states.length == 0)
+			return null;
+		if (states.length == 1)
+			return getLowestVersion(states[0]);
+		V lowest = null;
+		for (int index = 0; index < states.length; index++) {
+			V current = getLowestVersion(states[index]);
+			if (lowest != null && !current.isLower(lowest))
+				continue;
+			lowest = current;
+		}
+		return lowest;
 	}
 
 	/*
@@ -194,16 +224,17 @@ public class VersionManager<V extends Version> {
 	}
 
 	public VersionState getState(V version) {
-		for (VersionState state : VersionState.values()) {
-			if (contains(state, version)) {
-				return state;
+		VersionState[] states = VersionState.values();
+		for (int index = 0; index < states.length; index++) {
+			if (contains(states[index], version)) {
+				return states[index];
 			}
 		}
-		V lowest = getLowestVersion(VersionState.SUPPORTED);
-		if (lowest != null && lowest.isLower(version))
+		V lowest = getLowestVersionOf(VersionState.SUPPORTED, VersionState.NOT_TESTED);
+		if (lowest != null && version.isLower(lowest))
 			return lower;
-		V highest = getHighestVersion(VersionState.SUPPORTED);
-		if (highest != null && highest.isHigher(version))
+		V highest = getHighestVersionOf(VersionState.SUPPORTED, VersionState.NOT_TESTED);
+		if (highest != null && version.isHigher(highest))
 			return higher;
 		return unknown;
 	}
