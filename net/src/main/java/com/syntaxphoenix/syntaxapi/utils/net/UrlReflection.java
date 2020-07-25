@@ -14,7 +14,7 @@ public class UrlReflection {
 		Objects.requireNonNull(url);
 		Objects.requireNonNull(query);
 		URL_REFLECT.setFieldValue(url, "file", url.getPath() + query);
-		URL_REFLECT.setFieldValue(url, "query", query.startsWith("?") ? query.replaceFirst("?", "") : query);
+		URL_REFLECT.setFieldValue(url, "query", query.startsWith("?") ? query.replaceFirst("\\?", "") : query);
 	}
 
 }

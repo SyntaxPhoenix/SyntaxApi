@@ -10,7 +10,7 @@ public interface ContentDeserializer {
 
 	public static final ContentDeserializer URL_ENCODED = value -> {
 		JsonObject output = new JsonObject();
-		String[] entries = (value = value.replaceFirst("?", "")).contains("&") ? value.split("&")
+		String[] entries = (value = value.replaceFirst("\\?", "")).contains("&") ? value.split("&")
 				: new String[] { value };
 		for (int index = 0; index < entries.length; index++) {
 			String current = entries[index];
