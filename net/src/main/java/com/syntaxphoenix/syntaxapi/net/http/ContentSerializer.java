@@ -17,7 +17,7 @@ public interface ContentSerializer {
 		if (parameters.entrySet().isEmpty())
 			return "";
 
-		StringBuilder builder = new StringBuilder('?');
+		StringBuilder builder = new StringBuilder("?");
 
 		try {
 			for (Entry<String, JsonElement> parameter : parameters.entrySet()) {
