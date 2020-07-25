@@ -1,11 +1,14 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.syntaxphoenix.syntaxapi.utils.java.Streams;
 import com.syntaxphoenix.syntaxapi.utils.json.JsonTools;
 
 public class Response {
@@ -53,13 +56,17 @@ public class Response {
 	public int getCode() {
 		return responseCode;
 	}
-	
+
 	public byte[] getResponseBytes() {
 		return response;
 	}
 
 	public String getResponse() {
-		return new String(response);
+		try {
+			return Streams.toString(new ByteArrayInputStream(response));
+		} catch (IOException e) {
+			return new String(response);
+		}
 	}
 
 	public JsonObject getResponseAsJson() {

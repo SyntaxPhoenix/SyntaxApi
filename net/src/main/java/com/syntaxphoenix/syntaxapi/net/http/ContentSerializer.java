@@ -23,7 +23,7 @@ public interface ContentSerializer {
 			for (Entry<String, JsonElement> parameter : parameters.entrySet()) {
 				builder.append(URLEncoder.encode(parameter.getKey(), "UTF-8"));
 				builder.append('=');
-				builder.append(URLEncoder.encode(parameter.getValue().toString(), "UTF-8"));
+				builder.append(URLEncoder.encode(parameter.getValue().getAsString(), "UTF-8"));
 				builder.append('&');
 			}
 		} catch (UnsupportedEncodingException ignore) {
@@ -69,7 +69,7 @@ public interface ContentSerializer {
 					builder.append(element.getAsString());
 					continue;
 				}
-				
+
 				builder.append(CHARS[3]);
 
 				if (element.isJsonArray()) {
@@ -111,7 +111,7 @@ public interface ContentSerializer {
 					append(builder, element.getAsJsonArray(), depth + 1);
 					continue;
 				}
-				
+
 				append(builder, element.getAsJsonObject(), depth + 1);
 
 			}

@@ -1,6 +1,5 @@
 package com.syntaxphoenix.syntaxapi.utils.json;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -58,22 +57,26 @@ public class JsonTools {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Collector<Entry<String, List<String>>, Map<String, JsonElement>, JsonObject> toJsonObject() {
-		return new CollectorImpl<>((Supplier<Map<String, JsonElement>>) HashMap::new, (output, entry) -> {
-			List<String> list = entry.getValue();
-			if (list.size() == 1) {
-				output.put(entry.getKey(), toJsonPrimitive(list.get(0)));
-				return;
-			}
-			output.put(entry.getKey(), list.stream().collect(toJsonArray()));
-		}, (left, right) -> {
-			left.putAll(right);
-			return left;
-		}, map -> {
-			JsonObject object = new JsonObject();
-			((Map<String, JsonElement>) JSON_OBJECT.getFieldValue("map", object)).putAll(map);
-			return object;
-		}, Collect.CH_ID);
+	public static JsonObject merge(JsonObject output, JsonObject input) {
+		((Map<String, JsonElement>) JSON_OBJECT.getFieldValue("map", output))
+				.putAll((Map<String, JsonElement>) JSON_OBJECT.getFieldValue("map", input));
+		return output;
+	}
+
+	public static Collector<Entry<String, List<String>>, JsonObject, JsonObject> toJsonObject() {
+		return new CollectorImpl<Entry<String, List<String>>, JsonObject, JsonObject>(
+				(Supplier<JsonObject>) JsonObject::new, (output, entry) -> {
+					if (entry == null || entry.getKey() == null)
+						return;
+					List<String> list = entry.getValue();
+					if (list.size() == 1) {
+						output.add(entry.getKey(), toJsonPrimitive(list.get(0)));
+						return;
+					}
+					output.add(entry.getKey(), list.stream().collect(toJsonArray()));
+				}, (left, right) -> {
+					return merge(left, right);
+				}, Collect.passthrough(), Collect.CH_ID);
 	}
 
 	public static Collector<String, JsonArray, JsonArray> toJsonArray() {
