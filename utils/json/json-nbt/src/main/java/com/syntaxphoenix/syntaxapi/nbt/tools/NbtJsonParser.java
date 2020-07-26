@@ -15,9 +15,6 @@ public class NbtJsonParser {
 	
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	
-	/**
-	 * @see com.google.gson.Gson
-	 */
 	public static Object fromJson(JsonElement element, Class<?> classOfT) {
 		return GSON.fromJson(element, classOfT);
 	}
@@ -120,9 +117,9 @@ public class NbtJsonParser {
 	}
 
 	/**
-	 * Convert a JsonObject to an NbtList
+	 * Convert a JsonArray to an NbtList
 	 * 
-	 * @param object - JsonObject that should be converted
+	 * @param array - JsonArray that should be converted
 	 * 
 	 * @return resulting NbtList
 	 */
@@ -142,9 +139,9 @@ public class NbtJsonParser {
 
 
 	/**
-	 * Convert a JsonObject to an NbtList Array
+	 * Convert a JsonArray to an NbtList Array
 	 * 
-	 * @param object - JsonObject that should be converted
+	 * @param array - JsonArray that should be converted
 	 * 
 	 * @return resulting NbtList Array that contains a List for each NbtType
 	 */
