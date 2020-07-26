@@ -1,7 +1,7 @@
 image: maven:3-jdk-8
 
 before_script:
-  - gpg --import $GPG_SECRET_KEY --no-tty --batch --yes --passphrase $GPG_PASSPHRASE
+  - gpg --no-tty --batch --yes --passphrase $GPG_PASSPHRASE --import $GPG_SECRET_KEY
 
 stages:
   - build
