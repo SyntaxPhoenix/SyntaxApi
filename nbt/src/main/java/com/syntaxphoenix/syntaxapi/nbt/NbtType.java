@@ -187,7 +187,7 @@ public enum NbtType {
     
     /**
      * Returns the name of this type.
-     * {@link getName()}
+     * {@link #getName()}
      * 
      * @return the name
      */

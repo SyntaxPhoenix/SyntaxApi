@@ -24,7 +24,7 @@ public final class NbtList<T extends NbtTag> extends NbtAbstractList<T> {
     /**
      * Creates the list with a type and a series of elements.
      *
-     * @param array the value of the tag
+     * @param list the value of the tag
      */
 	public NbtList(List<T> list) {
     	if(list != null && !list.isEmpty()) {

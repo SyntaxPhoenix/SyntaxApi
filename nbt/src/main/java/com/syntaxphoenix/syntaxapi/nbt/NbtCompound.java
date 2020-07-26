@@ -311,7 +311,7 @@ public final class NbtCompound extends NbtTag {
 	/**
 	 * Returns a boolean named with the given key.
 	 *
-	 * @param key the key
+	 * @param path the key
 	 * @return a boolean
 	 * @throws NoSuchElementException if there is no boolean with given name
 	 */
@@ -413,8 +413,8 @@ public final class NbtCompound extends NbtTag {
 	/**
 	 * Put the given key and value into the compound tag.
 	 *
-	 * @param key   they key
-	 * @param value the value
+	 * @param path    the key
+	 * @param bool  the value
 	 */
 	public void set(String path, boolean bool) {
 		set(path, (byte) (bool ? 1 : 0));

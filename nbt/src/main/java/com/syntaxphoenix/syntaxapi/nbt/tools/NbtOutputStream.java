@@ -31,6 +31,7 @@ public final class NbtOutputStream extends DataOutputStream {
     /**
      * Writes a tag.
      * 
+     * @param name the name of the tag
      * @param tag the tag to write
      * @throws IOException if an I/O error occurs
      */
