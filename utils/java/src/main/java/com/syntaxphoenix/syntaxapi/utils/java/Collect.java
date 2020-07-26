@@ -103,9 +103,8 @@ public final class Collect {
 	 * new {@code List}. There are no guarantees on the type, mutability,
 	 * serializability, or thread-safety of the {@code List} returned; if more
 	 * control over the returned {@code List} is required, use
-	 * {@link #toCollection(Supplier)}.
 	 *
-	 * @param <T extends List<T>> the collection type of the input elements
+	 * @param <T> the collection type of the input elements
 	 * @return a {@code Collector} which collects all the input elements into a
 	 *         {@code List}, in encounter order
 	 */
@@ -121,9 +120,10 @@ public final class Collect {
 	 * new {@code List}. There are no guarantees on the type, mutability,
 	 * serializability, or thread-safety of the {@code List} returned; if more
 	 * control over the returned {@code List} is required, use
-	 * {@link #toCollection(Supplier)}.
 	 *
 	 * @param <T> the type of the input elements
+	 * @param <A> the type of the output element
+	 * @param consumer accumulator of collector
 	 * @return a {@code Collector} which collects all the transformed elements into
 	 *         a {@code List}, in encounter order
 	 */
