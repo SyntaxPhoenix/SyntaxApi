@@ -41,8 +41,8 @@ public class JsonTools {
 	}
 
 	/**
-	 * @param String {input json}
-	 * @return JsonObject {output json}
+	 * @param input the raw json string
+	 * @return output the complex json object
 	 */
 	public static JsonObject readJson(String input) {
 		return getJsonParser().parse(input).getAsJsonObject();
