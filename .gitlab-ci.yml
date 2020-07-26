@@ -1,7 +1,7 @@
 image: maven:3-jdk-8
 
 before_script:
-  - gpg --default-key ${env.GPG_SECRET_KEY}
+  - gpg --default-key $GPG_SECRET_KEY
 
 stages:
   - build
