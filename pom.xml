@@ -7,6 +7,32 @@
 	<version>2.1</version>
 	<packaging>pom</packaging>
 	
+	<name>SyntaxApi</name>
+	<description>A Java Library to make some things easier and provide helpful tools</description>
+	<url>https://gitlab.com/SyntaxPhoenix</url>
+	
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>https://gitlab.com/SyntaxPhoenix/syntax-api/-/raw/master/LICENSE</url>
+		</license>
+	</licenses>
+	
+	<developers>
+		<developer>
+			<name>Laura Endreß</name>
+			<email>laura.endress@syntaxphoenix.com</email>
+			<organization>SyntaxPhoenix IT-Solutions</organization>
+			<organizationUrl>https://syntaxphoenix.com/</organizationUrl>
+		</developer>
+	</developers>
+	
+	<scm>
+		<connection>scm:git:git://gitlab.com/SyntaxPhoenix/syntax-api.git</connection>
+		<developerConnection>scm:git:git@gitlab.com:SyntaxPhoenix/syntax-api.git</developerConnection>
+		<url>https://gitlab.com/SyntaxPhoenix/syntax-api/</url>
+	</scm>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
