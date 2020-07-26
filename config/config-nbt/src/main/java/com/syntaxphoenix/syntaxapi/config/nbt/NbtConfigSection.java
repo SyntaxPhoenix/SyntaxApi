@@ -13,23 +13,14 @@ import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
 
 public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompound> {
 
-	/**
-	 * 
-	 */
 	public NbtConfigSection() {
 		super("");
 	}
 
-	/**
-	 * 
-	 */
 	public NbtConfigSection(String name) {
 		super(name);
 	}
 
-	/**
-	 * @return NBTCompound {section values}
-	 */
 	@Override
 	public NbtCompound asNbt() {
 		NbtCompound data = new NbtCompound();
@@ -52,9 +43,6 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		return data;
 	}
 
-	/**
-	 * @param NbtCompound {data values}
-	 */
 	@Override
 	public void fromNbt(NbtCompound data) {
 		values.clear();
@@ -82,20 +70,11 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		}
 	}
 
-	/**
-	 * @param String {path}
-	 * @return Boolean {value exists}
-	 */
 	@Override
 	public boolean contains(String path) {
 		return get(path) != null;
 	}
 
-	/**
-	 * @param String {path}
-	 * @param NbtTag {default value}
-	 * @return NBTTag {section value}
-	 */
 	public NbtTag check(String path, NbtTag value) {
 		NbtTag current = get(path);
 		if (current != null) {
@@ -105,11 +84,6 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		return value;
 	}
 
-	/**
-	 * @param String {path}
-	 * @return NBTTag (Null) {section value}
-	 */
-
 	@Override
 	public NbtTag get(String path) {
 		if (!path.isEmpty()) {
@@ -117,11 +91,6 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		}
 		return null;
 	}
-
-	/**
-	 * @param String[] {path}
-	 * @return NBTTag (Null) {section value}
-	 */
 
 	private NbtTag get(String[] key) {
 		if (key.length != 0) {
@@ -139,11 +108,6 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		return null;
 	}
 
-	/**
-	 * @param String {path}
-	 * @return JsonSection (Null) {section value}
-	 */
-
 	@Override
 	public NbtConfigSection getSection(String path) {
 		if (!path.isEmpty()) {
@@ -151,11 +115,6 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		}
 		return null;
 	}
-
-	/**
-	 * @param String[] {path}
-	 * @return JsonSection (Null) {section value}
-	 */
 
 	private NbtConfigSection getSection(String[] key) {
 		if (key.length != 0) {
@@ -176,11 +135,6 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		return null;
 	}
 
-	/**
-	 * @param String {path}
-	 * @return JsonSection (Null) {old / new section}
-	 */
-
 	@Override
 	public NbtConfigSection createSection(String path) {
 		if (!path.isEmpty()) {
@@ -188,11 +142,6 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		}
 		return null;
 	}
-
-	/**
-	 * @param String[] {path}
-	 * @return JsonSection (Null) {old / new section}
-	 */
 
 	private NbtConfigSection createSection(String[] key) {
 		if (key.length != 0) {
@@ -222,20 +171,12 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		return null;
 	}
 
-	/**
-	 * @param String {path}
-	 * @param NbtTag {value}
-	 */
 	public void set(String path, NbtTag value) {
 		String[] keys = ConfigTools.getKeys(path);
 		String key = ConfigTools.getLastKey(keys);
 		set(key, ConfigTools.getKeysWithout(keys, key), value);
 	}
 
-	/**
-	 * @param String[] {path}
-	 * @param NbtTag   {value}
-	 */
 	public void set(String key, String[] path, NbtTag value) {
 		if (path.length == 0) {
 			values.put(key, value);
@@ -248,44 +189,27 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		}
 	}
 
-	/**
-	 * @param String {path}
-	 * @return NBTConfigSection {new section}
-	 */
 	@Override
 	protected NbtConfigSection initSection(String name) {
 		return new NbtConfigSection(name);
 	}
 
-	/**
-	 * @param String {path}
-	 * @return NBTConfigSection {new section}
-	 */
 	protected NbtConfigSection initSection(String name, NbtCompound data) {
 		NbtConfigSection section = new NbtConfigSection(name);
 		section.fromNbt(data);
 		return section;
 	}
 
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseSection#isSectionInstance(com.syntaxphoenix.syntaxapi.config.BaseSection)
-	 */
 	@Override
 	protected boolean isSectionInstance(BaseSection section) {
 		return section instanceof NbtConfigSection;
 	}
 
-	/**
-	 * @param NbtConfigSection {saveable section}
-	 */
 	private NbtConfigSection saveSection(NbtConfigSection section) {
 		set(section.getName(), section.asNbt());
 		return section;
 	}
-
-	/**
-	 * @return String {Compound as String}
-	 */
+	
 	@Override
 	public String toString() {
 		return asNbt().toMSONString();

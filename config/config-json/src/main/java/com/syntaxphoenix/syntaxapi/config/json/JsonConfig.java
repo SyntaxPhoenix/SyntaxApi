@@ -13,9 +13,6 @@ import com.syntaxphoenix.syntaxapi.config.BaseConfig;
  */
 public class JsonConfig extends JsonConfigSection implements BaseConfig {
 
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseConfig#load(java.io.File)
-	 */
 	@Override
 	public void load(File file) throws IOException {
 
@@ -36,9 +33,6 @@ public class JsonConfig extends JsonConfigSection implements BaseConfig {
 
 	}
 
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseConfig#save(java.io.File)
-	 */
 	@Override
 	public void save(File file) throws IOException {
 

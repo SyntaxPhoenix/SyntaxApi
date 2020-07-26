@@ -23,9 +23,6 @@ public class TomlConfigSection extends BaseSection {
 		return new TomlConfigSection(name);
 	}
 	
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseSection#isSectionInstance(com.syntaxphoenix.syntaxapi.config.BaseSection)
-	 */
 	@Override
 	protected boolean isSectionInstance(BaseSection section) {
 		return section instanceof TomlConfigSection;

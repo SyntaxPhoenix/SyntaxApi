@@ -19,39 +19,24 @@ import com.syntaxphoenix.syntaxapi.utils.json.ValueIdentifier;
  */
 public class JsonConfigSection extends BaseSection {
 
-	/**
-	 *  
-	 */
 	public JsonConfigSection() {
 		super("");
 	}
 
-	/**
-	 * @param String {name}
-	 */
 	public JsonConfigSection(String name) {
 		super(name);
 	}
 
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseSection#initSection(java.lang.String)
-	 */
 	@Override
 	protected BaseSection initSection(String name) {
 		return new JsonConfigSection(name);
 	}
 
-	/**
-	 * @see com.syntaxphoenix.syntaxapi.config.BaseSection#isSectionInstance(com.syntaxphoenix.syntaxapi.config.BaseSection)
-	 */
 	@Override
 	protected boolean isSectionInstance(BaseSection section) {
 		return section instanceof JsonConfigSection;
 	}
 
-	/**
-	 * @param JsonObject {input json}
-	 */
 	public void fromJson(JsonObject input) {
 		if (input.isJsonNull()) {
 			return;
@@ -125,16 +110,10 @@ public class JsonConfigSection extends BaseSection {
 		}
 	}
 
-	/**
-	 * @param String {input json}
-	 */
 	public void fromJsonString(String input) {
 		fromJson(JsonTools.readJson(input));
 	}
 
-	/**
-	 * @continue JsonObject {section values as json}
-	 */
 	public JsonObject toJson() {
 		JsonObject object = new JsonObject();
 		if (!values.isEmpty()) {
@@ -165,9 +144,6 @@ public class JsonConfigSection extends BaseSection {
 		return object;
 	}
 
-	/**
-	 * @continue String {section values as json string}
-	 */
 	public String toJsonString() {
 		return JsonTools.getConfiguredGson().toJson(toJson());
 	}
