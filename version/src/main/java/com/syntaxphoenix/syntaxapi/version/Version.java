@@ -1,5 +1,10 @@
 package com.syntaxphoenix.syntaxapi.version;
 
+/**
+ * 
+ * @author Lauriichan
+ *
+ */
 public abstract class Version implements Comparable<Version> {
 	
 	private int major;

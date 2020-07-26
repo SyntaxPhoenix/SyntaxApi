@@ -2,6 +2,11 @@ package com.syntaxphoenix.syntaxapi.version;
 
 import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 
+/**
+ * 
+ * @author Lauriichan
+ *
+ */
 public class DefaultVersion extends Version {
 
 	public DefaultVersion() {

@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 
+/**
+ * 
+ * @author Lauriichan
+ *
+ */
 @SuppressWarnings("unchecked")
 public class VersionManager<V extends Version> {
 
