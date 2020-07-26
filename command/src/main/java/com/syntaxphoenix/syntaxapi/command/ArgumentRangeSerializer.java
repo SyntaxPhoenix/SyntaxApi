@@ -48,9 +48,9 @@ public abstract class ArgumentRangeSerializer {
 	public abstract String toString(TextChooseRange range);
 
 	/**
-	 * @param ArgumentRange Array
-	 * @return String Array
+	 * @param ranges array of complex ranges
+	 * @return array of raw ranges
 	 */
-	public abstract String[] asStringArray(BaseArgumentRange... arguments);
+	public abstract String[] asStringArray(BaseArgumentRange... ranges);
 
 }

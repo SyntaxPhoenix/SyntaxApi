@@ -11,8 +11,8 @@ public abstract class ArgumentIdentifier {
 	public static final ArgumentIdentifier DEFAULT = new DefaultArgumentIdentifier();
 
 	/**
-	 * @param String Array
-	 * @return Argument List
+	 * @param rawArguments array of raw arguments
+	 * @return list of complex arguments
 	 */
 	public abstract ArrayList<BaseArgument> process(String... rawArguments);
 

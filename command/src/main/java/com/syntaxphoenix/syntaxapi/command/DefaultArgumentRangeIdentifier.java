@@ -101,17 +101,4 @@ public class DefaultArgumentRangeIdentifier extends ArgumentRangeIdentifier {
 		return null;
 	}
 
-	@Override
-	public String[] asStringArray(BaseArgumentRange... ranges) {
-		if (ranges == null || ranges.length == 0) {
-			return new String[0];
-		}
-		int length = ranges.length;
-		String[] array = new String[length];
-		for (int index = 0; index < length; index++) {
-			array[index] = ranges[index].toString();
-		}
-		return array;
-	}
-
 }

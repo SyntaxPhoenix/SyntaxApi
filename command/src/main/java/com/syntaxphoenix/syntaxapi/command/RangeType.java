@@ -16,16 +16,17 @@ public enum RangeType {
 	
 	COLLECTION_SIZE_RANGE(RangeSuperType.COLLECTION, Collection.class);
 	
-	/**
+	/*
 	 * 
 	 */
 
 	private final RangeSuperType superType;
 	private final Class<?> inputType;
 	
-	/**
+	/*
 	 * 
 	 */
+	
 	private RangeType(RangeSuperType superType, Class<?> inputType) {
 		this.superType = superType;
 		this.inputType = inputType;

@@ -76,10 +76,10 @@ public abstract class ArgumentSerializer {
 	public abstract String toString(StringArgument argument);
 
 	public abstract String toString(BooleanArgument argument);
-	
+
 	/**
-	 * @param Argument Array
-	 * @return String Array
+	 * @param arguments array of complex arguments
+	 * @return array of raw arguments
 	 */
 	public abstract String[] asStringArray(BaseArgument... arguments);
 

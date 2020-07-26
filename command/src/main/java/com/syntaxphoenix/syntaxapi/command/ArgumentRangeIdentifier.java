@@ -7,15 +7,9 @@ public abstract class ArgumentRangeIdentifier {
 	public static final ArgumentRangeIdentifier DEFAULT = new DefaultArgumentRangeIdentifier();
 
 	/**
-	 * @param String Array
-	 * @return Argument List
+	 * @param rawRanges array of raw ranges
+	 * @return list of complex ranges
 	 */
 	public abstract ArrayList<BaseArgumentRange> process(String... rawRanges);
-	
-	/**
-	 * @param Argument Array
-	 * @return String Array
-	 */
-	public abstract String[] asStringArray(BaseArgumentRange... ranges);
 
 }

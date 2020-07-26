@@ -59,7 +59,7 @@ public class DefaultArgumentRangeSerializer extends ArgumentRangeSerializer {
 		int length = ranges.length;
 		String[] array = new String[length];
 		for (int index = 0; index < length; index++) {
-			array[index] = ranges[index].toString(this);
+			array[index] = ranges[index].toString();
 		}
 		return array;
 	}
