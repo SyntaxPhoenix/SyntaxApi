@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class CacheList<V> {
 
 	private final List<CachedObject<V>> cacheList;
 	private final long timeToLive;
-	
-	private final Consumer<ArrayList<V>> action; 
+
+	private final Consumer<ArrayList<V>> action;
 	private final Thread timer;
 
 	public CacheList(long timeToLive, final long timerInterval, int maxItems) {
@@ -35,12 +39,12 @@ public class CacheList<V> {
 		} else
 			timer = null;
 	}
-	
+
 	public ArrayList<V> getListCopy() {
 		ArrayList<V> values = new ArrayList<>(size());
 		synchronized (cacheList) {
 			Iterator<CachedObject<V>> iterator = cacheList.iterator();
-			while(iterator.hasNext()) {
+			while (iterator.hasNext()) {
 				values.add(iterator.next().getValue());
 			}
 		}
@@ -52,16 +56,29 @@ public class CacheList<V> {
 			cacheList.add(new CachedObject<V>(value));
 		}
 	}
-	
+
 	public V get(int index) {
 		synchronized (cacheList) {
 			CachedObject<V> object = cacheList.get(index);
-			if(object == null)
+			if (object == null)
 				return null;
 			return object.getValue();
 		}
 	}
-	
+
+	public Optional<V> predicateFilter(Predicate<V> predicate) {
+		synchronized (cacheList) {
+			return cacheList.stream().filter(object -> predicate.test(object.getValue(false))).findFirst()
+					.map(cachedObject -> cachedObject.getValue());
+		}
+	}
+
+	public Optional<V> streamFilter(Function<Stream<V>, Optional<V>> filter) {
+		synchronized (cacheList) {
+			return filter.apply(cacheList.stream().map(object -> object.getValue(false)));
+		}
+	}
+
 	public void remove(int index) {
 		synchronized (cacheList) {
 			cacheList.remove(index);
@@ -87,25 +104,25 @@ public class CacheList<V> {
 	public void cleanup() {
 		long now = System.currentTimeMillis();
 		ArrayList<V> delete = null;
-		
+
 		synchronized (cacheList) {
 			Iterator<CachedObject<V>> iterator = cacheList.iterator();
 			delete = new ArrayList<>((cacheList.size() / 2) + 1);
-			
-			while(iterator.hasNext()) {
+
+			while (iterator.hasNext()) {
 				CachedObject<V> object = iterator.next();
-				if(object != null && (now > (timeToLive + object.getLastAccess()))) {
+				if (object != null && (now > (timeToLive + object.getLastAccess()))) {
 					delete.add(object.getValue(false));
 				}
 			}
 		}
-		
-		if(action != null) {
+
+		if (action != null) {
 			action.accept(delete);
 		}
-		
+
 		for (V value : delete) {
-			synchronized(cacheList) {
+			synchronized (cacheList) {
 				cacheList.remove(value);
 			}
 			Thread.yield();
