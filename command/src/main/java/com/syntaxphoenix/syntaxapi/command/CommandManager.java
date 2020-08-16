@@ -3,6 +3,7 @@ package com.syntaxphoenix.syntaxapi.command;
 import java.util.Map.Entry;
 import java.util.function.BiFunction;
 
+import com.syntaxphoenix.syntaxapi.logging.ILogger;
 import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 import com.syntaxphoenix.syntaxapi.utils.alias.Alias;
 import com.syntaxphoenix.syntaxapi.utils.alias.AliasMap;
@@ -19,7 +20,7 @@ public class CommandManager {
 
 	private final AliasMap<BaseCommand> commands = new AliasMap<>();
 	private ArgumentIdentifier validator = ArgumentIdentifier.DEFAULT;
-	private SynLogger logger = null;
+	private ILogger logger = null;
 
 	private String splitter = " ";
 	private String prefix = "!";
@@ -94,7 +95,7 @@ public class CommandManager {
 		return logger != null;
 	}
 
-	public SynLogger getLogger() {
+	public ILogger getLogger() {
 		return logger;
 	}
 
