@@ -13,10 +13,10 @@ public class ClassCache {
     		return Optional.of(CLASSES.get(classPath));
     	}
         try {
-        	Class<?> clz = Class.forName(classPath);
-        	if(clz != null) {
-        		CLASSES.put(classPath, clz);
-        		return Optional.of(clz);
+        	Class<?> clazz = Class.forName(classPath);
+        	if(clazz != null) {
+        		CLASSES.put(classPath, clazz);
+        		return Optional.of(clazz);
         	}
     		return Optional.empty();
         }

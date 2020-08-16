@@ -75,7 +75,22 @@ public class CacheList<V> {
 
 	public Optional<V> streamFilter(Function<Stream<V>, Optional<V>> filter) {
 		synchronized (cacheList) {
-			return filter.apply(cacheList.stream().map(object -> object.getValue(false)));
+			Optional<V> filtered = filter.apply(cacheList.stream().map(object -> object.getValue(false)));
+			return !filtered.isPresent() ? filtered
+					: cacheList.stream().filter(object -> object.getValue(false) == filtered.get()).findFirst()
+							.map(object -> object.getValue());
+		}
+	}
+
+	public boolean contains(V value) {
+		synchronized (cacheList) {
+			return cacheList.stream().anyMatch(object -> object.getValue(false) == value);
+		}
+	}
+
+	public void forEach(Consumer<V> consume) {
+		synchronized (cacheList) {
+			cacheList.stream().map(object -> object.getValue()).forEach(consume);
 		}
 	}
 

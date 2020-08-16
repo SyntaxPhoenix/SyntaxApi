@@ -66,7 +66,19 @@ public abstract class Version implements Comparable<Version> {
 	 * 
 	 */
 	
-	public boolean isHigher(Version version) {
+	// 1.5.3 (isHigher) 0.6.0 FALSCH
+	// 					f t f -> true
+	//				==> f - - -> false
+	//
+	// 1.5.3 (isHigher) 0.2.5 FALSCH
+	//					f f t -> true
+	//				==> f - - -> false
+	//
+	// 1.5.3 (isHigher) 1.5.4 RICHTIG
+	//					f f t -> true
+	//				==> f f t -> true
+	
+	public boolean isHigher(Version version) { 
 		if(major > version.major)
 			return true;
 		if(major < version.major)
@@ -77,8 +89,6 @@ public abstract class Version implements Comparable<Version> {
 			return false;
 		if(patch > version.patch)
 			return true;
-		if(patch < version.patch)
-			return false;
 		return false;
 	}
 	
@@ -97,8 +107,6 @@ public abstract class Version implements Comparable<Version> {
 			return false;
 		if(patch < version.patch)
 			return true;
-		if(patch > version.patch)
-			return false;
 		return false;
 	}
 	

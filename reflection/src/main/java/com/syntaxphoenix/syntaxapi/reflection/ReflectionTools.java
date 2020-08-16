@@ -1,11 +1,14 @@
 package com.syntaxphoenix.syntaxapi.reflection;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.function.Predicate;
 
 public class ReflectionTools {
 
@@ -57,58 +60,43 @@ public class ReflectionTools {
 		return true;
 	}
 
-	public static ArrayList<Class<?>> fromPackage(String name) {
-		ArrayList<Class<?>> classes = new ArrayList<>();
-		File file = null;
-		try {
-			file = new File(ReflectionTools.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-		ArrayList<File> files = new ArrayList<>();
-		if (file.isDirectory()) {
-			files.addAll(listPackageFiles(file, ".class", "$", name));
-		}
-		for (File currentFile : files) {
-			Class<?> clazz = null;
-			try {
-				clazz = Class.forName(shrimPath(currentFile, ".").replace(".class", ""), false,
-						ReflectionTools.class.getClassLoader());
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			classes.add(clazz);
-		}
-		return classes;
-	}
+	/*
+	 * 
+	 */
 
-	public static ArrayList<File> listPackageFiles(File directory, String fileEnd, String containsNot,
-			String inPackage) {
-		String packagePath = inPackage.replace(".", "/");
+	public static File[] getPackageClassFiles(String packageName) throws IOException {
 		ArrayList<File> list = new ArrayList<>();
-		for (File file : directory.listFiles()) {
-			if (file.isDirectory()) {
-				list.addAll(listPackageFiles(file, fileEnd, containsNot, inPackage));
-			} else {
-				if (file.getName().endsWith(fileEnd)) {
-					if (!file.getName().contains(containsNot)) {
-						if (checkPath(file, packagePath)) {
-							list.add(file);
-						}
-					}
+		Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageName);
+		while (urls.hasMoreElements()) {
+			URL url = urls.nextElement();
+			list.addAll(getDirectoryContent(new File(url.getFile()), file -> {
+				if (!file.getName().contains("."))
+					return false;
+				String[] filePath = file.getName().split("\\.");
+				switch (filePath[filePath.length - 1]) {
+				case "java":
+				case "class":
+					return true;
+				default:
+					return false;
 				}
-			}
+			}));
 		}
-		return list;
+		return list.toArray(new File[0]);
 	}
 
-	private static String shrimPath(File file, String replacement) {
-		return file.getPath().replace("\\", replacement).split(replacement + "bin" + replacement)[1];
-	}
-
-	private static boolean checkPath(File file, String packagePath) {
-		String path = shrimPath(file, "/");
-		return path.startsWith(packagePath);
+	private static ArrayList<File> getDirectoryContent(File folder, Predicate<File> filter) {
+		ArrayList<File> output = new ArrayList<>();
+		if (folder.isDirectory()) {
+			File[] files = folder.listFiles();
+			for (int index = 0; index < files.length; index++) {
+				File file = files[index];
+				if (filter.test(file))
+					output.add(file);
+			}
+		} else
+			output.add(folder);
+		return output;
 	}
 
 	/*
