@@ -4,7 +4,6 @@ import java.util.Map.Entry;
 import java.util.function.BiFunction;
 
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
-import com.syntaxphoenix.syntaxapi.logging.SynLogger;
 import com.syntaxphoenix.syntaxapi.utils.alias.Alias;
 import com.syntaxphoenix.syntaxapi.utils.alias.AliasMap;
 import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
@@ -86,7 +85,7 @@ public class CommandManager {
 		return this;
 	}
 
-	public CommandManager setLogger(SynLogger logger) {
+	public CommandManager setLogger(ILogger logger) {
 		this.logger = logger;
 		return this;
 	}
