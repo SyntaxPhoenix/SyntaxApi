@@ -1,6 +1,6 @@
 image: maven:3-jdk-8
 
-default:
+gpg:
   except:
     variables:
       - $MAVEN_PROFILE == "syntaxphoenix"
