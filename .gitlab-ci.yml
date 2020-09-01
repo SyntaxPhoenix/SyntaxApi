@@ -13,7 +13,7 @@ cache:
   paths:
     - .m2/repository/
     - target/
-gpg:
+job:
   stage: gpg
   except:
     variables:
