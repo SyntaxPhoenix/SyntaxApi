@@ -38,6 +38,7 @@ public class SyntaxExecutor extends Thread {
 			LOGGER.log(e);
 		}
 
+		
 		while (true) {
 			try {
 				QUEUE.take().run();
