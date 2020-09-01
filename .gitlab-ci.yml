@@ -33,7 +33,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true $MAVEN_ADDITION
+    - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true -Dmaven.main.skip=true $MAVEN_ADDITION
   only:
     refs:
       - master
