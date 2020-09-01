@@ -33,7 +33,7 @@
 			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
 		<repository>
-			<id>central</id>
+			<id>syntaxphoenix</id>
 			<url>https://nexus.syntaxphoenix.com/repository/projects</url>
 		</repository>
 	</repositories>
