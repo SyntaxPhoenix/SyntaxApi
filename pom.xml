@@ -34,7 +34,7 @@
 		</repository>
 		<repository>
 			<id>syntaxphoenix</id>
-			<url>https://nexus.syntaxphoenix.com/repository/projects</url>
+			<url>http://nexus.syntaxphoenix.com/repository/projects</url>
 		</repository>
 	</repositories>
 
