@@ -32,4 +32,4 @@ deploy:
     branches:
       - master
     variables:
-      - ($CI_COMMIT_MESSAGE =~ /^(?<tag>[publish])\s*(?<content>.*)\s*$/gim) || $PIPELINE_RUN
+      - ($CI_COMMIT_MESSAGE =~ /^(?<tag>[publish])\s*(?<content>.*)\s*$/gim) || ($MAVEN_PROFILE == "syntaxphoenix")
