@@ -29,4 +29,7 @@ deploy:
   script:
     - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true
   only:
-    - master
+    branches:
+      - master
+    variables:
+      - ($CI_COMMIT_MESSAGE =~ /^(?<tag>[publish])\s*(?<content>.*)\s*$/gim) || $PIPELINE_RUN
