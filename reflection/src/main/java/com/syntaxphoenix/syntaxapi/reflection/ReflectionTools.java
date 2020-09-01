@@ -1,14 +1,13 @@
 package com.syntaxphoenix.syntaxapi.reflection;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.function.Predicate;
+import java.util.Collection;
 
 public class ReflectionTools {
 
@@ -64,39 +63,13 @@ public class ReflectionTools {
 	 * 
 	 */
 
-	public static File[] getPackageClassFiles(String packageName) throws IOException {
-		ArrayList<File> list = new ArrayList<>();
-		Enumeration<URL> urls = Thread.currentThread().getContextClassLoader().getResources(packageName);
-		while (urls.hasMoreElements()) {
-			URL url = urls.nextElement();
-			list.addAll(getDirectoryContent(new File(url.getFile()), file -> {
-				if (!file.getName().contains("."))
-					return false;
-				String[] filePath = file.getName().split("\\.");
-				switch (filePath[filePath.length - 1]) {
-				case "java":
-				case "class":
-					return true;
-				default:
-					return false;
-				}
-			}));
-		}
-		return list.toArray(new File[0]);
-	}
-
-	private static ArrayList<File> getDirectoryContent(File folder, Predicate<File> filter) {
-		ArrayList<File> output = new ArrayList<>();
-		if (folder.isDirectory()) {
-			File[] files = folder.listFiles();
-			for (int index = 0; index < files.length; index++) {
-				File file = files[index];
-				if (filter.test(file))
-					output.add(file);
-			}
-		} else
-			output.add(folder);
-		return output;
+	public static File[] getUrlAsFiles(Collection<URL> collection) throws URISyntaxException {
+		if (collection.isEmpty())
+			return new File[0];
+		ArrayList<File> files = new ArrayList<>();
+		for (URL url : collection)
+			files.add(new File(url.toURI().getPath()));
+		return files.toArray(new File[0]);
 	}
 
 	/*

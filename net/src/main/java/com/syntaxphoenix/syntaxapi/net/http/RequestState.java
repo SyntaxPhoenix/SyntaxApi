@@ -10,8 +10,9 @@ public enum RequestState {
 		return message;
 	}
 
-	public void message(boolean message) {
+	public RequestState message(boolean message) {
 		this.message = message;
+		return this;
 	}
 	
 	public boolean accepted() {

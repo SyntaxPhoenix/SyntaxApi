@@ -15,7 +15,7 @@ public enum ArgumentSuperType {
 	NUMBER, 
 	COLLECTION;
 	
-	/**
+	/*
 	 * 
 	 */
 	

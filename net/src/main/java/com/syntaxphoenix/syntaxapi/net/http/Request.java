@@ -107,11 +107,12 @@ public class Request {
 		int length = 0;
 
 		if (hasParameters()) {
+			CustomRequestData<JsonObject> requestData = new CustomRequestData<>(JsonObject.class, parameters);
 			if (!modifyUrl) {
-				data = content.serialize(parameters).getBytes(StandardCharsets.UTF_8);
+				data = content.serialize(requestData).getBytes(StandardCharsets.UTF_8);
 				length = data.length;
 			} else if (content.supportsUrlModification()) {
-				content.modifyUrl(url, parameters);
+				content.modifyUrl(url, requestData);
 			}
 		}
 
@@ -126,8 +127,7 @@ public class Request {
 			connection.setRequestProperty(header.getKey(), header.getValue());
 		}
 
-		if (content != ContentType.CUSTOM)
-			connection.setRequestProperty("Content-Type", content.type() + "; charset=UTF-8");
+		connection.setRequestProperty("Content-Type", content.type() + "; charset=UTF-8");
 
 		connection.connect();
 

@@ -25,11 +25,6 @@ public class PrimitiveDataType<P, C> implements DataType<P, C> {
 
 	public static final PrimitiveDataType<String, String> STRING = new PrimitiveDataType<>(String.class, String.class);
 
-//	public static final PrimitiveDataType<DataHolder, DataHolder> DATA_HOLDER = new PrimitiveDataType<>(
-//			DataHolder.class, DataHolder.class);
-//	public static final PrimitiveDataType<DataHolder[], DataHolder[]> DATA_HOLDER_ARRAY = new PrimitiveDataType<>(
-//			DataHolder[].class, DataHolder[].class);
-
 	public static final PrimitiveDataType<int[], int[]> INT_ARRAY = new PrimitiveDataType<>(int[].class, int[].class);
 	public static final PrimitiveDataType<byte[], byte[]> BYTE_ARRAY = new PrimitiveDataType<>(byte[].class,
 			byte[].class);

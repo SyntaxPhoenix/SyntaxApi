@@ -34,6 +34,10 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		 * Numbers
 		 */
 
+		if (Objects.equals(Boolean.class, type))
+			return new NbtAdapter<Boolean, NbtByte>(Boolean.class, NbtByte.class, state -> new NbtByte((byte) (state ? 1 : 0)),
+					value -> value.getByteValue() == 1);
+
 		if (Objects.equals(Byte.class, type))
 			return new NbtAdapter<Byte, NbtByte>(Byte.class, NbtByte.class, NbtByte::new,
 					value -> value.getByteValue());
@@ -118,7 +122,7 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		 * NbtTag
 		 */
 
-		if (Objects.equals(NbtTag.class, type))
+		if (NbtTag.class.isAssignableFrom(type))
 			return new NbtAdapter<NbtTag, NbtTag>(NbtTag.class, NbtTag.class, tag -> tag, tag -> tag);
 
 		return null;

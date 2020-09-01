@@ -3,7 +3,9 @@ package com.syntaxphoenix.syntaxapi.net.http;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class HttpWriter {
 
@@ -52,6 +54,33 @@ public class HttpWriter {
 
 	public HttpWriter writeType(String type) {
 		return write("Content-Type", type + "; charset=UTF-8");
+	}
+
+	public HttpWriter writeCookies(Cookie... cookies) {
+		for (int index = 0; index < cookies.length; index++)
+			writeCookie(cookies[index]);
+		return this;
+	}
+
+	public HttpWriter writeCookie(Cookie cookie) {
+		StringBuilder builder = new StringBuilder();
+		builder.append(cookie.getName());
+		builder.append('=');
+		builder.append(cookie.getValue());
+		HashMap<String, Object> properties = cookie.getProperties();
+		if (!properties.isEmpty()) {
+			synchronized (properties) {
+				builder.append("; ");
+				builder
+					.append(properties
+						.entrySet()
+						.stream()
+						.map(entry -> entry.getValue() == null ? entry.getKey()
+							: entry.getKey() + '=' + entry.getValue())
+						.collect(Collectors.joining("; ")));
+			}
+		}
+		return write("Set-Cookie", builder.toString());
 	}
 
 	/*

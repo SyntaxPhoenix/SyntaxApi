@@ -2,167 +2,174 @@ package com.syntaxphoenix.syntaxapi.net.http;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+public abstract class Answer<E> {
 
-public class Answer {
-	
-	public static final Answer CONTINUE = new Answer(ContentType.JSON).code(ResponseCode.CONTINUE);
-	public static final Answer NO_CONTENT = new Answer(ContentType.JSON).code(ResponseCode.NO_CONTENT);
-	public static final Answer SERVER_ERROR = new Answer(ContentType.JSON).code(ResponseCode.INTERNAL_SERVER_ERROR);
-	
-	/*
-	 * 
-	 */
-	
-	public static final List<String> BLOCKED = Arrays.asList("Content-Type", "Server", "Date", "Content-Length");
-	
-	/*
-	 * 
-	 */
+	public static final List<String> BLOCKED = Arrays
+		.asList("Content-Type", "Server", "Date", "Content-Length", "Set-Cookie");
 
-	private final HashMap<String, String> headers = new HashMap<>();
-	private final ContentType type;
-	
-	private JsonObject object = new JsonObject();
-	private int code = 404;
+	protected final HashMap<String, String> headers = new HashMap<>();
+	protected final ArrayList<Cookie> cookies = new ArrayList<>();
+	protected final NamedType type;
 
-	/*
-	 * 
-	 */
+	protected int code = 404;
 
-	public Answer(ContentType type) {
+	public Answer(NamedType type) {
 		this.type = type;
 	}
-	
+
 	/*
-	 * 
+	 * Getter
 	 */
-	
+
 	public String header(String key) {
 		return headers.get(key);
 	}
-	
-	public JsonElement respond(String key) {
-		return object.get(key);
-	}
-	
-	public ContentType type() {
+
+	public NamedType type() {
 		return type;
 	}
-	
+
 	public int code() {
 		return code;
 	}
 
 	/*
-	 * 
+	 * Setter
 	 */
-	
-	public Answer code(int code) {
+
+	public Answer<E> code(int code) {
 		this.code = code;
 		return this;
 	}
 
-	public Answer header(String key, Object value) {
+	public Answer<E> header(String key, Object value) {
 		return header(key, value.toString());
 	}
 
-	public Answer header(String key, String value) {
-		if (value != null)
-			headers.put(key, value);
-		else
-			headers.remove(key);
+	public Answer<E> header(String key, String value) {
+		synchronized (headers) {
+			if (value != null)
+				headers.put(key, value);
+			else
+				headers.remove(key);
+		}
 		return this;
 	}
 
-	public Answer respond(String key, String value) {
-		if (value != null)
-			object.addProperty(key, value);
-		else
-			object.remove(key);
+	public Answer<E> addCookie(String key, Object value) {
+		return addCookie(Cookie.of(key, value));
+	}
+
+	public Answer<E> addCookie(Cookie cookie) {
+		synchronized (cookies) {
+			if (!cookies.contains(cookie))
+				cookies.add(cookie);
+		}
 		return this;
 	}
 
-	public Answer respond(String key, JsonElement element) {
-		if (element != null)
-			object.add(key, element);
-		else
-			object.remove(key);
+	public Answer<E> removeCookie(Cookie cookie) {
+		synchronized (cookies) {
+			cookies.remove(cookie);
+		}
 		return this;
 	}
 
-	public Answer respond(JsonObject object) {
-		this.object = object;
+	public Answer<E> removeCookie(String key) {
+		synchronized (cookies) {
+			cookies
+				.stream()
+				.filter(cookie -> cookie.getName().equals(key))
+				.findFirst()
+				.ifPresent(cookie -> cookies.remove(cookie));
+		}
 		return this;
 	}
 
 	/*
-	 * 
+	 * Response Management
 	 */
 
-	public Answer clearHeaders() {
-		headers.clear();
+	public Answer<E> clearHeaders() {
+		synchronized (headers) {
+			headers.clear();
+		}
 		return this;
 	}
 
-	public Answer clearResponse() {
-		object = new JsonObject();
+	public Answer<E> clearCookies() {
+		synchronized (cookies) {
+			cookies.clear();
+		}
 		return this;
 	}
 
+	public abstract boolean hasResponse();
+
+	public abstract E getResponse();
+
+	public abstract Answer<E> clearResponse();
+
 	/*
-	 * 
+	 * Serialize answer
 	 */
 
-	public boolean hasResponse() {
-		return !object.keySet().isEmpty();
+	public abstract byte[] serializeResponse();
+
+	protected byte[] serializeString(String input) {
+		return input.getBytes(StandardCharsets.UTF_8);
 	}
 
 	/*
-	 * 
+	 * Send answer
 	 */
 
-	public Answer write(HttpWriter writer) throws IOException {
-		if(type == null)
+	public Answer<E> write(HttpWriter writer) throws IOException {
+		if (type == null)
 			return this;
-			
+
 		byte[] data = null;
 		int length = 0;
 
-		if (object != null && hasResponse()) {
-			
-			data = type.serialize(object).getBytes(StandardCharsets.UTF_8);
-			length = data.length;
-			
-		}
-		
-		writer.write(code).writeServer().writeDate().writeLength(length);
-		
+		if (hasResponse()) {
 
-		for (Entry<String, String> header : headers.entrySet()) {
-			if(BLOCKED.contains(header.getKey()))
+			data = serializeResponse();
+			length = data.length;
+
+		}
+
+		writer.write(code).writeServer().writeDate().writeLength(length);
+
+		Set<Entry<String, String>> headers;
+		synchronized (this.headers) {
+			headers = this.headers.entrySet();
+		}
+		for (Entry<String, String> header : headers) {
+			if (BLOCKED.contains(header.getKey()))
 				continue;
 			writer.write(header);
 		}
+		
+		Cookie[] cookie;
+		synchronized (cookies) {
+			cookie = cookies.toArray(new Cookie[0]);
+		}
+		writer.writeCookies(cookie).writeType(type.type());
 
-		if(type == ContentType.CUSTOM)
-			writer.writeType(headers.get("Content-Type"));
-		else
-			writer.writeType(type);
-		
 		writer.line();
-		
-		if(data != null)
+
+		if (data != null)
 			writer.write(data);
-		
+
 		writer.clear();
-		
+
 		return this;
 	}
 

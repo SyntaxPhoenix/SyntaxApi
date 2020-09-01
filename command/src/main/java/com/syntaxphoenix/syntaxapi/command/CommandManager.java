@@ -1,6 +1,7 @@
 package com.syntaxphoenix.syntaxapi.command;
 
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
@@ -14,52 +15,76 @@ import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
  */
 public class CommandManager {
 
-	private BiFunction<CommandManager, String, ? extends BaseInfo> infoConstructor = ((manager,
-			label) -> new DefaultInfo(manager, label));
+	protected BiFunction<CommandManager, String, ? extends BaseInfo> infoConstructor = ((manager,
+		label) -> new DefaultInfo(manager, label));
 
-	private final AliasMap<BaseCommand> commands = new AliasMap<>();
-	private ArgumentIdentifier validator = ArgumentIdentifier.DEFAULT;
-	private ILogger logger = null;
+	protected final AliasMap<BaseCommand> commands = new AliasMap<>();
+	protected ArgumentIdentifier validator = ArgumentIdentifier.DEFAULT;
+	protected ILogger logger = null;
 
-	private String splitter = " ";
-	private String prefix = "!";
+	protected String splitter = " ";
+	protected String prefix = "!";
 
 	/*
-	 * 
+	 * Getter
 	 */
 
 	public AliasMap<BaseCommand> getClonedMap() {
-		return commands.clone();
+		synchronized (commands) {
+			return commands.clone();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public Entry<Alias, BaseCommand>[] getEntries() {
-		return commands.entrySet().toArray(new Entry[0]);
+		synchronized (commands) {
+			return commands.entrySet().toArray(new Entry[0]);
+		}
 	}
 
 	public BaseCommand[] getCommands() {
-		return commands.values().toArray(new BaseCommand[0]);
+		synchronized (commands) {
+			return commands.values().toArray(new BaseCommand[0]);
+		}
 	}
 
 	public Alias[] getAliases() {
-		return commands.keySet().toArray(new Alias[0]);
+		synchronized (commands) {
+			return commands.keySet().toArray(new Alias[0]);
+		}
 	}
-
-	/*
-	 * 
-	 */
 
 	public String getPrefix() {
 		return prefix;
 	}
 
+	public String getSplitter() {
+		return splitter;
+	}
+
+	public BiFunction<CommandManager, String, ? extends BaseInfo> getInfoConstructor() {
+		return infoConstructor;
+	}
+
+	public ArgumentIdentifier getValidator() {
+		return validator;
+	}
+
+	public boolean hasLogger() {
+		return logger != null;
+	}
+
+	public ILogger getLogger() {
+		return logger;
+	}
+
+	/*
+	 * Setter
+	 */
+
 	public CommandManager setPrefix(String prefix) {
 		this.prefix = prefix;
 		return this;
-	}
-
-	public String getSplitter() {
-		return splitter;
 	}
 
 	public CommandManager setSplitter(String splitter) {
@@ -67,17 +92,9 @@ public class CommandManager {
 		return this;
 	}
 
-	public BiFunction<CommandManager, String, ? extends BaseInfo> getInfoConstructor() {
-		return infoConstructor;
-	}
-
 	public CommandManager setInfoConstructor(BiFunction<CommandManager, String, ? extends BaseInfo> infoConstructor) {
 		this.infoConstructor = infoConstructor;
 		return this;
-	}
-
-	public ArgumentIdentifier getValidator() {
-		return validator;
 	}
 
 	public CommandManager setValidator(ArgumentIdentifier validator) {
@@ -90,16 +107,8 @@ public class CommandManager {
 		return this;
 	}
 
-	public boolean hasLogger() {
-		return logger != null;
-	}
-
-	public ILogger getLogger() {
-		return logger;
-	}
-
 	/*
-	 * 
+	 * Management
 	 */
 
 	public CommandManager register(BaseCommand command, String name, String... aliases) {
@@ -111,11 +120,73 @@ public class CommandManager {
 	}
 
 	public CommandManager register(BaseCommand command, Alias alias) {
-		if (commands.hasConflict(alias).isEmpty()) {
-			commands.put(alias, command);
+		synchronized (commands) {
+			if (commands.hasConflict(alias).isEmpty()) {
+				commands.put(alias, command);
+			}
 		}
 		return this;
 	}
+
+	public CommandManager unregister(BaseCommand command) {
+		synchronized (commands) {
+			if (!commands.containsValue(command))
+				return this;
+			Optional<Entry<Alias, BaseCommand>> optional = commands
+				.entrySet()
+				.stream()
+				.filter(entry -> entry.getValue().equals(command))
+				.findFirst();
+			if (optional.isPresent())
+				commands.remove(optional.get().getKey());
+		}
+		return this;
+	}
+
+	public CommandManager unregister(String name) {
+		synchronized (commands) {
+			if (commands.hasConflict(new Alias(name)).isEmpty())
+				return this;
+			Optional<Alias> optional = commands.keySet().stream().filter(alias -> alias.isLabel(name)).findFirst();
+			if (optional.isPresent())
+				commands.remove(optional.get());
+		}
+		return this;
+	}
+
+	public CommandManager unregister(Alias alias) {
+		synchronized (commands) {
+			String[] conflicts = commands.hasConflict(alias).toArray(new String[0]);
+			if (conflicts.length == 0)
+				return this;
+			Alias[] aliases = commands
+				.keySet()
+				.stream()
+				.filter(current -> hasLabel(conflicts, current))
+				.toArray(size -> new Alias[size]);
+			for (int index = 0; index < aliases.length; index++)
+				commands.remove(aliases[index]);
+		}
+		return this;
+	}
+
+	private boolean hasLabel(String[] source, Alias compare) {
+		for (int index = 0; index < source.length; index++)
+			if (compare.isLabel(source[index]))
+				return true;
+		return false;
+	}
+
+	public CommandManager unregisterAll() {
+		synchronized (commands) {
+			commands.clear();
+		}
+		return this;
+	}
+
+	/*
+	 * Command Processing
+	 */
 
 	public CommandProcess process(String message) {
 		CommandProcess process = new CommandProcess(this);
@@ -136,16 +207,18 @@ public class CommandManager {
 			return process.lock();
 		}
 		process.setValid(true);
-		if (!commands.containsKey(command)) {
-			return process.lock();
+		synchronized (commands) {
+			if (!commands.containsKey(command)) {
+				return process.lock();
+			}
+			process.setCommand(commands.get(command));
 		}
-		process.setCommand(commands.get(command));
 		process.setArguments(new Arguments(validator.process(Arrays.subArray(size -> new String[size], message, 1))));
 		return process.lock();
 	}
 
 	/*
-	 * 
+	 * Command Execution
 	 */
 
 	public ExecutionState execute(String message) {
