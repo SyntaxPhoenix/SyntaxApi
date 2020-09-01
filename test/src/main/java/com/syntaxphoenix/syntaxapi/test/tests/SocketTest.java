@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.function.Consumer;
 
 import com.syntaxphoenix.syntaxapi.net.http.HttpServer;
+import com.syntaxphoenix.syntaxapi.net.http.RestApiServer;
 import com.syntaxphoenix.syntaxapi.test.utils.Printer;
 
 public class SocketTest implements Consumer<String[]>, Printer {
@@ -31,7 +32,7 @@ public class SocketTest implements Consumer<String[]>, Printer {
 			}
 		}
 		
-		HttpServer server = new HttpServer(port);
+		RestApiServer server = new RestApiServer(port);
 		
 		try {
 			server.start();
