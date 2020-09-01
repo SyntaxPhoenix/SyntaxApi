@@ -1,20 +1,26 @@
 image: maven:3-jdk-8
 
-before_script:
-  - gpg --no-tty --batch --yes --passphrase $GPG_PASSPHRASE --import $GPG_SECRET_KEY
-
 stages:
+  - gpg
   - build
   - deploy
 
 variables:
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml -P$MAVEN_PROFILE --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 cache:
   paths:
     - .m2/repository/
     - target/
+
+gpg:
+  stage: gpg
+  script:
+    - gpg --no-tty --batch --yes --passphrase $GPG_PASSPHRASE --import $GPG_SECRET_KEY
+  except:
+    variables:
+      - $MAVEN_PROFILE == "syntaxphoenix"
 
 build:
   stage: build
@@ -27,6 +33,9 @@ build:
 deploy:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true
+    - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true $MAVEN_ADDITION
   only:
-    - master
+    branches:
+      - master
+    variables:
+      - ($CI_COMMIT_MESSAGE =~ /^(?<tag>[publish])\s*(?<content>.*)\s*$/gim) || ($MAVEN_PROFILE == "syntaxphoenix")
