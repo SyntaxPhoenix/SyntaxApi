@@ -1,7 +1,11 @@
 image: maven:3-jdk-8
 
-before_script:
-  - gpg --no-tty --batch --yes --passphrase $GPG_PASSPHRASE --import $GPG_SECRET_KEY
+default:
+  except:
+    variables:
+      - $MAVEN_PROFILE == "syntaxphoenix"
+  before_script:
+    - gpg --no-tty --batch --yes --passphrase $GPG_PASSPHRASE --import $GPG_SECRET_KEY
 
 stages:
   - build
@@ -27,7 +31,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true
+    - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true $MAVEN_ADDITION
   only:
     branches:
       - master
