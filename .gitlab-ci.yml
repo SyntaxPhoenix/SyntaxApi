@@ -35,7 +35,7 @@ deploy:
   script:
     - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true $MAVEN_ADDITION
   only:
-    branches:
+    refs:
       - master
     variables:
-      - ($CI_COMMIT_MESSAGE =~ /^(?<tag>[publish])\s*(?<content>.*)\s*$/gim) || ($MAVEN_PROFILE == "syntaxphoenix")
+      - ($CI_COMMIT_MESSAGE =~ /^(?P<name>\[publish\]).*$/) || ($MAVEN_PROFILE == "syntaxphoenix")
