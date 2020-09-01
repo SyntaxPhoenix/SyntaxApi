@@ -26,6 +26,13 @@
 			<organizationUrl>https://syntaxphoenix.com/</organizationUrl>
 		</developer>
 	</developers>
+	
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository>
+	</repositories>
 
 	<scm>
 		<connection>scm:git:git://gitlab.com/SyntaxPhoenix/syntax-api.git</connection>
