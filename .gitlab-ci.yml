@@ -25,7 +25,7 @@ gpg:
 build:
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS clean install
+    - mvn $MAVEN_CLI_OPTS clean install $MAVEN_ADDITION
   artifacts:
     paths:
       - target/
