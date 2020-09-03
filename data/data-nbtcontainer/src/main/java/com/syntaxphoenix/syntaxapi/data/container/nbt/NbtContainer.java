@@ -47,19 +47,19 @@ public class NbtContainer extends DataContainer implements DataAdapterContext, N
 	}
 
 	public void set(String key, NbtTag tag) {
+		if (tag == null)
+			return;
 		root.set(key, tag);
 	}
 
 	@SuppressWarnings("unchecked")
-	public void set(String key, Object primitive) {
-		if (!Primitives.isInstance(primitive))
-			return;
-		root.set(key, registry.wrap(Primitives.fromPrimitive((Class<Object>) primitive.getClass()), primitive));
+	public void set(String key, Object object) {
+		set(key, registry.wrap(Primitives.fromPrimitive((Class<Object>) object.getClass()), object));
 	}
 
 	@Override
 	public <E, V> void set(String key, E value, DataType<V, E> type) {
-		root.set(key, registry.wrap(type.getPrimitive(), type.toPrimitive(getAdapterContext(), value)));
+		set(key, registry.wrap(type.getPrimitive(), type.toPrimitive(getAdapterContext(), value)));
 	}
 
 	@Override
