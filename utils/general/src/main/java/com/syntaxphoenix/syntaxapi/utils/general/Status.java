@@ -8,6 +8,8 @@ public class Status {
 		return new Status(false);
 	};
 
+	private final Object sync = new Object();
+
 	private int total = 0;
 	private int failed = 0;
 	private int success = 0;
@@ -24,7 +26,9 @@ public class Status {
 	 * @param loaded - defines if it was loaded or not
 	 */
 	private Status(boolean done) {
-		this.done = done;
+		synchronized (sync) {
+			this.done = done;
+		}
 	}
 
 	/**
@@ -33,14 +37,18 @@ public class Status {
 	 * @param total - starting total amount of objects to load
 	 */
 	public Status(int total) {
-		this.total = total;
+		synchronized (sync) {
+			this.total = total;
+		}
 	}
 
 	/**
 	 * Set the loading to done
 	 */
 	public void done() {
-		done = true;
+		synchronized (sync) {
+			done = true;
+		}
 	}
 
 	/**
@@ -49,7 +57,9 @@ public class Status {
 	 * @return if loading is done
 	 */
 	public boolean isDone() {
-		return done;
+		synchronized (sync) {
+			return done;
+		}
 	}
 
 	/**
@@ -58,9 +68,11 @@ public class Status {
 	 * @return if it was marked or not
 	 */
 	public boolean success() {
-		if (done || !mark())
+		if (isDone() || !mark())
 			return false;
-		success++;
+		synchronized (sync) {
+			success++;
+		}
 		return true;
 	}
 
@@ -70,9 +82,11 @@ public class Status {
 	 * @return if it was marked or not
 	 */
 	public boolean failed() {
-		if (done || !mark())
+		if (isDone() || !mark())
 			return false;
-		failed++;
+		synchronized (sync) {
+			failed++;
+		}
 		return true;
 	}
 
@@ -82,9 +96,11 @@ public class Status {
 	 * @return if it was marked or not
 	 */
 	public boolean skip() {
-		if (done || !mark())
+		if (isDone() || !mark())
 			return false;
-		skipped++;
+		synchronized (sync) {
+			skipped++;
+		}
 		return true;
 	}
 
@@ -94,9 +110,11 @@ public class Status {
 	 * @return if it was marked or not
 	 */
 	public boolean cancel() {
-		if (done || !mark())
+		if (isDone() || !mark())
 			return false;
-		cancelled++;
+		synchronized (sync) {
+			cancelled++;
+		}
 		return true;
 	}
 
@@ -108,7 +126,9 @@ public class Status {
 	private boolean mark() {
 		if (marked == total)
 			return false;
-		marked++;
+		synchronized (sync) {
+			marked++;
+		}
 		return true;
 	}
 
@@ -125,9 +145,11 @@ public class Status {
 	 * @param amount - amount to add
 	 */
 	public void add(int amount) {
-		if (done)
+		if (isDone())
 			return;
-		total += amount;
+		synchronized (sync) {
+			total += amount;
+		}
 	}
 
 	/**
@@ -136,14 +158,16 @@ public class Status {
 	 * @param status - LoadingStatus to add
 	 */
 	public void add(Status status) {
-		if (done)
+		if (isDone())
 			return;
-		total += status.total;
-		failed += status.failed;
-		marked += status.marked;
-		success += status.success;
-		skipped += status.skipped;
-		cancelled += status.cancelled;
+		synchronized (sync) {
+			total += status.total;
+			failed += status.failed;
+			marked += status.marked;
+			success += status.success;
+			skipped += status.skipped;
+			cancelled += status.cancelled;
+		}
 	}
 
 	/**
@@ -152,7 +176,9 @@ public class Status {
 	 * @return the total amount
 	 */
 	public int getTotal() {
-		return total;
+		synchronized (sync) {
+			return total;
+		}
 	}
 
 	/**
@@ -161,7 +187,9 @@ public class Status {
 	 * @return the marked amount
 	 */
 	public int getMarked() {
-		return marked;
+		synchronized (sync) {
+			return marked;
+		}
 	}
 
 	/**
@@ -170,7 +198,9 @@ public class Status {
 	 * @return the failed amount
 	 */
 	public int getFailed() {
-		return failed;
+		synchronized (sync) {
+			return failed;
+		}
 	}
 
 	/**
@@ -179,7 +209,9 @@ public class Status {
 	 * @return the successful amount
 	 */
 	public int getSuccess() {
-		return success;
+		synchronized (sync) {
+			return success;
+		}
 	}
 
 	/**
@@ -188,7 +220,9 @@ public class Status {
 	 * @return the not loaded amount
 	 */
 	public int getSkipped() {
-		return skipped;
+		synchronized (sync) {
+			return skipped;
+		}
 	}
 
 	/**
@@ -197,7 +231,9 @@ public class Status {
 	 * @return the cancelled amount
 	 */
 	public int getCancelled() {
-		return cancelled;
+		synchronized (sync) {
+			return cancelled;
+		}
 	}
 
 }

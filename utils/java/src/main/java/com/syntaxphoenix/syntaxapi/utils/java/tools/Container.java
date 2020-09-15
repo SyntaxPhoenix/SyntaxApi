@@ -7,8 +7,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import java.util.Optional;
 
-public class Container<T> {
+public final class Container<T> {
 	/**
 	 * Common instance for {@code empty()}.
 	 */
@@ -52,9 +53,9 @@ public class Container<T> {
 	 *              ensure the value is non-{@code null} unless creating the
 	 *              singleton instance returned by {@code empty()}.
 	 */
-	private Container(T value) {
+	private Container(T value, boolean modifiable) {
 		this.value = value;
-		this.modifiable = true;
+		this.modifiable = modifiable;
 	}
 
 	/**
@@ -64,7 +65,7 @@ public class Container<T> {
 	 * @return an {@code Container}
 	 */
 	public static <T> Container<T> of() {
-		return new Container<>(null);
+		return new Container<>(null, true);
 	}
 
 	/**
@@ -75,7 +76,47 @@ public class Container<T> {
 	 * @return an {@code Container} with the value
 	 */
 	public static <T> Container<T> of(T value) {
-		return new Container<>(value);
+		return new Container<>(value, true);
+	}
+
+	/**
+	 * Returns an {@code Container} describing the given value.
+	 *
+	 * @param value the value to describe
+	 * @param <T>   the type of the value
+	 * @return an unmodifiable {@code Container} with the value or empty
+	 */
+	public static <T> Container<T> ofUnmodifiable(T value) {
+		return value == null ? empty() : new Container<>(value, false);
+	}
+
+	/**
+	 * Returns an {@code Container} describing the given value of the optional.
+	 *
+	 * @param value {code Optional} that contains a value or null
+	 * @return an {@code Container} with the value of the optional
+	 */
+	public static <T> Container<T> ofOptional(Optional<T> value) {
+		return value.isPresent() ? new Container<>(null, true) : new Container<>(value.get(), true);
+	}
+
+	/**
+	 * Returns an {@code Container} describing the given value of the optional.
+	 *
+	 * @param value {code Optional} that contains a value or null
+	 * @return an {@code Container} with the value of the optional
+	 */
+	public static <T> Container<T> ofOptionalUnmodifiable(Optional<T> value) {
+		return value.isPresent() ? empty() : new Container<>(value.get(), false);
+	}
+
+	/**
+	 * returns the value as an optional
+	 * 
+	 * @return the optional
+	 */
+	public Optional<T> asOptional() {
+		return Optional.ofNullable(value);
 	}
 
 	/**
@@ -176,9 +217,9 @@ public class Container<T> {
 	}
 
 	/**
-	 * If a value is present, returns an {@code Container} describing the result 
-	 * of applying the given mapping function to the
-	 * value, otherwise returns an empty {@code Container}.
+	 * If a value is present, returns an {@code Container} describing the result of
+	 * applying the given mapping function to the value, otherwise returns an empty
+	 * {@code Container}.
 	 *
 	 * <p>
 	 * If the mapping function returns a {@code null} result then this method

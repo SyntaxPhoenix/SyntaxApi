@@ -7,6 +7,7 @@
 		<artifactId>utils</artifactId>
 		<version>2.0.2</version>
 	</parent>
+	<version>2.0.3</version>
 	<artifactId>general</artifactId>
 	<packaging>jar</packaging>
 

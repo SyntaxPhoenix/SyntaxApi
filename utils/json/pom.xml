@@ -12,6 +12,7 @@
 	<modules>
 		<module>json-tools</module>
 		<module>json-nbt</module>
+		<module>json-lib</module>
 	</modules>
 
 	<dependencies>
