@@ -3,6 +3,7 @@ package com.syntaxphoenix.syntaxapi.command;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.syntaxphoenix.syntaxapi.command.arguments.ListArgument;
 import com.syntaxphoenix.syntaxapi.exception.ObjectLockedException;
@@ -60,6 +61,10 @@ public class Arguments implements Iterable<BaseArgument> {
 		}
 		arguments.add(argument);
 	}
+
+    public boolean match(Predicate<BaseArgument> filter) {
+        return arguments.stream().anyMatch(filter);
+    }
 
 	public ArgumentType getType(int position) {
 		return get(position).getType();

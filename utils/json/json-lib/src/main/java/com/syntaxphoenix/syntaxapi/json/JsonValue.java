@@ -16,9 +16,9 @@ public abstract class JsonValue<E> {
 		if (complex == String.class)
 			return (JsonValue<E>) new JsonString((String) primitive);
 		if (complex == Byte.class)
-			return (JsonValue<E>) new JsonByte((byte) primitive);
+			return (JsonValue<E>) new JsonByte((Byte) primitive);
 		if (complex == Short.class)
-			return (JsonValue<E>) new JsonShort((short) primitive);
+			return (JsonValue<E>) new JsonShort((Short) primitive);
 		if (complex == Integer.class)
 			return (JsonValue<E>) new JsonInteger((Integer) primitive);
 		if (complex == Long.class)

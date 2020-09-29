@@ -1,6 +1,5 @@
 package com.syntaxphoenix.syntaxapi.json.io;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 

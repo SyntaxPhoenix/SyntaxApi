@@ -18,7 +18,7 @@ public final class Container<T> {
 	/**
 	 * If false, is modifiable; if true, is not modifiable
 	 */
-	private final boolean modifiable;
+	private boolean modifiable;
 
 	/**
 	 * If non-null, the value; if null, indicates no value is present
@@ -138,6 +138,14 @@ public final class Container<T> {
 	 */
 	public T get() {
 		return value;
+	}
+
+	/**
+	 * locks the container
+	 */
+	public Container<T> lock() {
+		modifiable = false;
+		return this;
 	}
 
 	/**

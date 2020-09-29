@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.function.Predicate;
 
+import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
+
 public abstract class AbstractReflect {
 
 	public static final AbstractReflect FIELD = new Reflect(Field.class).searchField("modify", "modifiers");
@@ -98,6 +100,10 @@ public abstract class AbstractReflect {
 	 * 
 	 */
 
+	public boolean containsConstructor(String name) {
+		return constructors.containsKey(name);
+	}
+
 	public boolean containsMethod(String name) {
 		return methods.containsKey(name);
 	}
@@ -125,7 +131,7 @@ public abstract class AbstractReflect {
 			try {
 				return constructor.newInstance(args);
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
+				| InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
@@ -263,14 +269,20 @@ public abstract class AbstractReflect {
 		return predicate.test(this) ? searchConstructor(name, args) : this;
 	}
 
-	public AbstractReflect searchConstructor(String name, Class<?>... args) {
-		if (containsMethod(name)) {
+	public AbstractReflect searchConstructor(String name, Class<?>... arguments) {
+		if (containsConstructor(name)) {
 			return this;
 		}
 		Constructor<?> constructor = null;
 		try {
-			constructor = owner.getConstructor(args);
+			constructor = owner.getDeclaredConstructor(arguments);
 		} catch (NoSuchMethodException | SecurityException e) {
+		}
+		if (constructor == null) {
+			try {
+				constructor = owner.getConstructor(arguments);
+			} catch (NoSuchMethodException | SecurityException e) {
+			}
 		}
 		if (constructor != null) {
 			constructors.put(name, constructor);
@@ -279,7 +291,8 @@ public abstract class AbstractReflect {
 	}
 
 	public AbstractReflect searchConstructorsByArguments(String base, Class<?>... arguments) {
-		Constructor<?>[] constructors = owner.getConstructors();
+		Constructor<?>[] constructors = Arrays
+			.merge(Constructor<?>[]::new, owner.getDeclaredConstructors(), owner.getConstructors());
 		if (constructors.length == 0) {
 			return this;
 		}
@@ -303,7 +316,7 @@ public abstract class AbstractReflect {
 	 */
 
 	public AbstractReflect searchMethod(Predicate<AbstractReflect> predicate, String name, String methodName,
-			Class<?>... arguments) {
+		Class<?>... arguments) {
 		return predicate.test(this) ? searchMethod(name, methodName, arguments) : this;
 	}
 
@@ -329,7 +342,7 @@ public abstract class AbstractReflect {
 	}
 
 	public AbstractReflect searchMethodsByArguments(String base, Class<?>... arguments) {
-		Method[] methods = owner.getMethods();
+		Method[] methods = Arrays.merge(Method[]::new, owner.getDeclaredMethods(), owner.getMethods());
 		if (methods.length == 0) {
 			return this;
 		}
