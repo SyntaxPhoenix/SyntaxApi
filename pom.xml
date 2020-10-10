@@ -26,7 +26,7 @@
 			<organizationUrl>https://syntaxphoenix.com/</organizationUrl>
 		</developer>
 	</developers>
-	
+
 	<repositories>
 		<repository>
 			<id>central</id>
@@ -52,6 +52,18 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.honton.chas</groupId>
+				<artifactId>exists-maven-plugin</artifactId>
+				<version>0.3.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>remote</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
