@@ -66,6 +66,28 @@
 					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 				</repository>
 			</distributionManagement>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.honton.chas</groupId>
+						<artifactId>exists-maven-plugin</artifactId>
+						<version>0.3.0</version>
+						<configuration>
+							<exists>
+								<repository>https://repo1.maven.org/maven2/</repository>
+								<snapshotRepository>https://oss.sonatype.org/content/repositories/snapshots</snapshotRepository>
+							</exists>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>remote</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>syntaxphoenix</id>
@@ -82,24 +104,28 @@
 					<url>http://nexus.syntaxphoenix.com/repository/projects</url>
 				</repository>
 			</distributionManagement>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.honton.chas</groupId>
+						<artifactId>exists-maven-plugin</artifactId>
+						<version>0.3.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>remote</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.honton.chas</groupId>
-				<artifactId>exists-maven-plugin</artifactId>
-				<version>0.3.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>remote</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
