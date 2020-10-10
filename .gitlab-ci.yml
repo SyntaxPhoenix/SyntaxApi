@@ -2,6 +2,7 @@ image: maven:3-jdk-8
 
 stages:
   - gpg
+  - profiles
   - build
   - deploy
 
@@ -22,6 +23,11 @@ gpg:
   except:
     variables:
       - $MAVEN_PROFILE == "syntaxphoenix"
+
+profiles:
+  stage: profiles
+  script:
+    - mvn $MAVEN_CLI_OPTS help:active-profiles $PROFILE_OPTS $MAVEN_ADDITION
 
 build:
   stage: build
