@@ -7,7 +7,8 @@ stages:
 
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
-  MAVEN_OPTS: "-P $MAVEN_PROFILE -Dmaven.repo.local=.m2/repository"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  PROFILE_OPTS: "-P $MAVEN_PROFILE"
 
 cache:
   paths:
@@ -25,7 +26,7 @@ gpg:
 build:
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS clean install $MAVEN_ADDITION
+    - mvn $MAVEN_CLI_OPTS clean install $PROFILE_OPTS $MAVEN_ADDITION
   artifacts:
     paths:
       - target/
@@ -33,7 +34,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS deploy -Dmaven.test.skip=true -Dmaven.main.skip=true $MAVEN_ADDITION
+    - mvn $MAVEN_CLI_OPTS deploy $PROFILE_OPTS -Dmaven.test.skip=true -Dmaven.main.skip=true $MAVEN_ADDITION
   only:
     refs:
       - master
