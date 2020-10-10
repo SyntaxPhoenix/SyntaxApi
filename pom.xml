@@ -50,6 +50,42 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>ossrh</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+				<repository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>syntaxphoenix</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>syntaxphoenix</id>
+					<url>http://nexus.syntaxphoenix.com/repository/projects</url>
+				</snapshotRepository>
+				<repository>
+					<id>syntaxphoenix</id>
+					<url>http://nexus.syntaxphoenix.com/repository/projects</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+	</profiles>
+
+
 	<build>
 		<plugins>
 			<plugin>
