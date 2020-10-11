@@ -86,6 +86,9 @@ public class JsonWriter implements TextSerializer<JsonValue<?>> {
 		case STRING:
 			writeString((JsonString) value, writer);
 			break;
+		case BOOLEAN:
+			writeBoolean((JsonBoolean) value, writer);
+			break;
 		case BYTE:
 		case SHORT:
 		case INTEGER:
@@ -163,6 +166,10 @@ public class JsonWriter implements TextSerializer<JsonValue<?>> {
 
 	public void writeNull(JsonNull<?> jsonNull, Writer writer) throws IOException {
 		writer.append("null");
+	}
+
+	public void writeBoolean(JsonBoolean jsonBoolean, Writer writer) throws IOException {
+		writer.append(jsonBoolean.getValue().toString());
 	}
 
 	/*

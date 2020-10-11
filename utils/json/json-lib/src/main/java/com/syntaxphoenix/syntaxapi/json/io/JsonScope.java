@@ -1,7 +1,7 @@
 package com.syntaxphoenix.syntaxapi.json.io;
 
 public enum JsonScope {
-	
+
 	EMPTY_ARRAY,
 	EMPTY_OBJECT,
 	EMPTY_READER,

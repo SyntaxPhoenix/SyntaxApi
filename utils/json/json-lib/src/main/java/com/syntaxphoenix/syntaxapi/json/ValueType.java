@@ -11,6 +11,7 @@ public enum ValueType {
 	NULL,
 	STRING,
 	NUMBER,
+	BOOLEAN,
 	BYTE(NUMBER),
 	SHORT(NUMBER),
 	INTEGER(NUMBER),

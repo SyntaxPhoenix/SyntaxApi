@@ -1,24 +1,48 @@
 package com.syntaxphoenix.syntaxapi.json.io;
 
 public enum JsonToken {
-	
-	EOF(-1),
-	KEY(0),
-	VALUE(1),
-	SEPERATOR(2),
-	START_OBJECT(3),
-	END_OBJECT(4),
-	START_ARRAY(5),
-	END_ARRAY(6);
 
-	private final int id;
+	EOF,
+	KEY,
+	NULL,
+	STRING,
+	NUMBER,
+	BOOLEAN,
+	END_ARRAY,
+	END_OBJECT,
+	START_ARRAY,
+	START_OBJECT,
 
-	private JsonToken(int id) {
-		this.id = id;
+	// Numbers
+	BYTE(NUMBER),
+	SHORT(NUMBER),
+	INTEGER(NUMBER),
+	LONG(NUMBER),
+	BIG_INTEGER(NUMBER),
+	FLOAT(NUMBER),
+	DOUBLE(NUMBER),
+	BIG_DECIMAL(NUMBER);
+
+	private final JsonToken parent;
+
+	private JsonToken() {
+		this.parent = null;
 	}
 
-	public int id() {
-		return id;
+	private JsonToken(JsonToken parent) {
+		this.parent = parent;
+	}
+
+	public JsonToken getParent() {
+		return parent;
+	}
+
+	public boolean hasParent() {
+		return parent != null;
+	}
+
+	public JsonToken actualToken() {
+		return parent != null ? parent : this;
 	}
 
 }
