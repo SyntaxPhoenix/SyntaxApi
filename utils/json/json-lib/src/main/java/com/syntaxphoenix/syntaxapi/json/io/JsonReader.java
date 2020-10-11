@@ -38,7 +38,7 @@ public class JsonReader {
 	public static final int NUMBER_EXP_FRAC = 13;
 
 	public final Reader reader;
-	public final char[] buffer = new char[4096];
+	public final char[] buffer = new char[1024];
 
 	public final Stack<JsonScope> stack = new Stack<>();
 	public JsonState state;
@@ -428,35 +428,9 @@ public class JsonReader {
 	protected JsonState nextState(boolean peek) throws IOException, JsonSyntaxException {
 		next = null;
 		JsonScope current = peek ? peek() : pop();
+		System.out.println(current);
 		try {
 			switch (current) {
-			case FILLED_OBJECT:
-				char character1 = nextCharacter();
-				switch (character1) {
-				case '}':
-					stack.push(JsonScope.PENDING_NAME);
-					return state = JsonState.END_OBJECT;
-				case ',':
-					break;
-				default:
-					throw wrongSyntax("Never ending object");
-				}
-			case EMPTY_OBJECT:
-				stack.push(JsonScope.PENDING_NAME);
-				char character2 = nextCharacter();
-				switch (character2) {
-				case '\'':
-					return state = JsonState.KEY_SINGLE;
-				case '"':
-					return state = JsonState.KEY_DOUBLE;
-				case '}':
-					if (current == JsonScope.EMPTY_OBJECT) {
-						wrongSyntax("Unnamed element");
-					}
-					return state = JsonState.END_OBJECT;
-				default:
-					throw wrongSyntax("Unnamed element");
-				}
 			case EMPTY_ARRAY:
 				stack.push(JsonScope.FILLED_ARRAY);
 				break;
@@ -471,6 +445,34 @@ public class JsonReader {
 					throw wrongSyntax("Never ending array");
 				}
 				break;
+			case EMPTY_OBJECT:
+			case FILLED_OBJECT:
+				stack.push(JsonScope.PENDING_NAME);
+				if (current == JsonScope.FILLED_OBJECT) {
+					char character1 = nextCharacter();
+					switch (character1) {
+					case '}':
+						return state = JsonState.END_OBJECT;
+					case ',':
+						break;
+					default:
+						throw wrongSyntax("Never ending object");
+					}
+				}
+				char character2 = nextCharacter();
+				switch (character2) {
+				case '\'':
+					return state = JsonState.KEY_SINGLE;
+				case '"':
+					return state = JsonState.KEY_DOUBLE;
+				case '}':
+					if (current == JsonScope.FILLED_OBJECT) {
+						wrongSyntax("Unnamed element");
+					}
+					return state = JsonState.END_OBJECT;
+				default:
+					throw wrongSyntax("Unnamed element");
+				}
 			case EMPTY_READER:
 				stack.push(JsonScope.FILLED_READER);
 				break;
@@ -490,6 +492,7 @@ public class JsonReader {
 			}
 
 			char character = nextCharacter();
+			System.out.println(cursor);
 			switch (character) {
 			case ']':
 				if (current == JsonScope.EMPTY_ARRAY) {
@@ -646,7 +649,7 @@ public class JsonReader {
 				value.append(current);
 				continue;
 			default:
-				if (isDigit(current)) {
+				if (!isDigit(current)) {
 					if (!isLiteral(current)) {
 						break characterLoop;
 					}
@@ -683,7 +686,7 @@ public class JsonReader {
 		try {
 			stringBuffer = value.toString();
 			int length = (((decimal ? stringBuffer.split(".", 2)[0].length() : stringBuffer.length()) - exponentialLength)
-				* (10 ^ Integer.parseInt(exponentialValue.toString()))) - (negative ? 0 : 1);
+				* (exponential ? 10 ^ Integer.parseInt(exponentialValue.toString()) : 1)) - (negative ? 0 : 1);
 
 			if (decimal) {
 				switch (length) {
@@ -738,8 +741,10 @@ public class JsonReader {
 					state = JsonState.BIG_INTEGER;
 				}
 			}
+			cursor += length + 1;
 			return true;
 		} catch (NumberFormatException exception) {
+			exception.printStackTrace();
 			return false;
 		}
 	}
@@ -782,7 +787,7 @@ public class JsonReader {
 				continue;
 			case '/':
 				cursor = position;
-				if (position == 1) {
+				if (position == limit) {
 					cursor--;
 					boolean loaded = readToBuffer(2);
 					cursor++;
@@ -814,6 +819,7 @@ public class JsonReader {
 				limit = this.limit;
 				continue;
 			default:
+				cursor = position;
 				return current;
 			}
 		}
