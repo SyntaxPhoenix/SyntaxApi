@@ -32,4 +32,12 @@ public class NamespacedKey extends DataKey {
 		return key.contains(":") ? new NamespacedKey(key.split(":", 2)) : null;
 	}
 
+	public static NamespacedKey fromStringOrDefault(String key, String namespace) {
+		return key.contains(":") ? new NamespacedKey(key.split(":", 2))
+			: new NamespacedKey(new String[] {
+					namespace,
+					key
+			});
+	}
+
 }
