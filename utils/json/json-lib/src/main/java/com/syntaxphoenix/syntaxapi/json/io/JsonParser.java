@@ -15,43 +15,49 @@ public class JsonParser implements TextDeserializer<JsonValue<?>> {
 	public JsonValue<?> fromReader(Reader reader) throws IOException, JsonSyntaxException {
 		return read(new JsonReader(reader));
 	}
-	
+
 	protected JsonValue<?> read(JsonReader reader) throws IOException, JsonSyntaxException {
 		JsonToken token = reader.next();
-		switch(token) {
+		switch (token) {
 		case NULL:
+			reader.readNull();
 			return JsonNull.get();
 		case BOOLEAN:
-			return new JsonBoolean(false);
+			return new JsonBoolean(reader.readBoolean());
 		case STRING:
-			return new JsonString(null);
+			return new JsonString(reader.readString());
 		case START_ARRAY:
 			JsonArray array = new JsonArray();
+			reader.beginArray();
 			while (reader.hasNext()) {
 				array.add(read(reader));
 			}
+			reader.endArray();
+			return array;
 		case START_OBJECT:
 			JsonObject object = new JsonObject();
-	        while (reader.hasNext()) {
-	        	
-	        }
-	        return object;
+			reader.beginObject();
+			while (reader.hasNext()) {
+				object.set(reader.readName(), read(reader));
+			}
+			reader.endObject();
+			return object;
 		case BYTE:
-			break;
+			return new JsonByte(reader.readByte());
 		case SHORT:
-			break;
+			return new JsonShort(reader.readShort());
 		case INTEGER:
-			break;
+			return new JsonInteger(reader.readInteger());
 		case LONG:
-			break;
+			return new JsonLong(reader.readLong());
 		case BIG_INTEGER:
-			break;
+			return new JsonBigInteger(reader.readBigInteger());
 		case FLOAT:
-			break;
+			return new JsonFloat(reader.readFloat());
 		case DOUBLE:
-			break;
+			return new JsonDouble(reader.readDouble());
 		case BIG_DECIMAL:
-			break;
+			return new JsonBigDecimal(reader.readBigDecimal());
 		case EOF:
 		case KEY:
 		case NUMBER:

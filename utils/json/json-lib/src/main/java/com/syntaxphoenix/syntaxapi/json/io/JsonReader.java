@@ -49,7 +49,7 @@ public class JsonReader {
 	public int cursor;
 
 	public int lineAmount;
-	public int lineCurrent;
+	public int linePosition;
 
 	public String stringBuffer;
 
@@ -72,24 +72,153 @@ public class JsonReader {
 		return state != JsonState.END_OBJECT && state != JsonState.END_ARRAY && state != JsonState.EOF;
 	}
 
-	public String readName() throws IOException, JsonSyntaxException {
+	public String readName() throws IOException, JsonSyntaxException, IllegalStateException {
 		JsonState current = currentState();
-		String value;
 		switch (current) {
 		case KEY_SINGLE:
-			value = null;
-			break;
+			resetState();
+			return readSingleString();
 		case KEY_DOUBLE:
-			value = null;
-			break;
+			resetState();
+			return readDoubleString();
 		default:
 			throw illegalState(JsonToken.KEY, current);
 		}
-		resetState();
-		return value;
 	}
 
-	public void beginArray() throws IOException, JsonSyntaxException {
+	public String readString() throws IOException, JsonSyntaxException, IllegalStateException {
+		JsonState state = currentState();
+		switch (state.asToken().actualToken()) {
+		case STRING:
+			resetState();
+			return state == JsonState.VALUE_SINGLE ? readSingleString() : readDoubleString();
+		case NUMBER:
+			resetState();
+			return stringBuffer;
+		default:
+			throw illegalState(JsonToken.STRING, state);
+		}
+	}
+
+	public boolean readBoolean() throws IOException, JsonSyntaxException, IllegalStateException {
+		JsonState state = currentState();
+		switch (state) {
+		case TRUE:
+			resetState();
+			return true;
+		case FALSE:
+			resetState();
+			return false;
+		default:
+			throw illegalState(JsonToken.BOOLEAN, state);
+		}
+	}
+
+	public byte readByte() throws IOException, JsonSyntaxException, IllegalStateException, NumberFormatException {
+		JsonState state = currentState();
+		if (state != JsonState.BYTE) {
+			throw illegalState(JsonToken.BYTE, state);
+		}
+		resetState();
+		return Byte.parseByte(stringBuffer);
+	}
+
+	public short readShort() throws IOException, JsonSyntaxException, IllegalStateException, NumberFormatException {
+		JsonState state = currentState();
+		if (state != JsonState.SHORT) {
+			throw illegalState(JsonToken.SHORT, state);
+		}
+		resetState();
+		return Short.parseShort(stringBuffer);
+	}
+
+	public int readInteger() throws IOException, JsonSyntaxException, IllegalStateException, NumberFormatException {
+		JsonState state = currentState();
+		if (state != JsonState.INTEGER) {
+			throw illegalState(JsonToken.INTEGER, state);
+		}
+		resetState();
+		return Integer.parseInt(stringBuffer);
+	}
+
+	public long readLong() throws IOException, JsonSyntaxException, IllegalStateException, NumberFormatException {
+		JsonState state = currentState();
+		if (state != JsonState.LONG) {
+			throw illegalState(JsonToken.LONG, state);
+		}
+		resetState();
+		return Long.parseLong(stringBuffer);
+	}
+
+	public BigInteger readBigInteger() throws IOException, JsonSyntaxException, IllegalStateException, NumberFormatException {
+		JsonState state = currentState();
+		if (state != JsonState.BIG_INTEGER) {
+			throw illegalState(JsonToken.BIG_INTEGER, state);
+		}
+		resetState();
+		return new BigInteger(stringBuffer);
+	}
+
+	public float readFloat() throws IOException, JsonSyntaxException, IllegalStateException, NumberFormatException {
+		JsonState state = currentState();
+		if (state != JsonState.FLOAT) {
+			throw illegalState(JsonToken.FLOAT, state);
+		}
+		resetState();
+		return Float.parseFloat(stringBuffer);
+	}
+
+	public double readDouble() throws IOException, JsonSyntaxException, IllegalStateException, NumberFormatException {
+		JsonState state = currentState();
+		if (state != JsonState.DOUBLE) {
+			throw illegalState(JsonToken.DOUBLE, state);
+		}
+		resetState();
+		return Double.parseDouble(stringBuffer);
+	}
+
+	public BigDecimal readBigDecimal() throws IOException, JsonSyntaxException, IllegalStateException, NumberFormatException {
+		JsonState state = currentState();
+		if (state != JsonState.BIG_DECIMAL) {
+			throw illegalState(JsonToken.BIG_DECIMAL, state);
+		}
+		resetState();
+		return new BigDecimal(stringBuffer);
+	}
+
+	public Number readNumber() throws IOException, JsonSyntaxException, IllegalStateException, NumberFormatException {
+		JsonState state = currentState();
+		switch (state) {
+		case BYTE:
+			return readByte();
+		case SHORT:
+			return readShort();
+		case INTEGER:
+			return readInteger();
+		case LONG:
+			return readLong();
+		case BIG_INTEGER:
+			return readBigInteger();
+		case FLOAT:
+			return readFloat();
+		case DOUBLE:
+			return readDouble();
+		case BIG_DECIMAL:
+			return readBigDecimal();
+		default:
+			throw illegalState(JsonToken.NUMBER, state, true);
+		}
+	}
+
+	public void readNull() throws IOException, JsonSyntaxException, IllegalStateException {
+		JsonState state = currentState();
+		if (state != JsonState.NULL) {
+			throw illegalState(JsonToken.NULL, state);
+		}
+		resetState();
+	}
+
+	public void beginArray() throws IOException, JsonSyntaxException, IllegalStateException {
 		JsonState current = currentState();
 		if (current != JsonState.START_ARRAY) {
 			throw illegalState(JsonToken.START_ARRAY, current);
@@ -98,7 +227,7 @@ public class JsonReader {
 		resetState();
 	}
 
-	public void endArray() throws IOException, JsonSyntaxException {
+	public void endArray() throws IOException, JsonSyntaxException, IllegalStateException {
 		JsonState current = currentState();
 		if (current != JsonState.END_ARRAY) {
 			throw illegalState(JsonToken.END_ARRAY, current);
@@ -106,7 +235,7 @@ public class JsonReader {
 		resetState();
 	}
 
-	public void beginObject() throws IOException, JsonSyntaxException {
+	public void beginObject() throws IOException, JsonSyntaxException, IllegalStateException {
 		JsonState current = currentState();
 		if (current != JsonState.START_OBJECT) {
 			throw illegalState(JsonToken.START_OBJECT, current);
@@ -115,7 +244,7 @@ public class JsonReader {
 		resetState();
 	}
 
-	public void endObject() throws IOException, JsonSyntaxException {
+	public void endObject() throws IOException, JsonSyntaxException, IllegalStateException {
 		JsonState current = currentState();
 		if (current != JsonState.END_OBJECT) {
 			throw illegalState(JsonToken.END_OBJECT, current);
@@ -127,11 +256,7 @@ public class JsonReader {
 	 * Inner workings
 	 */
 
-	protected String readQuotedValue(boolean single) {
-		return single ? readSingleQuotedValue() : readDoubleQuotedValue();
-	}
-
-	protected String readSingleQuotedValue() {
+	protected String readSingleString() throws IOException, JsonSyntaxException {
 		char[] buffer = this.buffer;
 		StringBuilder builder = null;
 		while (true) {
@@ -153,23 +278,134 @@ public class JsonReader {
 				case '\\':
 					cursor = position;
 					int length1 = position - start - 1;
-					if(builder == null) {
-						int expected = (length1 + 1) * 2;
-						builder = new StringBuilder(Math.max(expected, 16));
+					if (builder == null) {
+						builder = new StringBuilder(Math.max((length1 + 1) * 2, 16));
 					}
 					builder.append(buffer, start, length1);
+					builder.append(readEscapeCharacter());
+					position = cursor;
+					limit = this.limit;
+					start = position;
+					continue;
+				case '\n':
+					lineAmount++;
+					linePosition = position;
+					continue;
 				}
+			}
+
+			if (builder == null) {
+				builder = new StringBuilder(Math.max((position - start) * 2, 16));
+			}
+			builder.append(buffer, start, position - start);
+			cursor = position;
+			if (!readToBuffer(1)) {
+				throw wrongSyntax("Never ending string");
 			}
 		}
 	}
 
-	protected String readDoubleQuotedValue() {
+	protected String readDoubleString() throws IOException, JsonSyntaxException {
+		char[] buffer = this.buffer;
+		StringBuilder builder = null;
+		while (true) {
+			int position = cursor;
+			int limit = this.limit;
 
+			int start = position;
+			while (position < limit) {
+				char current = buffer[position++];
+				switch (current) {
+				case '"':
+					cursor = position;
+					int length0 = position - start - 1;
+					if (builder == null) {
+						return new String(buffer, start, length0);
+					} else {
+						return builder.append(buffer, start, length0).toString();
+					}
+				case '\\':
+					cursor = position;
+					int length1 = position - start - 1;
+					if (builder == null) {
+						builder = new StringBuilder(Math.max((length1 + 1) * 2, 16));
+					}
+					builder.append(buffer, start, length1);
+					builder.append(readEscapeCharacter());
+					position = cursor;
+					limit = this.limit;
+					start = position;
+					continue;
+				case '\n':
+					lineAmount++;
+					linePosition = position;
+					continue;
+				}
+			}
+
+			if (builder == null) {
+				builder = new StringBuilder(Math.max((position - start) * 2, 16));
+			}
+			builder.append(buffer, start, position - start);
+			cursor = position;
+			if (!readToBuffer(1)) {
+				throw wrongSyntax("Never ending string");
+			}
+		}
 	}
-	
-	protected char readEspacedCharacter() throws IOException {
-		if(cursor == limit && !readToBuffer(1)) {
+
+	protected char readEscapeCharacter() throws IOException, JsonSyntaxException, NumberFormatException {
+		if (cursor == limit && !readToBuffer(1)) {
 			throw wrongSyntax("Never ending escape sequence");
+		}
+
+		char current = buffer[cursor++];
+		switch (current) {
+		case 'u':
+			if (cursor + 4 > limit && !readToBuffer(4)) {
+				throw wrongSyntax("Never ending escape sequence");
+			}
+
+			char output = 0;
+			for (int index = cursor, max = index + 4; index < max; index++) {
+				char check = buffer[index];
+				output <<= 4;
+				if (check >= '0' && check <= '9') {
+					output += (check - '0');
+					continue;
+				}
+				if (check >= 'a' && check <= 'f') {
+					output += (check - 'a' + 10);
+					continue;
+				}
+				if (check >= 'a' && check <= 'F') {
+					output += (check - 'A' + 10);
+					continue;
+				}
+				throw new NumberFormatException("\\u" + new String(buffer, cursor, 4));
+			}
+			cursor += 4;
+			return output;
+		case 't':
+			return '\t';
+		case 'b':
+			return '\b';
+		case 'n':
+			return '\n';
+		case 'r':
+			return '\r';
+		case 'f':
+			return '\f';
+		case '\n':
+			lineAmount++;
+			linePosition = cursor;
+		case '\'':
+		case '"':
+		case '\\':
+		case '/':
+			return current;
+		default:
+			throw wrongSyntax("Invalid exscaped sequence");
 		}
 	}
 
@@ -273,7 +509,7 @@ public class JsonReader {
 				cursor--;
 			}
 
-			if (isKeyword() || isNumber() || isHexNumber()) {
+			if (isKeyword() || isNumber()) {
 				return state;
 			}
 
@@ -508,10 +744,6 @@ public class JsonReader {
 		}
 	}
 
-	protected boolean isHexNumber() throws IOException {
-		return false;
-	}
-
 	protected boolean isLower(String value, BigDecimal comparision, boolean negative) {
 		if (negative) {
 			return new BigDecimal(value).compareTo(comparision.multiply(BigDecimal.ONE.negate())) == 1;
@@ -543,7 +775,7 @@ public class JsonReader {
 			switch (current) {
 			case '\n':
 				lineAmount++;
-				lineCurrent = position;
+				linePosition = position;
 			case ' ':
 			case '\r':
 			case '\t':
@@ -596,7 +828,7 @@ public class JsonReader {
 				switch (current) {
 				case '\n':
 					lineAmount++;
-					lineCurrent = cursor;
+					linePosition = cursor;
 				case '\r':
 					break;
 				default:
@@ -610,7 +842,7 @@ public class JsonReader {
 			for (; cursor + 2 <= limit || readToBuffer(2); cursor++) {
 				if (buffer[cursor] == '\n') {
 					lineAmount++;
-					lineCurrent = cursor + 1;
+					linePosition = cursor + 1;
 					continue;
 				}
 				if (buffer[cursor] != '*' || buffer[cursor + 1] != '/') {
@@ -626,7 +858,7 @@ public class JsonReader {
 
 	protected boolean readToBuffer(int minimum) throws IOException {
 		char[] buffer = this.buffer;
-		lineCurrent -= cursor;
+		linePosition -= cursor;
 		if (limit != cursor) {
 			limit -= cursor;
 			System.arraycopy(buffer, cursor, buffer, 0, limit);
@@ -637,9 +869,9 @@ public class JsonReader {
 		int total;
 		while ((total = reader.read(buffer, limit, buffer.length - limit)) != -1) {
 			limit += total;
-			if (lineAmount == 0 && lineCurrent == 0 && limit > 0 && buffer[0] == '\ufeff') {
+			if (lineAmount == 0 && linePosition == 0 && limit > 0 && buffer[0] == '\ufeff') {
 				cursor++;
-				lineCurrent++;
+				linePosition++;
 				minimum++;
 			}
 			if (limit >= minimum) {
@@ -719,7 +951,11 @@ public class JsonReader {
 	}
 
 	protected IllegalStateException illegalState(JsonToken expected, JsonState state) {
-		return new IllegalStateException(applyLocation("Expected " + expected.name() + " but was " + state.asToken().name()));
+		return illegalState(expected, state, false);
+	}
+
+	protected IllegalStateException illegalState(JsonToken expected, JsonState state, boolean actual) {
+		return new IllegalStateException(applyLocation("Expected " + expected.name() + " but was " + (actual ? state.asToken() : state.asToken()).name()));
 	}
 
 	protected String applyLocation(String message) {
@@ -727,7 +963,7 @@ public class JsonReader {
 	}
 
 	protected String getLocation() {
-		return " at line " + (lineAmount + 1) + " position " + (cursor - lineCurrent + 1);
+		return " at line " + (lineAmount + 1) + " position " + (cursor - linePosition + 1);
 	}
 
 }
