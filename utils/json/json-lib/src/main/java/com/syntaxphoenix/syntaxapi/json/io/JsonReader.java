@@ -41,6 +41,7 @@ public class JsonReader {
 	public final char[] buffer = new char[1024];
 
 	public final Stack<JsonScope> stack = new Stack<>();
+	public JsonScope scope;
 	public JsonState state;
 
 	public JsonState next;
@@ -64,7 +65,8 @@ public class JsonReader {
 	 */
 
 	public JsonToken next() throws IOException, JsonSyntaxException {
-		return nextState(false).asToken();
+		JsonToken token = nextState(false).asToken();
+		return token;
 	}
 
 	public boolean hasNext() throws IOException, JsonSyntaxException {
@@ -427,8 +429,10 @@ public class JsonReader {
 
 	protected JsonState nextState(boolean peek) throws IOException, JsonSyntaxException {
 		next = null;
-		JsonScope current = peek ? peek() : pop();
-		System.out.println(current);
+		JsonScope current = scope;
+		if (scope == null) {
+			current = scope = peek ? peek() : pop();
+		}
 		try {
 			switch (current) {
 			case EMPTY_ARRAY:
@@ -492,7 +496,6 @@ public class JsonReader {
 			}
 
 			char character = nextCharacter();
-			System.out.println(cursor);
 			switch (character) {
 			case ']':
 				if (current == JsonScope.EMPTY_ARRAY) {
@@ -781,6 +784,7 @@ public class JsonReader {
 			case '\n':
 				lineAmount++;
 				linePosition = position;
+				continue;
 			case ' ':
 			case '\r':
 			case '\t':
@@ -799,9 +803,11 @@ public class JsonReader {
 				switch (test) {
 				case '*':
 					cursor++;
-					if (skipTo(INDICATOR_EOC)) {
+					if (!skipTo(INDICATOR_EOC)) {
 						throw wrongSyntax("Never ending comment");
 					}
+					position = cursor + 2;
+					limit = this.limit;
 					continue;
 				case '/':
 					cursor++;

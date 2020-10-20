@@ -1,7 +1,7 @@
 package com.syntaxphoenix.syntaxapi.data;
 
-import com.syntaxphoenix.syntaxapi.data.key.DataKey;
-import com.syntaxphoenix.syntaxapi.data.key.NamespacedKey;
+import com.syntaxphoenix.syntaxapi.utils.key.IKey;
+import com.syntaxphoenix.syntaxapi.utils.key.NamespacedKey;
 
 public abstract class DataContainer implements IDataContainer {
 
@@ -9,7 +9,7 @@ public abstract class DataContainer implements IDataContainer {
 		return get(key) != null;
 	}
 
-	public boolean has(DataKey key) {
+	public boolean has(IKey key) {
 		return get(key) != null;
 	}
 
@@ -22,7 +22,7 @@ public abstract class DataContainer implements IDataContainer {
 		return true;
 	}
 
-	public boolean has(DataKey key, DataType<?, ?> type) {
+	public boolean has(IKey key, DataType<?, ?> type) {
 		Object obj = get(key);
 		if (obj == null)
 			return false;
@@ -35,24 +35,24 @@ public abstract class DataContainer implements IDataContainer {
 		return type.fromPrimitiveObj(getAdapterContext(), get(key));
 	}
 
-	public <E> E get(DataKey key, DataType<?, E> type) {
+	public <E> E get(IKey key, DataType<?, E> type) {
 		return type.fromPrimitiveObj(getAdapterContext(), get(key));
 	}
 
-	public Object get(DataKey key) {
+	public Object get(IKey key) {
 		return get(key.toString());
 	}
 
-	public <E, V> void set(DataKey key, E value, DataType<V, E> type) {
+	public <E, V> void set(IKey key, E value, DataType<V, E> type) {
 		set(key.toString(), value, type);
 	}
 
-	public boolean remove(DataKey key) {
+	public boolean remove(IKey key) {
 		return remove(key.toString());
 	}
 
-	public DataKey[] getDataKeys() {
-		return getKeys().stream().map(NamespacedKey::fromString).toArray(DataKey[]::new);
+	public IKey[] getKeys() {
+		return getKeyspaces().stream().map(NamespacedKey::fromString).toArray(IKey[]::new);
 	}
 
 }

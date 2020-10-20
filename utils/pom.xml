@@ -39,5 +39,6 @@
 		<module>json</module>
 		<module>io</module>
 		<module>location</module>
+		<module>key</module>
 	</modules>
 </project>

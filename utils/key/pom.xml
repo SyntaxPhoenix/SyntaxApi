@@ -4,11 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.syntaxphoenix.syntaxapi</groupId>
-		<artifactId>SyntaxApi</artifactId>
-		<version>2.1.1</version>
+		<artifactId>utils</artifactId>
+		<version>2.0.2</version>
 	</parent>
-	<version>2.0.4</version>
-	<artifactId>command</artifactId>
+	<artifactId>key</artifactId>
 	<packaging>jar</packaging>
 
 	<build>
@@ -63,33 +62,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<dependencies>
-		<dependency>
-			<groupId>com.syntaxphoenix.syntaxapi</groupId>
-			<artifactId>exception</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.syntaxphoenix.syntaxapi</groupId>
-			<artifactId>alias</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.syntaxphoenix.syntaxapi</groupId>
-			<artifactId>reflection</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.syntaxphoenix.syntaxapi</groupId>
-			<artifactId>java</artifactId>
-			<version>2.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.syntaxphoenix.syntaxapi</groupId>
-			<artifactId>logging</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-	</dependencies>
-
 </project>
