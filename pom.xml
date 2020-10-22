@@ -92,28 +92,6 @@
 		<profile>
 			<id>ossrh</id>
 			<activation />
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.honton.chas</groupId>
-						<artifactId>exists-maven-plugin</artifactId>
-						<version>0.3.0</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>remote</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<exists>
-								<repository>https://repo1.maven.org/maven2/</repository>
-								<snapshotRepository>https://oss.sonatype.org/content/repositories/snapshots</snapshotRepository>
-							</exists>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
 			<distributionManagement>
 				<repository>
 					<id>ossrh</id>
