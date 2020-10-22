@@ -2,5 +2,6 @@
 /target/
 /.settings/
 /.classpath
+/.gitlab-ci.yml
 /.project
 /debug.log
