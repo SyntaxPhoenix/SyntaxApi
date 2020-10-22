@@ -11,6 +11,8 @@ import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 
 public final class ArgumentMap {
 
+	public static final ArgumentMap EMPTY = new ArgumentMap(Collections.emptyMap());
+
 	protected final Map<String, BaseArgument> arguments = Collections.synchronizedMap(new HashMap<>());
 
 	private final boolean locked;

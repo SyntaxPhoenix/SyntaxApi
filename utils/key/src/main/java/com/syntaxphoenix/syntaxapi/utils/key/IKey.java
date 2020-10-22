@@ -1,8 +1,6 @@
 package com.syntaxphoenix.syntaxapi.utils.key;
 
-public interface IKey {
-
-	INamespace<?> getNamespace();
+public interface IKey extends INamespaced {
 
 	String getKey();
 

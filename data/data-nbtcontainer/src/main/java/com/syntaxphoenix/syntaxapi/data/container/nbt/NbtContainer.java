@@ -68,7 +68,7 @@ public class NbtContainer extends DataContainer implements DataAdapterContext, N
 	}
 
 	@Override
-	public Set<String> getKeys() {
+	public Set<String> getKeyspaces() {
 		return root.getKeys();
 	}
 
