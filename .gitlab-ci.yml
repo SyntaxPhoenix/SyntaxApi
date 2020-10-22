@@ -1,7 +1,6 @@
 image: maven:3-jdk-8
 
 stages:
-  - gpg
   - build
   - deploy
 
@@ -16,7 +15,7 @@ cache:
     - target/
 
 gpg:
-  stage: gpg
+  stage: build
   script:
     - gpg --no-tty --batch --yes --passphrase $GPG_PASSPHRASE --import $GPG_SECRET_KEY
   except:
