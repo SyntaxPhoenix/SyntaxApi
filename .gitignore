@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /bin/
 /target/
 /.settings/
@@ -5,3 +6,12 @@
 /.gitlab-ci.yml
 /.project
 /debug.log
+=======
+/bin/
+/target/
+/.settings/
+/.classpath
+/.gitlab-ci.yml
+/.project
+/debug.log
+>>>>>>> branch 'master' of https://git.syntaxphoenix.com/resources/syntaxapi-java.git
