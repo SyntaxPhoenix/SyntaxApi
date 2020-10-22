@@ -11,6 +11,7 @@
 	</parent>
 	<artifactId>version</artifactId>
 	<version>2.0.4</version>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
@@ -18,6 +19,7 @@
 			<version>2.0.2</version>
 		</dependency>
 	</dependencies>
+	
 	<build>
 		<plugins>
 			<plugin>
