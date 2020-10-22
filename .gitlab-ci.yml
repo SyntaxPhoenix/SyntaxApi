@@ -16,6 +16,8 @@ cache:
 
 build:
   stage: build
+  before_script:
+    - $BEFORE_SCRIPT
   script:
     - mvn $MAVEN_CLI_OPTS clean install $PROFILE_OPTS $MAVEN_ADDITION
   artifacts:
