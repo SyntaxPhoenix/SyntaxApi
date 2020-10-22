@@ -3,13 +3,13 @@ package com.syntaxphoenix.syntaxapi.command;
 import com.syntaxphoenix.syntaxapi.command.range.*;
 
 public abstract class BaseArgumentRange {
-	
+
 	private String label;
-	
+
 	public String getLabel() {
 		return label;
 	}
-	
+
 	public BaseArgumentRange setLabel(String label) {
 		this.label = label;
 		return this;
@@ -22,16 +22,16 @@ public abstract class BaseArgumentRange {
 	public abstract boolean hasType(BaseArgument argument);
 
 	public abstract boolean isInRange(BaseArgument argument);
-	
+
 	@Override
 	public abstract String toString();
-	
+
 	public abstract String toString(ArgumentRangeSerializer serializer);
 
 	public TextSizeRange asTextSize() {
 		return (TextSizeRange) this;
 	}
-	
+
 	public TextChooseRange asTextChoose() {
 		return (TextChooseRange) this;
 	}

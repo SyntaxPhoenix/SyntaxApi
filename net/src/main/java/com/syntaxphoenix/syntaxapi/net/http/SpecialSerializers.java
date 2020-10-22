@@ -7,18 +7,24 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class SpecialSerializers {
-	
+
 	/*
 	 * Default serializers
 	 */
-	
+
 	/*
 	 * Json serializers
 	 */
-	
+
 	public static final JsonContentSerializer PLAIN = new JsonContentSerializer() {
 
-		private final char[] CHARS = new char[] { ':', ' ', '\t', '\n', '-' };
+		private final char[] CHARS = new char[] {
+				':',
+				' ',
+				'\t',
+				'\n',
+				'-'
+		};
 		private final String NULL = "null";
 		private final String NEXT = "==>";
 

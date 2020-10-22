@@ -39,7 +39,7 @@ public class DownloadTest implements Consumer<String[]>, Printer {
 		}
 
 		Duration duration = Duration.between(start, Instant.now());
-		
+
 		print("This took " + (TimeUnit.SECONDS.toMillis(duration.getSeconds()) + TimeUnit.NANOSECONDS.toMillis(duration.getNano())) + "ms!");
 
 	}

@@ -8,7 +8,7 @@ import com.syntaxphoenix.syntaxapi.nbt.NbtNamedTag;
 import com.syntaxphoenix.syntaxapi.utils.io.Deserializer;
 
 public class NbtDeserializer implements Deserializer<NbtNamedTag> {
-	
+
 	public static final NbtDeserializer COMPRESSED = new NbtDeserializer(true);
 	public static final NbtDeserializer UNCOMPRESSED = new NbtDeserializer(false);
 
@@ -32,8 +32,7 @@ public class NbtDeserializer implements Deserializer<NbtNamedTag> {
 
 	@Override
 	public NbtNamedTag fromStream(InputStream stream) throws IOException {
-		NbtInputStream nbtStream = compressed ? new NbtInputStream(new GZIPInputStream(stream))
-				: new NbtInputStream(stream);
+		NbtInputStream nbtStream = compressed ? new NbtInputStream(new GZIPInputStream(stream)) : new NbtInputStream(stream);
 
 		NbtNamedTag tag = nbtStream.readNamedTag();
 		nbtStream.close();

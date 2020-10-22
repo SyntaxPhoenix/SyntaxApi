@@ -10,13 +10,13 @@ public class ColorTest implements Consumer<String[]>, Printer {
 
 	@Override
 	public void accept(String[] args) {
-		
+
 		Random random = new Random();
-		
+
 		Color color = new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255));
-		
+
 		print(color.toString());
-		
+
 	}
 
 }

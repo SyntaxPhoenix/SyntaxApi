@@ -7,7 +7,7 @@ public interface IKey extends INamespaced {
 	default boolean isSimilar(IKey key) {
 		return key != null && (key.getKey().equals(getKey()) && getNamespace().isSimilar(key.getNamespace()));
 	}
-	
+
 	default int hash() {
 		return asString().hashCode();
 	}

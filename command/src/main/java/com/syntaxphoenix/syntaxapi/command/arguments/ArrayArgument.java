@@ -12,31 +12,31 @@ import com.syntaxphoenix.syntaxapi.command.BaseArgument;
  */
 @SuppressWarnings("unchecked")
 public class ArrayArgument<E extends BaseArgument> extends BaseArgument {
-	
+
 	private E[] value;
-	
+
 	public ArrayArgument(ArgumentType type) {
 		this.value = (E[]) Array.newInstance(type.getClassType(), 8);
 	}
-	
+
 	public ArrayArgument(ArgumentType type, int length) {
 		this.value = (E[]) Array.newInstance(type.getClassType(), length);
 	}
-	
+
 	public ArrayArgument(E... value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public ArgumentType getType() {
 		return ArgumentType.ARRAY;
 	}
-	
+
 	@Override
 	public Object asObject() {
 		return value;
 	}
-	
+
 	public E[] getValue() {
 		return value;
 	}

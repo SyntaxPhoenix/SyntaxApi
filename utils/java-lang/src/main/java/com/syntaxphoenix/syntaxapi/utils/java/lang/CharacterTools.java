@@ -6,7 +6,7 @@ public class CharacterTools {
 		var1[var2 + 1] = Character.lowSurrogate(var0);
 		var1[var2] = Character.highSurrogate(var0);
 	}
-	
+
 	public static int codePointBeforeImpl(char[] var0, int var1, int var2) {
 		--var1;
 		char var3 = var0[var1];

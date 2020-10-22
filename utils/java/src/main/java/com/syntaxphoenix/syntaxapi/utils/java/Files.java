@@ -69,13 +69,15 @@ public class Files {
 	}
 
 	public static List<File> listFiles(File directory, String fileEnd) {
-		return Arrays.stream(directory.listFiles()).filter(file -> file.getName().endsWith(fileEnd))
-				.collect(Collect.collectList((output, input) -> {
-					if (input.isDirectory())
-						output.addAll(listFiles(input));
-					else
-						output.add(input);
-				}));
+		return Arrays
+			.stream(directory.listFiles())
+			.filter(file -> file.isDirectory() || file.getName().endsWith(fileEnd))
+			.collect(Collect.collectList((output, input) -> {
+				if (input.isDirectory())
+					output.addAll(listFiles(input));
+				else
+					output.add(input);
+			}));
 	}
 
 	/*
@@ -92,7 +94,7 @@ public class Files {
 		File zipFile = new File(folder, name.replace("%count%", tries + ""));
 		while (zipFile.exists())
 			zipFile = new File(folder, name.replace("%count%", (tries++) + ""));
-		
+
 		try {
 			Zipper.zip(zipFile, file);
 		} catch (IOException e) {

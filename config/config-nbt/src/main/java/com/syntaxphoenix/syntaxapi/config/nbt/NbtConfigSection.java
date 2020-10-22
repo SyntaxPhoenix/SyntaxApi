@@ -209,7 +209,7 @@ public class NbtConfigSection extends BaseSection implements NbtStorage<NbtCompo
 		set(section.getName(), section.asNbt());
 		return section;
 	}
-	
+
 	@Override
 	public String toString() {
 		return asNbt().toMSONString();

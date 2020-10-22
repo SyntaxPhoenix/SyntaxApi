@@ -66,7 +66,7 @@ public class MainMenu extends AbstractMenu {
 		}
 
 	}
-	
+
 	/**
 	 * @see com.syntaxphoenix.syntaxapi.test.menu.AbstractMenu#open(com.syntaxphoenix.syntaxapi.test.utils.InputReader)
 	 */
@@ -80,7 +80,7 @@ public class MainMenu extends AbstractMenu {
 				select = Integer.parseInt(input);
 			}
 			if (select >= getSize() || select < 0) {
-				if(select == -1) {
+				if (select == -1) {
 					print("");
 					print("Goodbye!");
 					try {

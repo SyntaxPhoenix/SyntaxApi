@@ -15,7 +15,7 @@ public class Strings {
 	public static boolean isNumeric(String msg) {
 		return NUMBER_PATTERN.matcher(msg).matches();
 	}
-	
+
 	public static boolean isDecimal(String msg) {
 		return DECIMAL_PATTERN.matcher(msg).matches();
 	}
@@ -60,14 +60,15 @@ public class Strings {
 	}
 
 	public static UUID toUUID(String id) {
-		return UUID.fromString(String.valueOf(id.substring(0, 8)) + "-" + id.substring(8, 12) + "-"
-				+ id.substring(12, 16) + "-" + id.substring(16, 20) + "-" + id.substring(20, 32));
+		return UUID
+			.fromString(String.valueOf(id.substring(0, 8)) + "-" + id.substring(8, 12) + "-" + id.substring(12, 16) + "-" + id.substring(16, 20) + "-"
+				+ id.substring(20, 32));
 	}
 
 	public static int count(String message, Character character) {
 		int count = 0;
 		Matcher matcher = Pattern.compile(character.toString()).matcher(message);
-		while(matcher.find())
+		while (matcher.find())
 			count++;
 		return count;
 	}
@@ -78,7 +79,7 @@ public class Strings {
 		}
 		return false;
 	}
-	
+
 	public static String firstLetterToUpperCase(String string) {
 		String letter = (string = string.toLowerCase()).substring(0, 1);
 		return string.replaceFirst(letter, letter.toUpperCase());

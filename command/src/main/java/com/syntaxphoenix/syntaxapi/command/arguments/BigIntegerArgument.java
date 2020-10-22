@@ -31,7 +31,7 @@ public class BigIntegerArgument extends NumericArgument {
 	public Object asObject() {
 		return value;
 	}
-	
+
 	@Override
 	public Number asNumber() {
 		return value;

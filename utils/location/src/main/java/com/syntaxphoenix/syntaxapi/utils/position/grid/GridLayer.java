@@ -16,17 +16,17 @@ public final class GridLayer<V> {
 	public GridRow<V>[] getRows() {
 		return rows.toArray(new GridRow[0]);
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public long getEntryCount() {
 		if (rows.isEmpty())
 			return 0;
 		long output = 0;
 		for (GridRow<V> row : rows)
-			output =+ row.getEntryCount();
+			output = +row.getEntryCount();
 		return output;
 	}
 
@@ -89,7 +89,7 @@ public final class GridLayer<V> {
 				lowest = buffer;
 		return lowest;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -138,7 +138,7 @@ public final class GridLayer<V> {
 	}
 
 	public GridLayer<V> set(int x, int z, V value) {
-		if(value == null)
+		if (value == null)
 			return this;
 		Optional<GridRow<V>> option = getOptionalRow(x);
 		GridRow<V> row;

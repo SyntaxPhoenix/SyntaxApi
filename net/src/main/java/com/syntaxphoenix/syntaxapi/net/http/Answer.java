@@ -11,8 +11,7 @@ import java.util.Set;
 
 public abstract class Answer<E> {
 
-	public static final List<String> BLOCKED = Arrays
-		.asList("Content-Type", "Server", "Date", "Content-Length", "Set-Cookie");
+	public static final List<String> BLOCKED = Arrays.asList("Content-Type", "Server", "Date", "Content-Length", "Set-Cookie");
 
 	protected final HashMap<String, String> headers = new HashMap<>();
 	protected final ArrayList<Cookie> cookies = new ArrayList<>();
@@ -84,11 +83,7 @@ public abstract class Answer<E> {
 
 	public Answer<E> removeCookie(String key) {
 		synchronized (cookies) {
-			cookies
-				.stream()
-				.filter(cookie -> cookie.getName().equals(key))
-				.findFirst()
-				.ifPresent(cookie -> cookies.remove(cookie));
+			cookies.stream().filter(cookie -> cookie.getName().equals(key)).findFirst().ifPresent(cookie -> cookies.remove(cookie));
 		}
 		return this;
 	}
@@ -156,7 +151,7 @@ public abstract class Answer<E> {
 				continue;
 			writer.write(header);
 		}
-		
+
 		Cookie[] cookie;
 		synchronized (cookies) {
 			cookie = cookies.toArray(new Cookie[0]);

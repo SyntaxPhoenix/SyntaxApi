@@ -5,17 +5,17 @@ import com.syntaxphoenix.syntaxapi.command.ArgumentType;
 import com.syntaxphoenix.syntaxapi.command.NumericArgument;
 
 public class ByteArgument extends NumericArgument {
-	
+
 	private Byte value;
-	
+
 	public ByteArgument() {
 		this.value = 0;
 	}
-	
+
 	public ByteArgument(Byte value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public ArgumentType getType() {
 		return ArgumentType.BYTE;
@@ -25,12 +25,12 @@ public class ByteArgument extends NumericArgument {
 	public Object asObject() {
 		return value;
 	}
-	
+
 	@Override
 	public Number asNumber() {
 		return value;
 	}
-	
+
 	public Byte getValue() {
 		return value;
 	}

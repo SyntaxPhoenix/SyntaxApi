@@ -13,8 +13,7 @@ import com.syntaxphoenix.syntaxapi.net.http.StandardNamedType;
 public class WebPathHandler implements IWebPathHandler {
 
 	@Override
-	public void handlePath(File directory, HttpSender sender, HttpWriter writer, ReceivedRequest data)
-		throws Exception {
+	public void handlePath(File directory, HttpSender sender, HttpWriter writer, ReceivedRequest data) throws Exception {
 		File file = new File(directory, data.getPathAsString());
 		if (!file.exists()) {
 			new NamedAnswer(StandardNamedType.PLAIN).code(ResponseCode.NOT_FOUND).write(writer);

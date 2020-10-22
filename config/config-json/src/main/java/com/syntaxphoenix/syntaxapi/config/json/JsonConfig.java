@@ -25,7 +25,7 @@ public class JsonConfig extends JsonConfigSection implements BaseConfig {
 				builder.append('\n');
 			}
 			scanner.close();
-			
+
 			String json = builder.toString();
 			fromJsonString(json.substring(0, json.length() - 1));
 
@@ -36,12 +36,12 @@ public class JsonConfig extends JsonConfigSection implements BaseConfig {
 	@Override
 	public void save(File file) throws IOException {
 
-		if(!file.exists()) {
+		if (!file.exists()) {
 			String parentPath = file.getParent();
-			if(parentPath != null && !parentPath.isEmpty()) {
+			if (parentPath != null && !parentPath.isEmpty()) {
 				File parent = file.getParentFile();
-				if(parent.exists()) {
-					if(!parent.isDirectory()) {
+				if (parent.exists()) {
+					if (!parent.isDirectory()) {
 						parent.delete();
 						parent.mkdirs();
 					}
@@ -51,7 +51,7 @@ public class JsonConfig extends JsonConfigSection implements BaseConfig {
 			}
 			file.createNewFile();
 		}
-		
+
 		FileWriter writer = new FileWriter(file);
 		writer.write(toJsonString());
 		writer.close();

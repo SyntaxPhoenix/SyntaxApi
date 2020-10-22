@@ -15,8 +15,7 @@ import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
  */
 public class CommandManager {
 
-	protected BiFunction<CommandManager, String, ? extends BaseInfo> infoConstructor = ((manager,
-		label) -> new DefaultInfo(manager, label));
+	protected BiFunction<CommandManager, String, ? extends BaseInfo> infoConstructor = ((manager, label) -> new DefaultInfo(manager, label));
 
 	protected final AliasMap<BaseCommand> commands = new AliasMap<>();
 	protected ArgumentIdentifier validator = ArgumentIdentifier.DEFAULT;
@@ -132,11 +131,7 @@ public class CommandManager {
 		synchronized (commands) {
 			if (!commands.containsValue(command))
 				return this;
-			Optional<Entry<Alias, BaseCommand>> optional = commands
-				.entrySet()
-				.stream()
-				.filter(entry -> entry.getValue().equals(command))
-				.findFirst();
+			Optional<Entry<Alias, BaseCommand>> optional = commands.entrySet().stream().filter(entry -> entry.getValue().equals(command)).findFirst();
 			if (optional.isPresent())
 				commands.remove(optional.get().getKey());
 		}
@@ -159,11 +154,7 @@ public class CommandManager {
 			String[] conflicts = commands.hasConflict(alias).toArray(new String[0]);
 			if (conflicts.length == 0)
 				return this;
-			Alias[] aliases = commands
-				.keySet()
-				.stream()
-				.filter(current -> hasLabel(conflicts, current))
-				.toArray(size -> new Alias[size]);
+			Alias[] aliases = commands.keySet().stream().filter(current -> hasLabel(conflicts, current)).toArray(size -> new Alias[size]);
 			for (int index = 0; index < aliases.length; index++)
 				commands.remove(aliases[index]);
 		}

@@ -29,17 +29,17 @@ public class GridMap<V> {
 	public GridLayer<V>[] getLayers() {
 		return layers.toArray(new GridLayer[0]);
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public long getEntryCount() {
 		if (layers.isEmpty())
 			return 0;
 		long output = 0;
 		for (GridLayer<V> layer : layers)
-			output =+ layer.getEntryCount();
+			output = +layer.getEntryCount();
 		return output;
 	}
 
@@ -186,7 +186,7 @@ public class GridMap<V> {
 	}
 
 	public GridMap<V> set(int y, int x, int z, V value) {
-		if(value == null)
+		if (value == null)
 			return this;
 		GridLayer<V> layer;
 		if (type.is2D()) {

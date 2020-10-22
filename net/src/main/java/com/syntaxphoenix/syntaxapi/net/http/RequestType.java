@@ -2,7 +2,16 @@ package com.syntaxphoenix.syntaxapi.net.http;
 
 public enum RequestType {
 
-	GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH, NONE;
+	GET,
+	HEAD,
+	POST,
+	PUT,
+	DELETE,
+	CONNECT,
+	OPTIONS,
+	TRACE,
+	PATCH,
+	NONE;
 
 	public static RequestType fromString(String value) {
 		value = value.toUpperCase();

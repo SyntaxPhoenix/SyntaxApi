@@ -4,7 +4,7 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 
 	private long seed;
 	private int state;
-	
+
 	private int multiplier = 87454568;
 	private int increment = 3214561;
 	private int modulu = 2 ^ 31;
@@ -16,24 +16,24 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 	public LinearCongruentialGenerator(long seed) {
 		setSeed(System.currentTimeMillis());
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public void setSeed(long seed) {
 		this.seed = seed;
 		this.state = Math.toIntExact(seed >> 32);
 	}
-	
+
 	public long getSeed() {
 		return seed;
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	@Override
 	public void setCompressedState(long state) {
 		this.state = Math.toIntExact(seed);
@@ -47,29 +47,29 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 	/*
 	 * 
 	 */
-	
+
 	public int getMultipliert() {
 		return multiplier;
 	}
-	
+
 	public void setMultiplier(int multiplier) {
 		this.multiplier = multiplier;
 		checkVariables();
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public int getIncrement() {
 		return increment;
 	}
-	
+
 	public void setIncrement(int increment) {
 		this.increment = increment;
 		checkVariables();
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -82,7 +82,7 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 		this.modulu = modulu;
 		checkVariables();
 	}
-	
+
 	/*
 	 * 
 	 * 
@@ -91,9 +91,9 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 
 	@Override
 	public boolean nextBoolean() {
-		return next(1) == 0; 
+		return next(1) == 0;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -110,12 +110,12 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 
 	@Override
 	public short nextShort(short min, short max) {
-		if(max <= min) {
+		if (max <= min) {
 			return min;
 		}
 		return (short) (min + Math.abs((int) (nextShort() % (max - min))));
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -185,7 +185,7 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 	/*
 	 * 
 	 */
-	
+
 	@Override
 	public double nextDouble() {
 		return (((long) (next(26)) << 27) + next(27)) * 0x1.0p-53;
@@ -203,24 +203,24 @@ public class LinearCongruentialGenerator extends RandomNumberGenerator {
 		}
 		return min + (nextDouble() * (max - min));
 	}
-	
+
 	/*
 	 * 
 	 * 
 	 * 
 	 */
-	
+
 	private void checkVariables() {
-		if(modulu <= 0)
+		if (modulu <= 0)
 			modulu = 1;
-		if(multiplier <= 0)
+		if (multiplier <= 0)
 			multiplier = 1;
-		if(increment < 0)
+		if (increment < 0)
 			increment = 0;
-		if(multiplier > modulu)
+		if (multiplier > modulu)
 			multiplier = modulu != 1 ? modulu - 1 : 1;
-		if(increment > modulu)
+		if (increment > modulu)
 			increment = modulu - 1;
 	}
-	
+
 }

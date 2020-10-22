@@ -12,7 +12,7 @@ public abstract class BaseSection implements IBaseSection {
 
 	protected final SectionMap<String, Object> values = new SectionMap<>();;
 	private final String name;
-	
+
 	public BaseSection(String name) {
 		this.name = name;
 	}
@@ -20,7 +20,7 @@ public abstract class BaseSection implements IBaseSection {
 	public Map<String, Object> getValues() {
 		return values;
 	}
-	
+
 	public Set<String> getKeys() {
 		return values.keySet();
 	}
@@ -28,29 +28,29 @@ public abstract class BaseSection implements IBaseSection {
 	public String getName() {
 		return name;
 	}
-	
+
 	public boolean isValid() {
 		return !name.isEmpty();
 	}
-	
+
 	public void clear() {
 		values.clear();
 	}
-	
+
 	public boolean contains(String path) {
 		return get(path) != null;
 	}
-	
+
 	public <E> boolean isInstance(String path, E value) {
 		Object object = get(path);
 		return object == null ? false : (value == null ? false : object.getClass().isAssignableFrom(value.getClass()));
 	}
-	
+
 	public <E> boolean isInstance(String path, Class<E> value) {
 		Object object = get(path);
 		return object == null ? false : (value == null ? false : object.getClass().isAssignableFrom(value));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public <E> E check(String path, E value) {
 		Object current = get(path);
@@ -60,7 +60,7 @@ public abstract class BaseSection implements IBaseSection {
 		set(path, value);
 		return value;
 	}
-	
+
 	public Object get(String path) {
 		if (!path.isEmpty()) {
 			return get(ConfigTools.getKeys(path));
@@ -99,14 +99,14 @@ public abstract class BaseSection implements IBaseSection {
 		}
 		return null;
 	}
-	
+
 	public BaseSection getSection(String path) {
 		if (!path.isEmpty()) {
 			return getSection(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
-	
+
 	private BaseSection getSection(String[] key) {
 		if (key.length != 0) {
 			if (values.containsKey(key[0])) {
@@ -125,14 +125,14 @@ public abstract class BaseSection implements IBaseSection {
 		}
 		return null;
 	}
-	
+
 	public BaseSection createSection(String path) {
 		if (!path.isEmpty()) {
 			return createSection(ConfigTools.getKeys(path));
 		}
 		return null;
 	}
-	
+
 	private BaseSection createSection(String[] key) {
 		if (key.length != 0) {
 			if (values.containsKey(key[0])) {
@@ -160,7 +160,7 @@ public abstract class BaseSection implements IBaseSection {
 		}
 		return null;
 	}
-	
+
 	protected BaseSection saveSection(BaseSection section) {
 		set(section.getName(), section);
 		return section;
@@ -183,17 +183,17 @@ public abstract class BaseSection implements IBaseSection {
 			section.set(key, value);
 		}
 	}
-	
+
 	public SectionMap<String, Object> toMap() {
 		SectionMap<String, Object> output = new SectionMap<>();
-		if(values.isEmpty()) {
+		if (values.isEmpty()) {
 			return output;
 		}
 		Set<Entry<String, Object>> set = values.entrySet();
-		for(Entry<String, Object> entry : set) {
+		for (Entry<String, Object> entry : set) {
 			Object out = entry.getValue();
-			if(out instanceof BaseSection) {
-				if(isSectionInstance((BaseSection) out)) {
+			if (out instanceof BaseSection) {
+				if (isSectionInstance((BaseSection) out)) {
 					out = ((BaseSection) out).toMap();
 				}
 			}
@@ -201,17 +201,17 @@ public abstract class BaseSection implements IBaseSection {
 		}
 		return output;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void fromMap(SectionMap<String, Object> input) {
 		clear();
 		Set<Entry<String, Object>> set = input.entrySet();
-		if(set.isEmpty()) {
+		if (set.isEmpty()) {
 			return;
 		}
-		for(Entry<String, Object> entry : set) {
+		for (Entry<String, Object> entry : set) {
 			Object obj = entry.getValue();
-			if(obj instanceof SectionMap) {
+			if (obj instanceof SectionMap) {
 				createSection(entry.getKey()).fromMap((SectionMap<String, Object>) obj);
 			} else {
 				set(entry.getKey(), obj);
@@ -220,7 +220,7 @@ public abstract class BaseSection implements IBaseSection {
 	}
 
 	protected abstract BaseSection initSection(String name);
-	
+
 	protected abstract boolean isSectionInstance(BaseSection section);
-	
+
 }

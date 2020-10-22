@@ -7,5 +7,5 @@ public class EndOfFileException extends RuntimeException {
 	public EndOfFileException() {
 		super();
 	}
-	
+
 }

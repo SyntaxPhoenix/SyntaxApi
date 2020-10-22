@@ -1,23 +1,22 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.syntaxphoenix.syntaxapi</groupId>
 	<artifactId>SyntaxApi</artifactId>
-	<version>2.1.1</version>
+	<version>2.1.2</version>
 	<packaging>pom</packaging>
-
 	<name>SyntaxApi</name>
 	<description>A Java Library to make some things easier and provide helpful tools</description>
 	<url>https://gitlab.com/SyntaxPhoenix</url>
-
 	<licenses>
 		<license>
 			<name>MIT License</name>
 			<url>https://gitlab.com/SyntaxPhoenix/syntax-api/-/raw/master/LICENSE</url>
 		</license>
 	</licenses>
-
 	<developers>
 		<developer>
 			<name>Laura Endreß</name>
@@ -26,7 +25,33 @@
 			<organizationUrl>https://syntaxphoenix.com/</organizationUrl>
 		</developer>
 	</developers>
-
+	<modules>
+		<module>net</module>
+		<module>command</module>
+		<module>reflection</module>
+		<module>utils</module>
+		<module>random</module>
+		<module>exception</module>
+		<module>logging</module>
+		<module>event</module>
+		<module>service</module>
+		<module>nbt</module>
+		<module>thread</module>
+		<module>version</module>
+		<module>config</module>
+		<module>data</module>
+		<module>test</module>
+	</modules>
+	<scm>
+		<connection>scm:git:git://gitlab.com/SyntaxPhoenix/syntax-api.git</connection>
+		<developerConnection>scm:git:git@gitlab.com:SyntaxPhoenix/syntax-api.git</developerConnection>
+		<url>https://gitlab.com/SyntaxPhoenix/syntax-api/</url>
+	</scm>
+	<properties>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<repositories>
 		<repository>
 			<id>central</id>
@@ -37,97 +62,9 @@
 			<url>http://nexus.syntaxphoenix.com/repository/projects</url>
 		</repository>
 	</repositories>
-
-	<scm>
-		<connection>scm:git:git://gitlab.com/SyntaxPhoenix/syntax-api.git</connection>
-		<developerConnection>scm:git:git@gitlab.com:SyntaxPhoenix/syntax-api.git</developerConnection>
-		<url>https://gitlab.com/SyntaxPhoenix/syntax-api/</url>
-	</scm>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
-
-	<profiles>
-		<profile>
-			<id>ossrh</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>ossrh</id>
-					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-				</snapshotRepository>
-				<repository>
-					<id>ossrh</id>
-					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-				</repository>
-			</distributionManagement>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.honton.chas</groupId>
-						<artifactId>exists-maven-plugin</artifactId>
-						<version>0.3.0</version>
-						<configuration>
-							<exists>
-								<repository>https://repo1.maven.org/maven2/</repository>
-								<snapshotRepository>https://oss.sonatype.org/content/repositories/snapshots</snapshotRepository>
-							</exists>
-						</configuration>
-						<executions>
-							<execution>
-								<goals>
-									<goal>remote</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>syntaxphoenix</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>syntaxphoenix</id>
-					<url>http://nexus.syntaxphoenix.com/repository/projects</url>
-				</snapshotRepository>
-				<repository>
-					<id>syntaxphoenix</id>
-					<url>http://nexus.syntaxphoenix.com/repository/projects</url>
-				</repository>
-			</distributionManagement>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.honton.chas</groupId>
-						<artifactId>exists-maven-plugin</artifactId>
-						<version>0.3.0</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>remote</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-
-
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<version>1.5</version>
 				<executions>
@@ -151,23 +88,72 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<modules>
-		<module>net</module>
-		<module>command</module>
-		<module>reflection</module>
-		<module>utils</module>
-		<module>random</module>
-		<module>exception</module>
-		<module>logging</module>
-		<module>event</module>
-		<module>service</module>
-		<module>nbt</module>
-		<module>thread</module>
-		<module>version</module>
-		<module>config</module>
-		<module>data</module>
-		<module>test</module>
-	</modules>
-
+	<profiles>
+		<profile>
+			<id>ossrh</id>
+			<activation />
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.honton.chas</groupId>
+						<artifactId>exists-maven-plugin</artifactId>
+						<version>0.3.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>remote</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<exists>
+								<repository>https://repo1.maven.org/maven2/</repository>
+								<snapshotRepository>https://oss.sonatype.org/content/repositories/snapshots</snapshotRepository>
+							</exists>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<distributionManagement>
+				<repository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+				</repository>
+				<snapshotRepository>
+					<id>ossrh</id>
+					<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>syntaxphoenix</id>
+			<activation />
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.honton.chas</groupId>
+						<artifactId>exists-maven-plugin</artifactId>
+						<version>0.3.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>remote</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<distributionManagement>
+				<repository>
+					<id>syntaxphoenix</id>
+					<url>http://nexus.syntaxphoenix.com/repository/projects</url>
+				</repository>
+				<snapshotRepository>
+					<id>syntaxphoenix</id>
+					<url>http://nexus.syntaxphoenix.com/repository/projects</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+	</profiles>
 </project>

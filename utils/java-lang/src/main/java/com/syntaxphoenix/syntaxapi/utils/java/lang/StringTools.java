@@ -1,12 +1,12 @@
 package com.syntaxphoenix.syntaxapi.utils.java.lang;
 
 public class StringTools {
-	
+
 	public static void getChars(String var0, char[] var1, int var2) {
 		char[] var4 = var0.toCharArray();
 		System.arraycopy(var4, 0, var1, var2, var4.length);
 	}
-	
+
 	public static int lastIndexOf(char[] var0, int var1, int var2, String var3, int var4) {
 		char[] var5 = var3.toCharArray();
 		return lastIndexOf(var0, var1, var2, var5, 0, var5.length, var4);
@@ -53,7 +53,7 @@ public class StringTools {
 			}
 		}
 	}
-	
+
 	static int indexOf(char[] var0, int var1, int var2, String var3, int var4) {
 		char[] var5 = var3.toCharArray();
 		return indexOf(var0, var1, var2, var5, 0, var5.length, var4);

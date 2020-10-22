@@ -5,7 +5,8 @@ import com.syntaxphoenix.syntaxapi.reflection.Reflect;
 
 public enum NumberGeneratorType {
 
-	LINEAR(LinearCongruentialGenerator.class), PERMUTED(PermutedCongruentialGenerator.class),
+	LINEAR(LinearCongruentialGenerator.class),
+	PERMUTED(PermutedCongruentialGenerator.class),
 	MURMUR(MurmurHashGenerator.class);
 
 	private final AbstractReflect NUMBER_GENERATOR;

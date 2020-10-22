@@ -22,18 +22,18 @@ public class TomlConfigSection extends BaseSection {
 	protected BaseSection initSection(String name) {
 		return new TomlConfigSection(name);
 	}
-	
+
 	@Override
 	protected boolean isSectionInstance(BaseSection section) {
 		return section instanceof TomlConfigSection;
 	}
-	
+
 	/*
 	 * 
 	 * TO TOML
 	 * 
 	 */
-	
+
 	public String toTomlString() {
 		try {
 			return Toml.writeToString(toMap());
@@ -42,27 +42,27 @@ public class TomlConfigSection extends BaseSection {
 		}
 		return "";
 	}
-	
+
 	/*
 	 * 
 	 * FROM TOML
 	 * 
 	 */
-	
+
 	public void fromTomlString(String toml) {
 		fromMap((HashMap<String, Object>) Toml.read(toml));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void fromMap(HashMap<String, Object> input) {
 		clear();
 		Set<Entry<String, Object>> set = input.entrySet();
-		if(set.isEmpty()) {
+		if (set.isEmpty()) {
 			return;
 		}
-		for(Entry<String, Object> entry : set) {
+		for (Entry<String, Object> entry : set) {
 			Object obj = entry.getValue();
-			if(obj instanceof HashMap) {
+			if (obj instanceof HashMap) {
 				((TomlConfigSection) createSection(entry.getKey())).fromMap((HashMap<String, Object>) obj);
 			} else {
 				set(entry.getKey(), obj);

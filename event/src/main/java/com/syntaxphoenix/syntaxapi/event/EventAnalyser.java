@@ -44,7 +44,8 @@ public final class EventAnalyser {
 			if (executors.containsKey(clazz)) {
 				executors.get(clazz).add(handler.priority(), new EventMethod(listener, method, handler.ignoreCancel()));
 			} else {
-				executors.put(clazz, new EventExecutor(manager, listener, clazz).add(handler.priority(), new EventMethod(listener, method, handler.ignoreCancel())));
+				executors
+					.put(clazz, new EventExecutor(manager, listener, clazz).add(handler.priority(), new EventMethod(listener, method, handler.ignoreCancel())));
 			}
 		}
 		manager.registerExecutors(executors.values());

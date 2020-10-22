@@ -16,7 +16,7 @@ public abstract class DataAdapter<I, R, B> {
 		this.builder = builder;
 		this.extractor = extractor;
 	}
-	
+
 	public abstract Class<B> getBaseType();
 
 	protected I extract(B input) {
@@ -26,9 +26,9 @@ public abstract class DataAdapter<I, R, B> {
 	protected R build(Object input) {
 		return primitiveType.isInstance(input) ? builder.apply(primitiveType.cast(input)) : null;
 	}
-	
-    public boolean isInstance(B base) {
-        return resultType.isInstance(base);
-    }
+
+	public boolean isInstance(B base) {
+		return resultType.isInstance(base);
+	}
 
 }

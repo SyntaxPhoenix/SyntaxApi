@@ -56,9 +56,13 @@ public final class ReflectionHelper {
 			return classLoaders;
 		} else {
 			ClassLoader contextClassLoader = contextClassLoader(), staticClassLoader = staticClassLoader();
-			return contextClassLoader != null ? staticClassLoader != null && contextClassLoader != staticClassLoader
-				? new ClassLoader[] { contextClassLoader, staticClassLoader }
-				: new ClassLoader[] { contextClassLoader } : new ClassLoader[] {};
+			return contextClassLoader != null ? staticClassLoader != null && contextClassLoader != staticClassLoader ? new ClassLoader[] {
+					contextClassLoader,
+					staticClassLoader
+			}
+				: new ClassLoader[] {
+						contextClassLoader
+				} : new ClassLoader[] {};
 
 		}
 	}
@@ -143,11 +147,10 @@ public final class ReflectionHelper {
 				if (url != null) {
 					final String normalizedUrl = url
 						.toExternalForm()
-						.substring(0,
-							url.toExternalForm().lastIndexOf(aClass.getPackage().getName().replace(".", "/")));
+						.substring(0, url.toExternalForm().lastIndexOf(aClass.getPackage().getName().replace(".", "/")));
 					return new URL(normalizedUrl);
 				}
-			} catch (MalformedURLException e) { 
+			} catch (MalformedURLException e) {
 				// Ignore for now
 				// TODO: Add logger
 			}

@@ -2,8 +2,7 @@ package com.syntaxphoenix.syntaxapi.net.http;
 
 public enum StandardContentType implements ContentType {
 
-	URL_ENCODED("application/x-www-form-urlencoded", DefaultSerializers.URL_ENCODED, DefaultDeserializers.URL_ENCODED,
-		ContentToUrlModifier.URL_ENCODED),
+	URL_ENCODED("application/x-www-form-urlencoded", DefaultSerializers.URL_ENCODED, DefaultDeserializers.URL_ENCODED, ContentToUrlModifier.URL_ENCODED),
 	PLAIN_SPECIAL("text/plain", SpecialSerializers.PLAIN, null),
 	JSON("application/json", DefaultSerializers.JSON, DefaultDeserializers.JSON);
 
@@ -14,8 +13,7 @@ public enum StandardContentType implements ContentType {
 
 	private final ContentToUrlModifier urlModifier;
 
-	private StandardContentType(String type, ContentSerializer serializer, ContentDeserializer deserializer,
-		ContentToUrlModifier urlModifier) {
+	private StandardContentType(String type, ContentSerializer serializer, ContentDeserializer deserializer, ContentToUrlModifier urlModifier) {
 		this.type = type;
 		this.serializer = serializer;
 		this.deserializer = deserializer;

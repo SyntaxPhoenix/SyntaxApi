@@ -52,34 +52,34 @@ public class InputReader extends Thread {
 	public boolean isOnline() {
 		return online;
 	}
-	
+
 	public void setAction(Consumer<String> action) {
 		this.action = action;
 	}
-	
+
 	public Consumer<String> getAction() {
 		return action;
 	}
-	
+
 	public InputReader initialize() {
 		start();
 		return this;
 	}
-	
+
 	@Override
 	public void start() {
-		if(!started) {
+		if (!started) {
 			super.start();
 		}
 	}
-	
+
 	public void shutdown() {
 		interrupt();
 	}
 
 	@Override
 	public void interrupt() {
-		if(online) {
+		if (online) {
 			online = false;
 			super.interrupt();
 		}

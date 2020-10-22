@@ -130,8 +130,7 @@ public abstract class AbstractReflect {
 		if (constructor != null) {
 			try {
 				return constructor.newInstance(args);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
@@ -291,8 +290,7 @@ public abstract class AbstractReflect {
 	}
 
 	public AbstractReflect searchConstructorsByArguments(String base, Class<?>... arguments) {
-		Constructor<?>[] constructors = Arrays
-			.merge(Constructor<?>[]::new, owner.getDeclaredConstructors(), owner.getConstructors());
+		Constructor<?>[] constructors = Arrays.merge(Constructor<?>[]::new, owner.getDeclaredConstructors(), owner.getConstructors());
 		if (constructors.length == 0) {
 			return this;
 		}
@@ -315,8 +313,7 @@ public abstract class AbstractReflect {
 	 * 
 	 */
 
-	public AbstractReflect searchMethod(Predicate<AbstractReflect> predicate, String name, String methodName,
-		Class<?>... arguments) {
+	public AbstractReflect searchMethod(Predicate<AbstractReflect> predicate, String name, String methodName, Class<?>... arguments) {
 		return predicate.test(this) ? searchMethod(name, methodName, arguments) : this;
 	}
 

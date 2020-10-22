@@ -205,13 +205,11 @@ public class EventManager {
 	}
 
 	public List<EventExecutor> getExecutorsFromOwner(EventListener listener) {
-		return getExecutors().stream().filter(executor -> executor.getListener() == listener)
-				.collect(Collectors.toList());
+		return getExecutors().stream().filter(executor -> executor.getListener() == listener).collect(Collectors.toList());
 	}
 
 	public List<EventExecutor> getExecutorsFromOwner(Class<? extends EventListener> listener) {
-		return getExecutors().stream().filter(executor -> executor.getListener().getClass() == listener)
-				.collect(Collectors.toList());
+		return getExecutors().stream().filter(executor -> executor.getListener().getClass() == listener).collect(Collectors.toList());
 	}
 
 	public List<EventExecutor> getExecutorsForEvent(Class<? extends Event> event) {

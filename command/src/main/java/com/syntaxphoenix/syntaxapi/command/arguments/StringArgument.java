@@ -11,11 +11,11 @@ import com.syntaxphoenix.syntaxapi.command.BaseArgument;
 public class StringArgument extends BaseArgument {
 
 	private String value;
-	
+
 	public StringArgument() {
 		this.value = "";
 	}
-	
+
 	public StringArgument(String value) {
 		this.value = value;
 	}

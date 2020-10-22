@@ -9,17 +9,17 @@ import com.syntaxphoenix.syntaxapi.command.NumericArgument;
  *
  */
 public class IntegerArgument extends NumericArgument {
-	
+
 	private Integer value;
-	
+
 	public IntegerArgument() {
 		this.value = 0;
 	}
-	
+
 	public IntegerArgument(Integer value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public ArgumentType getType() {
 		return ArgumentType.INTEGER;
@@ -29,12 +29,12 @@ public class IntegerArgument extends NumericArgument {
 	public Object asObject() {
 		return value;
 	}
-	
+
 	@Override
 	public Number asNumber() {
 		return value;
 	}
-	
+
 	public Integer getValue() {
 		return value;
 	}
@@ -48,6 +48,5 @@ public class IntegerArgument extends NumericArgument {
 	public String toString(ArgumentSerializer serializer) {
 		return serializer.toString(this);
 	}
-
 
 }

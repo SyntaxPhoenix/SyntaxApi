@@ -9,17 +9,17 @@ import com.syntaxphoenix.syntaxapi.command.NumericArgument;
  *
  */
 public class FloatArgument extends NumericArgument {
-	
+
 	private Float value;
-	
+
 	public FloatArgument() {
 		this.value = 0F;
 	}
-	
+
 	public FloatArgument(Float value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public ArgumentType getType() {
 		return ArgumentType.FLOAT;
@@ -29,12 +29,12 @@ public class FloatArgument extends NumericArgument {
 	public Object asObject() {
 		return value;
 	}
-	
+
 	@Override
 	public Number asNumber() {
 		return value;
 	}
-	
+
 	public Float getValue() {
 		return value;
 	}

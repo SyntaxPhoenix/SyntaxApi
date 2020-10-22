@@ -18,8 +18,9 @@ import com.syntaxphoenix.syntaxapi.reflection.AbstractReflect;
 import com.syntaxphoenix.syntaxapi.reflection.Reflect;
 
 public class LinkedConstructor extends SafeConstructor {
-	
-	public static final AbstractReflect SAFE_CONSTRUCT = new Reflect(SafeConstructor.class).searchMethod("merge", "mergeNode", MappingNode.class, boolean.class, Map.class, List.class);
+
+	public static final AbstractReflect SAFE_CONSTRUCT = new Reflect(SafeConstructor.class)
+		.searchMethod("merge", "mergeNode", MappingNode.class, boolean.class, Map.class, List.class);
 
 	public LinkedConstructor() {
 		super();
@@ -52,9 +53,8 @@ public class LinkedConstructor extends SafeConstructor {
 					try {
 						key.hashCode();
 					} catch (Exception var11) {
-						throw new YamlException("while constructing a mapping // " + node.getStartMark().toString()
-								+ " // found unacceptable key " + key + " // "
-								+ tuple.getKeyNode().getStartMark().toString(), var11);
+						throw new YamlException("while constructing a mapping // " + node.getStartMark().toString() + " // found unacceptable key " + key
+							+ " // " + tuple.getKeyNode().getStartMark().toString(), var11);
 					}
 				}
 
@@ -68,8 +68,7 @@ public class LinkedConstructor extends SafeConstructor {
 				}
 			}
 		}
-		
-		
+
 		Iterator<Integer> indicies2remove2 = toRemove.descendingIterator();
 
 		while (indicies2remove2.hasNext()) {

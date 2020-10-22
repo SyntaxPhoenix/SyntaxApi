@@ -12,17 +12,18 @@ import com.syntaxphoenix.syntaxapi.nbt.*;
 import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 
 public class NbtJsonParser {
-	
+
 	public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	
+
 	public static Object fromJson(JsonElement element, Class<?> classOfT) {
 		return GSON.fromJson(element, classOfT);
 	}
-	
+
 	/**
-	 * Convert nbt to json and then serialize it with {@code fromJson(JsonElement, Class<?>)}
+	 * Convert nbt to json and then serialize it with
+	 * {@code fromJson(JsonElement, Class<?>)}
 	 * 
-	 * @param tag - Nbt to convert
+	 * @param tag  - Nbt to convert
 	 * @param type - Type of in nbt serialized object
 	 * 
 	 * @return the object
@@ -30,7 +31,7 @@ public class NbtJsonParser {
 	public static Object fromNbt(NbtTag tag, Class<?> type) {
 		return fromJson(toJson(tag), type);
 	}
-	
+
 	/**
 	 * Serialize an object to json
 	 * 
@@ -39,14 +40,14 @@ public class NbtJsonParser {
 	 * @return json that was created
 	 */
 	public static JsonElement toJson(Object object) {
-		if(object instanceof JsonElement) {
+		if (object instanceof JsonElement) {
 			return (JsonElement) object;
-		} else if(object instanceof NbtTag) {
+		} else if (object instanceof NbtTag) {
 			return toJson((NbtTag) object);
 		}
 		return GSON.toJsonTree(object);
 	}
-	
+
 	/**
 	 * Serialize an object to nbt
 	 * 
@@ -55,14 +56,14 @@ public class NbtJsonParser {
 	 * @return nbt that was created
 	 */
 	public static NbtTag toNbt(Object object) {
-		if(object instanceof JsonElement) {
+		if (object instanceof JsonElement) {
 			return toNbt((JsonElement) object);
-		} else if(object instanceof NbtTag) {
+		} else if (object instanceof NbtTag) {
 			return (NbtTag) object;
 		}
 		return toNbt(toJson(object));
 	}
-	
+
 	/**
 	 * Convert json to nbt
 	 * 
@@ -77,17 +78,17 @@ public class NbtJsonParser {
 			return toNbtList(element.getAsJsonArray());
 		} else if (element.isJsonPrimitive()) {
 			JsonPrimitive primitive = element.getAsJsonPrimitive();
-			if(primitive.isBoolean()) {
+			if (primitive.isBoolean()) {
 				return new NbtByte((byte) (primitive.getAsBoolean() ? 1 : 0));
-			} else if(primitive.isString()) {
+			} else if (primitive.isString()) {
 				String input = primitive.getAsString();
-				if(Strings.isNumeric(input)) {
+				if (Strings.isNumeric(input)) {
 					return new NbtBigInt(input);
-				} else if(Strings.isDecimal(input)) {
+				} else if (Strings.isDecimal(input)) {
 					return new NbtBigDecimal(input);
 				}
 				return new NbtString(input);
-			} else if(primitive.isNumber()) {
+			} else if (primitive.isNumber()) {
 				return NbtNumber.fromNumber(primitive.getAsNumber());
 			}
 		}
@@ -103,12 +104,12 @@ public class NbtJsonParser {
 	 */
 	public static NbtCompound toNbtCompound(JsonObject object) {
 		NbtCompound compound = new NbtCompound();
-		if(object.size() == 0) {
+		if (object.size() == 0) {
 			return compound;
 		}
-		for(String key : object.keySet()) {
+		for (String key : object.keySet()) {
 			NbtTag tag = toNbt(object.get(key));
-			if(tag == null) {
+			if (tag == null) {
 				continue;
 			}
 			compound.set(key, tag);
@@ -137,7 +138,6 @@ public class NbtJsonParser {
 		return list;
 	}
 
-
 	/**
 	 * Convert a JsonArray to an NbtList Array
 	 * 
@@ -153,7 +153,7 @@ public class NbtJsonParser {
 		for (int index = 0; index < array.size(); index++) {
 			NbtTag tag = toNbt(array.get(index));
 			NbtType type = tag.getType();
-			if(tags.containsKey(type)) {
+			if (tags.containsKey(type)) {
 				tags.get(type).addTag(tag);
 			} else {
 				NbtList<?> list = new NbtList<>();
@@ -164,8 +164,8 @@ public class NbtJsonParser {
 		NbtList<?>[] output = tags.values().toArray(new NbtList[0]);
 		tags.clear();
 		return output;
- 	}
-	
+	}
+
 	/**
 	 * Convert nbt to json
 	 * 
@@ -174,14 +174,14 @@ public class NbtJsonParser {
 	 * @return resulting json
 	 */
 	public static JsonElement toJson(NbtTag tag) {
-		if(tag instanceof NbtCompound) {
+		if (tag instanceof NbtCompound) {
 			return toJsonObject((NbtCompound) tag);
-		} else if(tag instanceof NbtList) {
+		} else if (tag instanceof NbtList) {
 			return toJsonArray((NbtList<?>) tag);
 		}
 		return GSON.toJsonTree(tag.getValue());
 	}
-	
+
 	/**
 	 * Convert an NbtCompound to a JsonObject
 	 * 
@@ -191,15 +191,15 @@ public class NbtJsonParser {
 	 */
 	public static JsonObject toJsonObject(NbtCompound compound) {
 		JsonObject object = new JsonObject();
-		if(compound.size() == 0) {
+		if (compound.size() == 0) {
 			return object;
 		}
-		for(String key : compound.getKeys()) {
+		for (String key : compound.getKeys()) {
 			object.add(key, toJson(compound.get(key)));
 		}
 		return object;
 	}
-	
+
 	/**
 	 * Convert a NbtList to an JsonArray
 	 * 
@@ -209,10 +209,10 @@ public class NbtJsonParser {
 	 */
 	public static JsonArray toJsonArray(NbtList<?> list) {
 		JsonArray array = new JsonArray();
-		if(list.isEmpty()) {
+		if (list.isEmpty()) {
 			return array;
 		}
-		for(NbtTag tag : list) {
+		for (NbtTag tag : list) {
 			array.add(toJson(tag));
 		}
 		return array;

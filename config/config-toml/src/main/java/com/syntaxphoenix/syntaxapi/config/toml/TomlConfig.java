@@ -20,7 +20,7 @@ public class TomlConfig extends TomlConfigSection implements BaseConfig {
 				builder.append('\n');
 			}
 			scanner.close();
-			
+
 			String toml = builder.toString();
 			fromTomlString(toml.substring(0, toml.length() - 1));
 
@@ -31,12 +31,12 @@ public class TomlConfig extends TomlConfigSection implements BaseConfig {
 	@Override
 	public void save(File file) throws Throwable {
 
-		if(!file.exists()) {
+		if (!file.exists()) {
 			String parentPath = file.getParent();
-			if(parentPath != null && !parentPath.isEmpty()) {
+			if (parentPath != null && !parentPath.isEmpty()) {
 				File parent = file.getParentFile();
-				if(parent.exists()) {
-					if(!parent.isDirectory()) {
+				if (parent.exists()) {
+					if (!parent.isDirectory()) {
 						parent.delete();
 						parent.mkdirs();
 					}
@@ -50,7 +50,7 @@ public class TomlConfig extends TomlConfigSection implements BaseConfig {
 		FileWriter writer = new FileWriter(file);
 		writer.write(toTomlString());
 		writer.close();
-		
+
 	}
 
 }

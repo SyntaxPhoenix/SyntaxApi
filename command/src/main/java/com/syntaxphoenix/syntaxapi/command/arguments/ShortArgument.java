@@ -5,17 +5,17 @@ import com.syntaxphoenix.syntaxapi.command.ArgumentType;
 import com.syntaxphoenix.syntaxapi.command.NumericArgument;
 
 public class ShortArgument extends NumericArgument {
-	
+
 	private Short value;
-	
+
 	public ShortArgument() {
 		this.value = 0;
 	}
-	
+
 	public ShortArgument(Short value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public ArgumentType getType() {
 		return ArgumentType.SHORT;
@@ -25,12 +25,12 @@ public class ShortArgument extends NumericArgument {
 	public Object asObject() {
 		return value;
 	}
-	
+
 	@Override
 	public Number asNumber() {
 		return value;
 	}
-	
+
 	public Short getValue() {
 		return value;
 	}

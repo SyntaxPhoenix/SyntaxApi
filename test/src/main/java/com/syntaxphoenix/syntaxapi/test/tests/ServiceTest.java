@@ -8,9 +8,9 @@ public class ServiceTest implements Consumer<String[]>, Printer {
 
 	@Override
 	public void accept(String[] args) {
-		
+
 		// Not written
-		
+
 	}
 
 }

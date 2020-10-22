@@ -19,19 +19,19 @@ public class StateRange extends BaseArgumentRange {
 		this.enabled = true;
 		this.disallowed = disallowed;
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public boolean isEnabled() {
 		return enabled;
 	}
-	
+
 	public boolean getDisallowed() {
 		return disallowed;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -45,7 +45,7 @@ public class StateRange extends BaseArgumentRange {
 	public Class<?> getInputType() {
 		return getType().getInputType();
 	}
-	
+
 	@Override
 	public boolean hasType(BaseArgument argument) {
 		return argument.getClassType().isAssignableFrom(getInputType());
@@ -59,7 +59,7 @@ public class StateRange extends BaseArgumentRange {
 			return true;
 		return ((boolean) argument.asObject() != disallowed);
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -68,7 +68,7 @@ public class StateRange extends BaseArgumentRange {
 	public String toString() {
 		return toString(ArgumentRangeSerializer.DEFAULT);
 	}
-	
+
 	@Override
 	public String toString(ArgumentRangeSerializer serializer) {
 		return serializer.toString(this);

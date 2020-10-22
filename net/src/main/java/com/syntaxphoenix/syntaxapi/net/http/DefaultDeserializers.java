@@ -20,7 +20,9 @@ public class DefaultDeserializers {
 	public static final JsonContentDeserializer URL_ENCODED = value -> {
 		JsonObject output = new JsonObject();
 		String[] entries = (value = value.replaceFirst("\\?", "")).contains("&") ? value.split("&")
-			: new String[] { value };
+			: new String[] {
+					value
+		};
 		for (int index = 0; index < entries.length; index++) {
 			String current = entries[index];
 			if (!current.contains("="))

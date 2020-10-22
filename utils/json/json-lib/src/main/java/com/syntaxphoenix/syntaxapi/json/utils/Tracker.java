@@ -8,7 +8,7 @@ public abstract class Tracker {
 	public static TrackElement getTrackElementFromStack(int offset) {
 		return new TrackElement(Thread.currentThread().getStackTrace()[2 + offset]);
 	}
-	
+
 	public static TrackElement getTrackElement() {
 		return getTrackElementFromStack(1);
 	}

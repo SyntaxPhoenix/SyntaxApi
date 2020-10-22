@@ -30,7 +30,7 @@ public enum RequestExecution {
 	public boolean close() {
 		return close;
 	}
-	
+
 	public static RequestExecution of(boolean close) {
 		return close ? CLOSE : OPEN;
 	}

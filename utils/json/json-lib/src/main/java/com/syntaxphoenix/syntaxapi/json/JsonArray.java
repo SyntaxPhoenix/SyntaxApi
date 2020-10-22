@@ -84,7 +84,7 @@ public class JsonArray extends JsonValue<List<JsonValue<?>>> implements Iterable
 			return values.size();
 		}
 	}
-	
+
 	@Override
 	public SynchronizedIterator<JsonValue<?>> iterator() {
 		return new SynchronizedIterator<>(values);

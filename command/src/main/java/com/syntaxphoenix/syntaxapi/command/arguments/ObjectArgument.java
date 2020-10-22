@@ -5,9 +5,9 @@ import com.syntaxphoenix.syntaxapi.command.ArgumentType;
 import com.syntaxphoenix.syntaxapi.command.BaseArgument;
 
 public class ObjectArgument<E> extends BaseArgument {
-	
+
 	private E value;
-	
+
 	public ObjectArgument(E value) {
 		this.value = value;
 	}
@@ -21,7 +21,7 @@ public class ObjectArgument<E> extends BaseArgument {
 	public Object asObject() {
 		return value;
 	}
-	
+
 	public E getValue() {
 		return value;
 	}

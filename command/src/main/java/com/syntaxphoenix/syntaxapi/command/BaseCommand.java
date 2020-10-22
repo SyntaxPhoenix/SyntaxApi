@@ -5,11 +5,11 @@ package com.syntaxphoenix.syntaxapi.command;
  *
  */
 public abstract class BaseCommand {
-	
+
 	public abstract void execute(BaseInfo info, Arguments arguments);
-	
+
 	public BaseCompletion complete(BaseInfo info, Arguments arguments) {
 		return null;
 	}
-	
+
 }

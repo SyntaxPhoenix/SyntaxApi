@@ -68,8 +68,7 @@ public class CacheList<V> {
 
 	public Optional<V> predicateFilter(Predicate<V> predicate) {
 		synchronized (cacheList) {
-			return cacheList.stream().filter(object -> predicate.test(object.getValue(false))).findFirst()
-					.map(cachedObject -> cachedObject.getValue());
+			return cacheList.stream().filter(object -> predicate.test(object.getValue(false))).findFirst().map(cachedObject -> cachedObject.getValue());
 		}
 	}
 
@@ -77,8 +76,7 @@ public class CacheList<V> {
 		synchronized (cacheList) {
 			Optional<V> filtered = filter.apply(cacheList.stream().map(object -> object.getValue(false)));
 			return !filtered.isPresent() ? filtered
-					: cacheList.stream().filter(object -> object.getValue(false) == filtered.get()).findFirst()
-							.map(object -> object.getValue());
+				: cacheList.stream().filter(object -> object.getValue(false) == filtered.get()).findFirst().map(object -> object.getValue());
 		}
 	}
 

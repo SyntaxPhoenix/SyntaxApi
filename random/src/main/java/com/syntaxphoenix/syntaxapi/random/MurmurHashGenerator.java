@@ -12,20 +12,20 @@ public class MurmurHashGenerator extends RandomNumberGenerator {
 	public MurmurHashGenerator(long seed) {
 		this.seed = seed;
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public void setSeed(long seed) {
 		this.seed = seed;
 		this.iterations = 0L;
 	}
-	
+
 	public long getSeed() {
 		return seed;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -49,9 +49,9 @@ public class MurmurHashGenerator extends RandomNumberGenerator {
 
 	@Override
 	public boolean nextBoolean() {
-		return next(1) == 0; 
+		return next(1) == 0;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -68,7 +68,7 @@ public class MurmurHashGenerator extends RandomNumberGenerator {
 
 	@Override
 	public short nextShort(short min, short max) {
-		if(max <= min) {
+		if (max <= min) {
 			return min;
 		}
 		return (short) (min + Math.abs((int) (nextShort() % (max - min))));
@@ -80,7 +80,7 @@ public class MurmurHashGenerator extends RandomNumberGenerator {
 
 	@Override
 	public int nextInt() {
-		if(iterations == Long.MAX_VALUE)
+		if (iterations == Long.MAX_VALUE)
 			iterations = 0L;
 		int output = generateInt(seed, iterations++);
 		return output;
@@ -146,7 +146,7 @@ public class MurmurHashGenerator extends RandomNumberGenerator {
 	/*
 	 * 
 	 */
-	
+
 	@Override
 	public double nextDouble() {
 		return (((long) (next(26)) << 27) + next(27)) * 0x1.0p-53;

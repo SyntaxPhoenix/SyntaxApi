@@ -189,8 +189,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 		} else if (var1 instanceof String) {
 			return this.append((String) var1);
 		} else {
-			return var1 instanceof AbstractStringBuilder ? this.append((AbstractStringBuilder) var1)
-					: this.append(var1, 0, var1.length());
+			return var1 instanceof AbstractStringBuilder ? this.append((AbstractStringBuilder) var1) : this.append(var1, 0, var1.length());
 		}
 	}
 
@@ -225,8 +224,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 			this.count += var4;
 			return this;
 		} else {
-			throw new IndexOutOfBoundsException(
-					"start " + var2 + ", end " + var3 + ", s.length() " + var1.length());
+			throw new IndexOutOfBoundsException("start " + var2 + ", end " + var3 + ", s.length() " + var1.length());
 		}
 	}
 
@@ -414,8 +412,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 				this.count += var4;
 				return this;
 			} else {
-				throw new StringIndexOutOfBoundsException(
-						"offset " + var3 + ", len " + var4 + ", str.length " + var2.length);
+				throw new StringIndexOutOfBoundsException("offset " + var3 + ", len " + var4 + ", str.length " + var2.length);
 			}
 		} else {
 			throw new StringIndexOutOfBoundsException(var1);
@@ -461,8 +458,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 			var2 = "null";
 		}
 
-		return var2 instanceof String ? this.insert(var1, (String) var2)
-				: this.insert(var1, var2, 0, var2.length());
+		return var2 instanceof String ? this.insert(var1, (String) var2) : this.insert(var1, var2, 0, var2.length());
 	}
 
 	public AbstractStringBuilder insert(int var1, CharSequence var2, int var3, int var4) {
@@ -483,8 +479,7 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 				this.count += var5;
 				return this;
 			} else {
-				throw new IndexOutOfBoundsException(
-						"start " + var3 + ", end " + var4 + ", s.length() " + var2.length());
+				throw new IndexOutOfBoundsException("start " + var3 + ", end " + var4 + ", s.length() " + var2.length());
 			}
 		} else {
 			throw new IndexOutOfBoundsException("dstOffset " + var1);
@@ -577,5 +572,5 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
 	final char[] getValue() {
 		return this.value;
 	}
-	
+
 }

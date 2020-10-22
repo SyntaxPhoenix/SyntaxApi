@@ -21,23 +21,23 @@ public class AsyncLogger implements ILogger {
 		this.executor = executor;
 		this.logger = logger;
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public ExecutorService getExecutor() {
 		return executor;
 	}
-	
+
 	public ILogger getLogger() {
 		return logger;
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	@Override
 	public AsyncLogger close() {
 		try {
@@ -49,7 +49,7 @@ public class AsyncLogger implements ILogger {
 		logger.close();
 		return this;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -64,7 +64,7 @@ public class AsyncLogger implements ILogger {
 	public String getThreadName() {
 		return logger.getThreadName();
 	}
-	
+
 	@Override
 	public AsyncLogger setState(LoggerState state) {
 		logger.setState(state);
@@ -97,23 +97,23 @@ public class AsyncLogger implements ILogger {
 	public LogType getType(String typeId) {
 		return logger.getType(typeId);
 	}
-	
+
 	@Override
 	public ILogger setColored(boolean color) {
 		logger.setColored(color);
 		return this;
 	}
-	
+
 	@Override
 	public boolean isColored() {
 		return logger.isColored();
 	}
-	
+
 	@Override
 	public LogTypeMap getTypeMap() {
 		return logger.getTypeMap();
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -162,11 +162,11 @@ public class AsyncLogger implements ILogger {
 		queue(() -> logger.log(typeId, throwable));
 		return this;
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	private void queue(Runnable runnable) {
 		final String name = Thread.currentThread().getName();
 		executor.submit(() -> {

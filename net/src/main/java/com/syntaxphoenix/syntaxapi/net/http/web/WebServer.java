@@ -14,7 +14,7 @@ import com.syntaxphoenix.syntaxapi.net.http.ResponseCode;
 import com.syntaxphoenix.syntaxapi.net.http.StandardNamedType;
 
 public class WebServer extends HttpServer {
-	
+
 	private WebHandler handler;
 
 	public WebServer() {
@@ -86,8 +86,7 @@ public class WebServer extends HttpServer {
 	 */
 
 	@Override
-	protected RequestExecution handleHttpRequest(HttpSender sender, HttpWriter writer, ReceivedRequest request)
-		throws Exception {
+	protected RequestExecution handleHttpRequest(HttpSender sender, HttpWriter writer, ReceivedRequest request) throws Exception {
 		try {
 			return RequestExecution.of(handler.handleRequest(sender, writer, request));
 		} catch (Exception e) {

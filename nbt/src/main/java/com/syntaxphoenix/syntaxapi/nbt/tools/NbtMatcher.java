@@ -16,10 +16,10 @@ public class NbtMatcher {
 	 */
 	@SuppressWarnings("unused")
 	private final static int EXACT = 0b1,
-			/**
-			 * Ignore values, only verify that the NBT tags match in types.
-			 */
-			TYPES_ONLY = 0b10;
+		/**
+		 * Ignore values, only verify that the NBT tags match in types.
+		 */
+		TYPES_ONLY = 0b10;
 
 	private final NbtTag pattern;
 	@SuppressWarnings("unused")
@@ -66,8 +66,7 @@ public class NbtMatcher {
 
 		@SuppressWarnings("unlikely-arg-type")
 		public boolean equals(NbtList<?> tag) {
-			return this.empty && tag.isEmpty()
-					|| this.type == tag.getTypeId() && this.hash == tag.hashCode() && this.equals(tag.getValue());
+			return this.empty && tag.isEmpty() || this.type == tag.getTypeId() && this.hash == tag.hashCode() && this.equals(tag.getValue());
 		}
 
 		public boolean equals(List<NbtTag> tags) {

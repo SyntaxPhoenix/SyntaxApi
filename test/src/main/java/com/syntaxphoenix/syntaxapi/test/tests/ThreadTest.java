@@ -40,43 +40,43 @@ public class ThreadTest implements Consumer<String[]>, Printer {
 				}
 			}
 		}
-		
+
 		SynThreadPool service = new SynThreadPool((throwable, pool, thread, command) -> {
 			failed++;
 		}, threadsMin, threadsMax, "ThreadTestPool");
-		
+
 		Random random = new Random((amount ^ threadsMax) * threadsMin);
 		shouldFail = 0;
 
-		print("Running " + amount + " commands on a ThreadPool with [min: " + threadsMin + ", max: " + threadsMax
-				+ "] Threads.");
+		print("Running " + amount + " commands on a ThreadPool with [min: " + threadsMin + ", max: " + threadsMax + "] Threads.");
 		ArrayList<Future<?>> tasks = new ArrayList<>();
 		for (int x = 0; x < amount; x++) {
 			tasks.add(service.submit(createTask(random.nextBoolean())));
 		}
 		while (!tasks.isEmpty()) {
 			Object[] object = tasks.stream().filter(future -> future.isDone()).toArray();
-			for(int x = 0; x < object.length; x++) {
+			for (int x = 0; x < object.length; x++) {
 				tasks.remove(object[x]);
 			}
 		}
-		
+
 		service.shutdown();
 		print("Test is done [success: " + (amount - failed) + ", failed: " + failed + ", shouldFail: " + shouldFail + "]");
 
 	}
-	
+
 	public int shouldFail = 0;
-	
+
 	private Runnable createTask(boolean error) {
-		if(error) {
+		if (error) {
 			shouldFail++;
 			return () -> {
 				AbstractReflect reflect = new Reflect("fjsdfi.sdfsdfno");
 				reflect.run("sdf0");
 			};
 		} else {
-			return () -> { };
+			return () -> {
+			};
 		}
 	}
 

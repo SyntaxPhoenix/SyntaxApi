@@ -36,8 +36,7 @@ public class ColorTools {
 	}
 
 	public static String toAnsiColor(Color color) {
-		return ANSI_FORMAT.replace("r", color.getRed() + "").replace("g", color.getGreen() + "").replace("b",
-				color.getBlue() + "");
+		return ANSI_FORMAT.replace("r", color.getRed() + "").replace("g", color.getGreen() + "").replace("b", color.getBlue() + "");
 	}
 
 }

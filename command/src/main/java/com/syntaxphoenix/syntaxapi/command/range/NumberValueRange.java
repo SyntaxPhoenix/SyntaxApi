@@ -111,7 +111,7 @@ public class NumberValueRange extends BaseArgumentRange {
 			decimal = (BigDecimal) number;
 		return decimal.compareTo(minimum) >= 0 && decimal.compareTo(maximum) <= 0;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -120,7 +120,7 @@ public class NumberValueRange extends BaseArgumentRange {
 	public String toString() {
 		return toString(ArgumentRangeSerializer.DEFAULT);
 	}
-	
+
 	@Override
 	public String toString(ArgumentRangeSerializer serializer) {
 		return serializer.toString(this);

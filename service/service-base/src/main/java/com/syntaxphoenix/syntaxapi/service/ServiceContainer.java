@@ -15,7 +15,7 @@ public class ServiceContainer {
 	ServiceContainer(Object owner) {
 		this.owner = owner;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -23,19 +23,19 @@ public class ServiceContainer {
 	public Object getOwner() {
 		return owner;
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	boolean isEmpty() {
 		return subscribed.isEmpty();
 	}
-	
+
 	boolean add(IServiceValue value) {
 		return subscribed.add(value);
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -61,7 +61,7 @@ public class ServiceContainer {
 		}).findAny();
 		return option.isPresent() ? (ServiceMethodValue) option.get() : null;
 	}
-	
+
 	/*
 	 * 
 	 */

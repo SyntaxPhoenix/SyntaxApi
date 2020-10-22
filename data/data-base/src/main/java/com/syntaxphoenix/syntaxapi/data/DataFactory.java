@@ -5,17 +5,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public abstract class DataFactory<B> {
-	
+
 	private final DataAdapterRegistry<B> adapterRegistry;
-	
+
 	public DataFactory(DataAdapterRegistry<B> adapterRegistry) {
 		this.adapterRegistry = adapterRegistry;
 	}
-	
+
 	/*
 	 * Get
 	 */
-	
+
 	public DataAdapterRegistry<B> getAdapaterRegistry() {
 		return adapterRegistry;
 	}

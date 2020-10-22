@@ -118,8 +118,7 @@ public interface ContentType extends NamedType {
 		};
 	}
 
-	public static ContentType build(String type, ContentSerializer serializer, ContentDeserializer deserializer,
-		ContentToUrlModifier modifier) {
+	public static ContentType build(String type, ContentSerializer serializer, ContentDeserializer deserializer, ContentToUrlModifier modifier) {
 		return new ContentType() {
 			@Override
 			public String type() {

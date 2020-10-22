@@ -75,8 +75,7 @@ public class HttpWriter {
 					.append(properties
 						.entrySet()
 						.stream()
-						.map(entry -> entry.getValue() == null ? entry.getKey()
-							: entry.getKey() + '=' + entry.getValue())
+						.map(entry -> entry.getValue() == null ? entry.getKey() : entry.getKey() + '=' + entry.getValue())
 						.collect(Collectors.joining("; ")));
 			}
 		}

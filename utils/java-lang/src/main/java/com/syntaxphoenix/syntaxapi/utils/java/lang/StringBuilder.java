@@ -229,13 +229,13 @@ public final class StringBuilder extends AbstractStringBuilder implements Serial
 	public String toString() {
 		return new String(this.value, 0, this.count);
 	}
-	
+
 	public String toStringClear() {
 		String out = toString();
 		clear();
 		return out;
 	}
-	
+
 	public void clear() {
 		this.count = 0;
 		this.value = new char[16];

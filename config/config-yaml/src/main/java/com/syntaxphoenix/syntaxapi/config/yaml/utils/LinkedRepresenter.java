@@ -12,8 +12,7 @@ import com.syntaxphoenix.syntaxapi.reflection.Reflect;
 
 public class LinkedRepresenter extends Representer {
 
-	public static final AbstractReflect BASE_REPRESENT = new Reflect(BaseRepresenter.class).searchField("objectMap",
-			"representedObjects");
+	public static final AbstractReflect BASE_REPRESENT = new Reflect(BaseRepresenter.class).searchField("objectMap", "representedObjects");
 
 	public LinkedRepresenter() {
 		super();

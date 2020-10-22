@@ -79,8 +79,7 @@ public class DownloadService implements IService {
 						continue;
 					}
 
-					Download download = (Download) ReflectionTools.execute(subscription.getOwnerInstance(),
-							subscription.asMethod());
+					Download download = (Download) ReflectionTools.execute(subscription.getOwnerInstance(), subscription.asMethod());
 					List<DownloadListener> listeners = download.getListeners();
 
 					if (!listeners.isEmpty())
@@ -96,26 +95,25 @@ public class DownloadService implements IService {
 							listeners.forEach(listener -> listener.onDisconnect(download, DisconnectReason.ABORTED));
 						continue;
 					}
-					
+
 					status.add(paths.size());
 
 					URL url = new URL(host);
 
 					URLConnection connection = url.openConnection();
-					
+
 					if (connection instanceof HttpURLConnection) {
 						HttpURLConnection http = (HttpURLConnection) connection;
-						
+
 						http.setReadTimeout(15000);
 						http.setConnectTimeout(10000);
 						http.setRequestMethod("GET");
-						
+
 						int code = http.getResponseCode();
-						
+
 						if (code != 200) {
 							if (!listeners.isEmpty())
-								listeners
-										.forEach(listener -> listener.onDisconnect(download, DisconnectReason.TIMEOUT));
+								listeners.forEach(listener -> listener.onDisconnect(download, DisconnectReason.TIMEOUT));
 							while (status.failed())
 								;
 							if (services.hasLogger()) {
@@ -136,29 +134,28 @@ public class DownloadService implements IService {
 						if ((throwable = download(host, entry.getKey(), entry.getValue(), timeout)) == null) {
 							status.success();
 							if (!listeners.isEmpty())
-								listeners.forEach(
-										listener -> listener.onSuccess(download, entry.getKey(), entry.getValue()));
+								listeners.forEach(listener -> listener.onSuccess(download, entry.getKey(), entry.getValue()));
 						} else {
 							status.failed();
 
 							if (!listeners.isEmpty())
-								listeners.forEach(
-										listener -> listener.onFail(download, entry.getKey(), entry.getValue()));
+								listeners.forEach(listener -> listener.onFail(download, entry.getKey(), entry.getValue()));
 
 							if (services.hasLogger())
-								services.getLogger()
-										.log(new DownloadFailedException(
-												"Failed to download file from host (" + host + ") with path ("
-														+ entry.getKey() + ") to '" + entry.getValue() + "'",
-												throwable));
+								services
+									.getLogger()
+									.log(new DownloadFailedException(
+										"Failed to download file from host (" + host + ") with path (" + entry.getKey() + ") to '" + entry.getValue() + "'",
+										throwable));
 						}
 					}
-					
+
 					if (!listeners.isEmpty())
 						listeners.forEach(listener -> listener.onDisconnect(download, DisconnectReason.DEFAULT));
-					
+
 				} catch (Throwable throwable) {
-					while (status.failed());
+					while (status.failed())
+						;
 					if (services.hasLogger())
 						services.getLogger().log(new DownloadFailedException(throwable));
 				}

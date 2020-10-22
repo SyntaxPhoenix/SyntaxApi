@@ -8,25 +8,25 @@ import java.util.Collection;
  *
  */
 public enum ArgumentSuperType {
-	
-	TEXT, 
+
+	TEXT,
 	STATE,
 	OBJECT,
-	NUMBER, 
+	NUMBER,
 	COLLECTION;
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public ArgumentType[] getSubTypes() {
 		Collection<ArgumentType> types = new ArrayList<>();
-		for(ArgumentType type : ArgumentType.values()) {
-			if(type.getSuperType().equals(this)) {
+		for (ArgumentType type : ArgumentType.values()) {
+			if (type.getSuperType().equals(this)) {
 				types.add(type);
 			}
 		}
 		return types.toArray(new ArgumentType[0]);
 	}
-	
+
 }

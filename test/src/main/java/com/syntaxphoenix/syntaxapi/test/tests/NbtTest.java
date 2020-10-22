@@ -14,33 +14,33 @@ public class NbtTest implements Consumer<String[]>, Printer {
 
 	@Override
 	public void accept(String[] args) {
-		
+
 		NbtConfig config = new NbtConfig(false);
-		
+
 		File file = new File("C:\\Users\\laura\\Desktop\\Eclipse\\test.nbt");
-		
+
 		try {
 			config.load(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		print(config.toString());
-		
+
 		file.delete();
 		NbtTag tag = config.get("testBigInt");
-		if(tag.getType() == NbtType.STRING) {
+		if (tag.getType() == NbtType.STRING) {
 			NbtString string = (NbtString) tag;
-			if(string.isBigInteger()) {
+			if (string.isBigInteger()) {
 				System.out.println("BIG INT");
 			}
 		}
-		
+
 		try {
 			config.save(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

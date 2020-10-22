@@ -2,7 +2,8 @@ package com.syntaxphoenix.syntaxapi.net.http;
 
 public enum RequestState {
 
-	ACCEPTED, DENIED;
+	ACCEPTED,
+	DENIED;
 
 	private boolean message = false;
 
@@ -14,11 +15,11 @@ public enum RequestState {
 		this.message = message;
 		return this;
 	}
-	
+
 	public boolean accepted() {
 		return this == ACCEPTED;
 	}
-	
+
 	public boolean denied() {
 		return this == DENIED;
 	}

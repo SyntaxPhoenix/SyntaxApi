@@ -25,7 +25,7 @@ public final class Primitives {
 		collect.put(char.class, Character.class);
 
 		PRIMITIVE_TO_COMPLEX = Collections.unmodifiableMap(collect);
-		
+
 		collect = new LinkedHashMap<>(10);
 		for (Entry<Class<?>, Class<?>> entry : PRIMITIVE_TO_COMPLEX.entrySet())
 			collect.put(entry.getValue(), entry.getKey());
@@ -42,8 +42,7 @@ public final class Primitives {
 	}
 
 	public static boolean isComplex(Object object) {
-		return object == null ? false
-			: (object instanceof Class ? isComplex((Class<?>) object) : isComplex(object.getClass()));
+		return object == null ? false : (object instanceof Class ? isComplex((Class<?>) object) : isComplex(object.getClass()));
 	}
 
 	public static boolean isComplex(Class<?> type) {
@@ -51,8 +50,7 @@ public final class Primitives {
 	}
 
 	public static boolean isPrimitive(Object object) {
-		return object == null ? false
-			: (object instanceof Class ? isPrimitive((Class<?>) object) : isPrimitive(object.getClass()));
+		return object == null ? false : (object instanceof Class ? isPrimitive((Class<?>) object) : isPrimitive(object.getClass()));
 	}
 
 	public static boolean isPrimitive(Class<?> type) {

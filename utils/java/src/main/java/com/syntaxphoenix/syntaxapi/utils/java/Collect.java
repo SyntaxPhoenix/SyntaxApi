@@ -14,8 +14,7 @@ import java.util.stream.Collector;
 
 public final class Collect {
 
-	public static final Set<Collector.Characteristics> CH_ID = Collections
-			.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+	public static final Set<Collector.Characteristics> CH_ID = Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
 
 	@SuppressWarnings("unchecked")
 	public static <I, R> Function<I, R> castingIdentity() {
@@ -39,8 +38,8 @@ public final class Collect {
 		private final Function<A, R> finisher;
 		private final Set<Characteristics> characteristics;
 
-		public CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner,
-				Function<A, R> finisher, Set<Characteristics> characteristics) {
+		public CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner, Function<A, R> finisher,
+			Set<Characteristics> characteristics) {
 			this.supplier = supplier;
 			this.accumulator = accumulator;
 			this.combiner = combiner;
@@ -48,8 +47,7 @@ public final class Collect {
 			this.characteristics = characteristics;
 		}
 
-		public CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner,
-				Set<Characteristics> characteristics) {
+		public CollectorImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, BinaryOperator<A> combiner, Set<Characteristics> characteristics) {
 			this(supplier, accumulator, combiner, castingIdentity(), characteristics);
 		}
 
@@ -121,8 +119,8 @@ public final class Collect {
 	 * serializability, or thread-safety of the {@code List} returned; if more
 	 * control over the returned {@code List} is required, use
 	 *
-	 * @param <T> the type of the input elements
-	 * @param <A> the type of the output element
+	 * @param <T>      the type of the input elements
+	 * @param <A>      the type of the output element
 	 * @param consumer accumulator of collector
 	 * @return a {@code Collector} which collects all the transformed elements into
 	 *         a {@code List}, in encounter order

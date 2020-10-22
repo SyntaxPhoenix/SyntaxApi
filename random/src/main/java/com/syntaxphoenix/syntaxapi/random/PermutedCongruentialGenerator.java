@@ -7,11 +7,11 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 
 	private long multiplier = 645;
 	private long increment = 2583;
-	
+
 	public PermutedCongruentialGenerator() {
 		setSeed(System.currentTimeMillis());
 	}
-	
+
 	public PermutedCongruentialGenerator(long seed) {
 		setSeed(seed);
 	}
@@ -34,7 +34,7 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 	/*
 	 * 
 	 */
-	
+
 	@Override
 	public void setCompressedState(long state) {
 		this.state = state;
@@ -44,7 +44,7 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 	public long getCompressedState() {
 		return state;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -57,7 +57,7 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 		this.multiplier = multiplier;
 		checkVariables();
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -79,9 +79,9 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 
 	@Override
 	public boolean nextBoolean() {
-		return next(1) == 0; 
+		return next(1) == 0;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -98,7 +98,7 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 
 	@Override
 	public short nextShort(short min, short max) {
-		if(max <= min) {
+		if (max <= min) {
 			return min;
 		}
 		return (short) (min + Math.abs((int) (nextShort() % (max - min))));
@@ -177,7 +177,7 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 	/*
 	 * 
 	 */
-	
+
 	@Override
 	public double nextDouble() {
 		return (((long) (next(26)) << 27) + next(27)) * 0x1.0p-53;
@@ -195,18 +195,18 @@ public class PermutedCongruentialGenerator extends RandomNumberGenerator {
 		}
 		return min + (nextDouble() * (max - min));
 	}
-	
+
 	/*
 	 * 
 	 * 
 	 * 
 	 */
-	
+
 	private void checkVariables() {
-		if(multiplier <= 0)
+		if (multiplier <= 0)
 			multiplier = 1;
-		if(increment < 0)
+		if (increment < 0)
 			increment = 0;
 	}
-	
+
 }

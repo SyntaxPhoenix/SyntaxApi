@@ -18,8 +18,8 @@ public class NbtAdapterRegistry extends DataAdapterRegistry<NbtTag> {
 	}
 
 	@Override
-	protected <I, R extends NbtTag> NbtAdapter<I, R> createAdapter(Class<I> primitiveType, Class<R> resultType,
-			Function<I, R> builder, Function<R, I> extractor) {
+	protected <I, R extends NbtTag> NbtAdapter<I, R> createAdapter(Class<I> primitiveType, Class<R> resultType, Function<I, R> builder,
+		Function<R, I> extractor) {
 		return new NbtAdapter<>(primitiveType, resultType, builder, extractor);
 	}
 

@@ -5,13 +5,13 @@ import com.syntaxphoenix.syntaxapi.command.ArgumentType;
 import com.syntaxphoenix.syntaxapi.command.BaseArgument;
 
 public class BooleanArgument extends BaseArgument {
-	
+
 	private Boolean value;
-	
+
 	public BooleanArgument() {
 		this.value = false;
 	}
-	
+
 	public BooleanArgument(Boolean value) {
 		this.value = value;
 	}
@@ -25,7 +25,7 @@ public class BooleanArgument extends BaseArgument {
 	public Object asObject() {
 		return value;
 	}
-	
+
 	public Boolean getValue() {
 		return value;
 	}

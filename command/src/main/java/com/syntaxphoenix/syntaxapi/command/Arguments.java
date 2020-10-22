@@ -62,9 +62,9 @@ public class Arguments implements Iterable<BaseArgument> {
 		arguments.add(argument);
 	}
 
-    public boolean match(Predicate<BaseArgument> filter) {
-        return arguments.stream().anyMatch(filter);
-    }
+	public boolean match(Predicate<BaseArgument> filter) {
+		return arguments.stream().anyMatch(filter);
+	}
 
 	public ArgumentType getType(int position) {
 		return get(position).getType();

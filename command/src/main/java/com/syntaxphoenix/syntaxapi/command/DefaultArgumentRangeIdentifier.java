@@ -15,7 +15,10 @@ import com.syntaxphoenix.syntaxapi.utils.java.Strings;
  */
 public class DefaultArgumentRangeIdentifier extends ArgumentRangeIdentifier {
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({
+			"rawtypes",
+			"unchecked"
+	})
 	@Override
 	public ArrayList<BaseArgumentRange> process(String... ranges) {
 		ArrayList<BaseArgumentRange> list = new ArrayList<>();
@@ -46,8 +49,7 @@ public class DefaultArgumentRangeIdentifier extends ArgumentRangeIdentifier {
 				list.add(new CollectionSizeRange(min, max, valueType));
 			} else if (range.startsWith("number0[")) {
 				String[] part = (range = range.replaceFirst("number0[", "")).split("\\,", 2);
-				if (!((Strings.isNumeric(part[0]) || Strings.isDecimal(part[0]))
-						&& (Strings.isNumeric(part[1]) || Strings.isDecimal(part[1]))))
+				if (!((Strings.isNumeric(part[0]) || Strings.isDecimal(part[0])) && (Strings.isNumeric(part[1]) || Strings.isDecimal(part[1]))))
 					continue;
 
 				BigDecimal min, max;
@@ -61,11 +63,9 @@ public class DefaultArgumentRangeIdentifier extends ArgumentRangeIdentifier {
 				list.add(new NumberValueRange(min, max));
 			} else if (range.startsWith("number1[")) {
 				String[] part = (range = range.replaceFirst("number1[", "")).split("\\:", 2);
-				if (!(Strings.isBoolean(part[0])
-						&& LIST.matcher(part[1] = part[1].substring(0, part[1].length() - 1)).matches()))
+				if (!(Strings.isBoolean(part[0]) && LIST.matcher(part[1] = part[1].substring(0, part[1].length() - 1)).matches()))
 					continue;
-				list.add(new NumberChooseRange(Boolean.valueOf(part[0]),
-						(Object[]) part[1].replaceFirst("\\A\\{", "").replaceFirst("\\}\\z", "").split(",")));
+				list.add(new NumberChooseRange(Boolean.valueOf(part[0]), (Object[]) part[1].replaceFirst("\\A\\{", "").replaceFirst("\\}\\z", "").split(",")));
 			} else if (range.startsWith("text0[")) {
 				String[] part = (range = range.replaceFirst("text0[", "")).split("\\,", 2);
 				if (!(Strings.isNumeric(part[0]) && Strings.isNumeric(part[1])))
@@ -82,11 +82,9 @@ public class DefaultArgumentRangeIdentifier extends ArgumentRangeIdentifier {
 				list.add(new TextSizeRange(min, max));
 			} else if (range.startsWith("text1[")) {
 				String[] part = (range = range.replaceFirst("text1[", "")).split("\\:", 2);
-				if (!(Strings.isBoolean(part[0])
-						&& LIST.matcher(part[1] = part[1].substring(0, part[1].length() - 1)).matches()))
+				if (!(Strings.isBoolean(part[0]) && LIST.matcher(part[1] = part[1].substring(0, part[1].length() - 1)).matches()))
 					continue;
-				list.add(new TextChooseRange(Boolean.valueOf(part[0]),
-						part[1].replaceFirst("\\A\\{", "").replaceFirst("\\}\\z", "").split(",")));
+				list.add(new TextChooseRange(Boolean.valueOf(part[0]), part[1].replaceFirst("\\A\\{", "").replaceFirst("\\}\\z", "").split(",")));
 			} else if (range.startsWith("state0[")) {
 				if ((range = range.replaceFirst("state0[", "")).length() == 1) {
 					list.add(new StateRange());

@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.ListIterator;
 
 public abstract class NbtAbstractList<T extends NbtTag> extends NbtTag implements List<T> {
-	
+
 	protected ArrayList<T> list = new ArrayList<>();
-	
+
 	@Override
-    public Iterator<T> iterator() {
-        return list.iterator();
-    }
+	public Iterator<T> iterator() {
+		return list.iterator();
+	}
 
 	@Override
 	public boolean isEmpty() {
@@ -34,9 +34,9 @@ public abstract class NbtAbstractList<T extends NbtTag> extends NbtTag implement
 	public void add(int index, T element) {
 		list.add(index, element);
 	}
-    
-    @Override
-    public abstract NbtAbstractList<T> clone();
+
+	@Override
+	public abstract NbtAbstractList<T> clone();
 
 	@Override
 	public boolean contains(Object o) {
@@ -120,7 +120,7 @@ public abstract class NbtAbstractList<T extends NbtTag> extends NbtTag implement
 
 	@Override
 	public abstract NbtAbstractList<T> subList(int fromIndex, int toIndex);
-	
+
 	@Override
 	public List<T> getValue() {
 		return list;

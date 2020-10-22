@@ -10,7 +10,9 @@ public class ConfigTools {
 
 	public static String[] getKeys(String input) {
 		if (!input.contains(".")) {
-			return new String[] { input };
+			return new String[] {
+					input
+			};
 		}
 		return input.split("\\.");
 	}

@@ -26,11 +26,9 @@ public class VersionTest implements Consumer<String[]>, Printer {
 			Random random = new Random(seed + (state.ordinal() * 32254));
 			print(state.name() + " | creating versions...");
 			for (int versions = 100; versions > 0; versions--) {
-				DefaultVersion version = new DefaultVersion(random.nextInt(1000), random.nextInt(10000),
-						random.nextInt(100000));
+				DefaultVersion version = new DefaultVersion(random.nextInt(1000), random.nextInt(10000), random.nextInt(100000));
 				while (manager.contains(version))
-					version = new DefaultVersion(random.nextInt(10000), random.nextInt(100000),
-							random.nextInt(1000000));
+					version = new DefaultVersion(random.nextInt(10000), random.nextInt(100000), random.nextInt(1000000));
 				manager.set(state, version, false);
 			}
 			print(state.name() + " | versions created");

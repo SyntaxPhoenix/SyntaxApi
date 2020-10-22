@@ -47,8 +47,7 @@ public abstract class SocketServer {
 	public SocketServer(int port, InetAddress address, ThreadFactory factory) {
 		this.port = port;
 		this.address = address;
-		this.serverThread = factory == null ? Executors.newSingleThreadExecutor()
-				: Executors.newSingleThreadExecutor(factory);
+		this.serverThread = factory == null ? Executors.newSingleThreadExecutor() : Executors.newSingleThreadExecutor(factory);
 	}
 
 	/*

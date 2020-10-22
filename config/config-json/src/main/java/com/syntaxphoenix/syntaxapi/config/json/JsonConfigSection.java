@@ -133,8 +133,7 @@ public class JsonConfigSection extends BaseSection {
 					} else if (input instanceof Serializable) {
 						JsonObject serialized = new JsonObject();
 						JsonElement element = JsonTools.getConfiguredGson().toJsonTree(input);
-						serialized.addProperty("class",
-								input.getClass().getName().replace(".java", "").replace(".class", ""));
+						serialized.addProperty("class", input.getClass().getName().replace(".java", "").replace(".class", ""));
 						serialized.add("classValue", element);
 						object.add(entry.getKey(), serialized);
 					}

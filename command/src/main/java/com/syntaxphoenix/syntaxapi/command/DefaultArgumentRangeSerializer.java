@@ -18,8 +18,7 @@ public class DefaultArgumentRangeSerializer extends ArgumentRangeSerializer {
 
 	@Override
 	public String toString(CollectionSizeRange<?> range) {
-		return String.format(COLLECTION_SIZE_FORMAT, "collection0", range.getInputType().toString(), range.getMinimum(),
-				range.getMaximum());
+		return String.format(COLLECTION_SIZE_FORMAT, "collection0", range.getInputType().toString(), range.getMinimum(), range.getMaximum());
 	}
 
 	@Override

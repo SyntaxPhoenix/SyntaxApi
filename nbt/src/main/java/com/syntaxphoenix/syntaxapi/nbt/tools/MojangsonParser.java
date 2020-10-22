@@ -9,15 +9,12 @@ import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 
 public final class MojangsonParser {
 
-	private static final Pattern DOUBLE_NS = Pattern.compile("[-+]?(?:[0-9]+[.]|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?",
-			Pattern.CASE_INSENSITIVE),
-			DOUBLE_S = Pattern.compile("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?d",
-					Pattern.CASE_INSENSITIVE),
-			FLOAT = Pattern.compile("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?f", Pattern.CASE_INSENSITIVE),
-			BYTE = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)b", Pattern.CASE_INSENSITIVE),
-			LONG = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)l", Pattern.CASE_INSENSITIVE),
-			SHORT = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)s", Pattern.CASE_INSENSITIVE),
-			INT = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)");
+	private static final Pattern DOUBLE_NS = Pattern.compile("[-+]?(?:[0-9]+[.]|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?", Pattern.CASE_INSENSITIVE),
+		DOUBLE_S = Pattern.compile("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?d", Pattern.CASE_INSENSITIVE),
+		FLOAT = Pattern.compile("[-+]?(?:[0-9]+[.]?|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?f", Pattern.CASE_INSENSITIVE),
+		BYTE = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)b", Pattern.CASE_INSENSITIVE),
+		LONG = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)l", Pattern.CASE_INSENSITIVE),
+		SHORT = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)s", Pattern.CASE_INSENSITIVE), INT = Pattern.compile("[-+]?(?:0|[1-9][0-9]*)");
 
 	private final String str;
 	private int index;
@@ -106,7 +103,7 @@ public final class MojangsonParser {
 		if (Strings.isNumeric(str)) {
 			return new NbtBigInt(str);
 		}
-		if(Strings.isDecimal(str)) {
+		if (Strings.isDecimal(str)) {
 			return new NbtBigDecimal(str);
 		}
 		return new NbtString(str);
@@ -357,9 +354,8 @@ public final class MojangsonParser {
 			this.index += 1;
 			return;
 		}
-		throw new MojangsonParseException(
-				"Expected '" + c + "' but got '" + (hasNext ? Character.valueOf(currentChar()) : "<EOF>") + "'",
-				this.str, this.index + 1);
+		throw new MojangsonParseException("Expected '" + c + "' but got '" + (hasNext ? Character.valueOf(currentChar()) : "<EOF>") + "'", this.str,
+			this.index + 1);
 	}
 
 	/**
@@ -382,9 +378,8 @@ public final class MojangsonParser {
 	}
 
 	private static boolean isSimpleChar(char paramChar) {
-		return (paramChar >= '0' && paramChar <= '9') || (paramChar >= 'A' && paramChar <= 'Z')
-				|| (paramChar >= 'a' && paramChar <= 'z') || paramChar == '_' || paramChar == '-' || paramChar == '.'
-				|| paramChar == '+';
+		return (paramChar >= '0' && paramChar <= '9') || (paramChar >= 'A' && paramChar <= 'Z') || (paramChar >= 'a' && paramChar <= 'z') || paramChar == '_'
+			|| paramChar == '-' || paramChar == '.' || paramChar == '+';
 	}
 
 }

@@ -16,11 +16,11 @@ public final class GridRow<V> {
 	public GridValue<V>[] getValues() {
 		return values.toArray(new GridValue[0]);
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	public long getEntryCount() {
 		return values.size();
 	}
@@ -93,7 +93,7 @@ public final class GridRow<V> {
 	}
 
 	public GridRow<V> set(int z, V value) {
-		if(value == null)
+		if (value == null)
 			return this;
 		Optional<GridValue<V>> option = getOptionalValue(z);
 		GridValue<V> grid;

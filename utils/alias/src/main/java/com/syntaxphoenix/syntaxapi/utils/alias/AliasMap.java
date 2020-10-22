@@ -9,12 +9,12 @@ public class AliasMap<A> extends HashMap<Alias, A> {
 
 	private static final long serialVersionUID = 8244987875156828827L;
 	private Set<Entry<Alias, A>> entries;
-	
+
 	public AliasMap(Map<Alias, A> map) {
 		super(map);
 		entries = entrySet();
 	}
-	
+
 	public AliasMap() {
 		entries = entrySet();
 	}
@@ -107,11 +107,11 @@ public class AliasMap<A> extends HashMap<Alias, A> {
 		}
 		return conflict;
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	@Override
 	public AliasMap<A> clone() {
 		return new AliasMap<A>(this);

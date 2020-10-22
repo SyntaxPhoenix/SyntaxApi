@@ -7,23 +7,23 @@ import java.util.List;
 import com.syntaxphoenix.syntaxapi.command.arguments.*;
 
 public class DefaultArgumentSerializer extends ArgumentSerializer {
-	
+
 	@Override
 	public String toString(ArrayArgument<BaseArgument> argument) {
 		BaseArgument[] value = argument.getValue();
-		if(value == null || value.length == 0) {
+		if (value == null || value.length == 0) {
 			return "[]";
 		}
 		Iterator<BaseArgument> iterator = Arrays.stream(value).iterator();
 		StringBuilder builder = new StringBuilder();
 		builder.append('[');
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			BaseArgument entry = iterator.next();
-			if(entry == null) {
+			if (entry == null) {
 				continue;
 			}
 			builder.append(toString(entry));
-			if(iterator.hasNext()) {
+			if (iterator.hasNext()) {
 				builder.append(',');
 				builder.append(' ');
 			}
@@ -70,19 +70,19 @@ public class DefaultArgumentSerializer extends ArgumentSerializer {
 	@Override
 	public String toString(ListArgument<BaseArgument> argument) {
 		List<BaseArgument> value = argument.getValue();
-		if(value == null || value.isEmpty()) {
+		if (value == null || value.isEmpty()) {
 			return "{}";
 		}
 		Iterator<BaseArgument> iterator = value.iterator();
 		StringBuilder builder = new StringBuilder();
 		builder.append('{');
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			BaseArgument entry = iterator.next();
-			if(entry == null) {
+			if (entry == null) {
 				continue;
 			}
 			builder.append(toString(entry));
-			if(iterator.hasNext()) {
+			if (iterator.hasNext()) {
 				builder.append(',');
 				builder.append(' ');
 			}
@@ -118,5 +118,5 @@ public class DefaultArgumentSerializer extends ArgumentSerializer {
 		}
 		return array;
 	}
-	
+
 }

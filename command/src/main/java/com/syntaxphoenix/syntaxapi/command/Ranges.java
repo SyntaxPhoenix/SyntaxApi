@@ -62,7 +62,7 @@ public class Ranges implements Iterable<BaseArgumentRange> {
 	public RangeType getType(int position) {
 		return get(position).getType();
 	}
-	
+
 	public RangeSuperType getSuperType(int position) {
 		return getType(position).getSuperType();
 	}

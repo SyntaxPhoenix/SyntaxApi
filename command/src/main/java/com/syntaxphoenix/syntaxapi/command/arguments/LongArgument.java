@@ -9,17 +9,17 @@ import com.syntaxphoenix.syntaxapi.command.NumericArgument;
  *
  */
 public class LongArgument extends NumericArgument {
-	
+
 	private Long value;
-	
+
 	public LongArgument() {
 		this.value = 0L;
 	}
-	
+
 	public LongArgument(Long value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public ArgumentType getType() {
 		return ArgumentType.LONG;
@@ -29,12 +29,12 @@ public class LongArgument extends NumericArgument {
 	public Object asObject() {
 		return value;
 	}
-	
+
 	@Override
 	public Number asNumber() {
 		return value;
 	}
-	
+
 	public Long getValue() {
 		return value;
 	}

@@ -37,7 +37,7 @@ public class ServiceManager {
 	public boolean hasLogger() {
 		return logger != null;
 	}
-	
+
 	public ServiceManager setLogger(ILogger logger) {
 		this.logger = logger;
 		return this;
@@ -65,7 +65,7 @@ public class ServiceManager {
 		Optional<IService> option = findService(id);
 		return option.isPresent() ? option.get() : null;
 	}
-	
+
 	public List<IService> getServices() {
 		return services.stream().collect(Collectors.toList());
 	}
@@ -105,7 +105,7 @@ public class ServiceManager {
 	 */
 
 	// subscribe
-	
+
 	public void subscribe(Object object) {
 		boolean flag = object instanceof Class;
 		Class<?> clazz = flag ? (Class<?>) object : object.getClass();
@@ -127,50 +127,53 @@ public class ServiceManager {
 
 		if (!methods.isEmpty())
 			for (Method method : methods)
-				container.add(
-						flag ? new ServiceMethodValue(clazz, method) : new ServiceMethodValue(clazz, method, object));
+				container.add(flag ? new ServiceMethodValue(clazz, method) : new ServiceMethodValue(clazz, method, object));
 
 		if (container.isEmpty())
 			return;
 		containers.add(container);
 	}
-	
+
 	// Unsubscribe
-	
+
 	public void unsubscribe(ServiceContainer container) {
-		if(containers.isEmpty())
+		if (containers.isEmpty())
 			return;
 		containers.remove(container);
 	}
-	
+
 	public void unsubscribe(Object object) {
-		ServiceContainer[] containers = this.containers.stream()
-				.filter(container -> container.getOwner().equals(object)).toArray(size -> new ServiceContainer[size]);
+		ServiceContainer[] containers = this.containers
+			.stream()
+			.filter(container -> container.getOwner().equals(object))
+			.toArray(size -> new ServiceContainer[size]);
 		if (containers.length == 0)
 			return;
 		for (ServiceContainer container : containers) {
 			this.containers.remove(container);
 		}
 	}
-	
+
 	public void unsubscribe(Class<?> clazz) {
-		ServiceContainer[] containers = this.containers.stream()
-				.filter(container -> container.getOwner().getClass() == clazz).toArray(size -> new ServiceContainer[size]);
+		ServiceContainer[] containers = this.containers
+			.stream()
+			.filter(container -> container.getOwner().getClass() == clazz)
+			.toArray(size -> new ServiceContainer[size]);
 		if (containers.length == 0)
 			return;
 		for (ServiceContainer container : containers) {
 			this.containers.remove(container);
 		}
 	}
-	
+
 	// ServiceContainer Getter
-	
+
 	public List<ServiceContainer> getContainers() {
 		return containers.stream().collect(Collectors.toList());
 	}
-	
+
 	// Subscription Getter
-	
+
 	public IServiceValue[] getSubscriptions(String id) {
 		Optional<IService> service = findService(id);
 		return service.isPresent() ? getSubscriptions(service.get()) : new IServiceValue[0];
@@ -183,11 +186,11 @@ public class ServiceManager {
 	public IServiceValue[] getSubscriptions(Class<? extends IService> service) {
 		if (containers.isEmpty())
 			return new IServiceValue[0];
-		
+
 		ArrayList<IServiceValue> services = new ArrayList<>();
-		for (ServiceContainer container : containers) 
+		for (ServiceContainer container : containers)
 			services.addAll(Arrays.asList(container.getValues(service)));
-		
+
 		return services.toArray(new IServiceValue[0]);
 	}
 

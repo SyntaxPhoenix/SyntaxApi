@@ -39,7 +39,7 @@ public class YamlConfigSection extends BaseSection {
 	protected BaseSection initSection(String name) {
 		return new YamlConfigSection(name);
 	}
-	
+
 	@Override
 	protected boolean isSectionInstance(BaseSection section) {
 		return section instanceof YamlConfigSection;
@@ -73,9 +73,9 @@ public class YamlConfigSection extends BaseSection {
 			throw new NullPointerException("No content!");
 		}
 
-		fromEntrySet(input.entrySet());		
+		fromEntrySet(input.entrySet());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void fromEntrySet(Set<Entry<String, Object>> entries) {
 		for (Entry<String, Object> entry : entries) {

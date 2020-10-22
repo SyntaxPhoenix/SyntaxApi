@@ -13,13 +13,13 @@ import com.syntaxphoenix.syntaxapi.test.utils.Printer;
  *
  */
 public class SyntaxTest implements Executor, Printer {
-	
+
 	private static InputReader reader;
-	
+
 	public static InputReader getReader() {
 		return reader;
 	}
-	
+
 	/*
 	 * 
 	 * Vars
@@ -27,23 +27,24 @@ public class SyntaxTest implements Executor, Printer {
 	 */
 
 	private MainMenu menu;
-	
+
 	/*
 	 * 
 	 * Constructor
 	 * 
 	 */
-	
+
 	public SyntaxTest(String[] args) {
-		(getMenu()).open((reader = new InputReader(this, input -> {}, System.in, "ConsoleReader")).initialize());
+		(getMenu()).open((reader = new InputReader(this, input -> {
+		}, System.in, "ConsoleReader")).initialize());
 	}
-	
+
 	/*
 	 * 
 	 * Stuff
 	 * 
 	 */
-	
+
 	/**
 	 * @return test menu
 	 */
@@ -61,38 +62,38 @@ public class SyntaxTest implements Executor, Printer {
 		menu.register("ThreadTest", "Tests the new Threading Stuff", new ThreadTest(), "amount=<Number>", "threadsMin=<Number>", "threadsMax=<Number>");
 		menu.register("SocketTest", "Tests the socket server", new SocketTest(), "port=<Number>");
 		menu.register("RequestTest", "Tests the Request util", new RequestTest());
-		
+
 		return menu;
 	}
-	
+
 	/*
 	 * 
 	 * Getter & Setter
 	 * 
 	 */
-	
+
 	/**
 	 * @return the menu
 	 */
 	public MainMenu getMenu() {
-		if(menu == null) {
+		if (menu == null) {
 			menu = new MainMenu();
-			
+
 			menu.register("TestMenu - open the text menu", createTests());
-			
+
 		}
 		return menu;
 	}
-	
+
 	/*
 	 * 
 	 * Executor
 	 * 
 	 */
-	
+
 	@Override
 	public void execute(Runnable command) {
 		SyntaxExecutor.queue(command);
 	}
-	
+
 }

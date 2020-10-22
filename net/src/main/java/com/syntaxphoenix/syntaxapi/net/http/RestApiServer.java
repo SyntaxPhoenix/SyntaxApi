@@ -103,8 +103,7 @@ public class RestApiServer extends HttpServer {
 	 */
 
 	@Override
-	protected RequestExecution handleHttpRequest(HttpSender sender, HttpWriter writer, ReceivedRequest request)
-		throws Exception {
+	protected RequestExecution handleHttpRequest(HttpSender sender, HttpWriter writer, ReceivedRequest request) throws Exception {
 
 		if (serializer == null)
 			serializer = value -> JsonTools.readJson(value);
@@ -117,9 +116,7 @@ public class RestApiServer extends HttpServer {
 			return RequestExecution.error(new IllegalStateException("Handler can't be null!"));
 		}
 
-		request
-			.setData(new CustomRequestData<>(JsonObject.class,
-				serializer.serialize(request.getData().getValue().toString())));
+		request.setData(new CustomRequestData<>(JsonObject.class, serializer.serialize(request.getData().getValue().toString())));
 
 		try {
 			return RequestExecution.of(handler.handleRequest(sender, writer, request));

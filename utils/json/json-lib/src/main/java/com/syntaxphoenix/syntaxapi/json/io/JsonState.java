@@ -24,7 +24,7 @@ public enum JsonState {
 	FLOAT(JsonToken.FLOAT),
 	DOUBLE(JsonToken.DOUBLE),
 	BIG_DECIMAL(JsonToken.BIG_DECIMAL);
-	
+
 	private final JsonToken token;
 
 	private JsonState(JsonToken token) {

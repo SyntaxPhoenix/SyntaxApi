@@ -5,10 +5,10 @@ import java.awt.Color;
 import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 
 public abstract class LogType {
-	
+
 	private final String id;
 	private String name;
-	
+
 	/*
 	 * 
 	 * 
@@ -23,43 +23,43 @@ public abstract class LogType {
 		this.id = id.toLowerCase();
 		this.name = name;
 	}
-	
+
 	/*
 	 * 
 	 * 
 	 * 
 	 */
-	
+
 	public void setName(String name) {
 		this.name = (name == null || name.isEmpty()) ? this.name : name;
 	}
-	
+
 	/*
 	 * 
 	 * 
 	 * 
 	 */
-	
+
 	public String getId() {
 		return id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	/*
 	 * 
 	 * 
 	 * 
 	 */
-	
+
 	public abstract ColorProcessor getColorProcessor();
-	
+
 	public abstract Color asColor();
-	
+
 	public abstract String asColorString();
-	
+
 	public abstract String asColorString(boolean stream);
-	
+
 }

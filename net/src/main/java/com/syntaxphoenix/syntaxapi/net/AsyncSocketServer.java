@@ -50,8 +50,7 @@ public abstract class AsyncSocketServer extends SocketServer {
 	}
 
 	public AsyncSocketServer(int port, InetAddress address, ThreadFactory factory) {
-		this(port, address, factory,
-				factory == null ? Executors.newCachedThreadPool() : Executors.newCachedThreadPool(factory));
+		this(port, address, factory, factory == null ? Executors.newCachedThreadPool() : Executors.newCachedThreadPool(factory));
 	}
 
 	public AsyncSocketServer(int port, InetAddress address, ExecutorService service) {

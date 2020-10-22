@@ -8,14 +8,14 @@ import java.util.Optional;
  *
  */
 public interface BaseConfig {
-	
+
 	public void load(File file) throws Throwable;
-	
+
 	public void save(File file) throws Throwable;
-	
+
 	public default Optional<BaseSection> asSection() {
 		BaseSection output = null;
-		if(this instanceof BaseSection) {
+		if (this instanceof BaseSection) {
 			output = (BaseSection) this;
 		}
 		return Optional.ofNullable(output);

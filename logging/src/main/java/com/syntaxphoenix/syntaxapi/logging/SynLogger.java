@@ -23,7 +23,7 @@ public final class SynLogger implements ILogger {
 	private LogTypeMap typeMap = new LogTypeMap();
 	private boolean colored;
 	private String format;
-	
+
 	private BiConsumer<Boolean, String> custom;
 	private PrintStream stream;
 
@@ -68,14 +68,14 @@ public final class SynLogger implements ILogger {
 		setState(state);
 		setDefaultTypes();
 	}
-	
+
 	/*
 	 * 
 	 */
-	
+
 	@Override
 	public SynLogger close() {
-		if(stream != null) {
+		if (stream != null) {
 			stream.close();
 			stream = null;
 		}
@@ -150,7 +150,7 @@ public final class SynLogger implements ILogger {
 	public LogTypeMap getTypeMap() {
 		return typeMap;
 	}
-	
+
 	/*
 	 * 
 	 */
@@ -215,8 +215,13 @@ public final class SynLogger implements ILogger {
 	}
 
 	public SynLogger log(LogType type, String message) {
-		return println(type, format.replace("%date%", Times.getDate(".")).replace("%time%", Times.getTime(":"))
-				.replace("%thread%", getThreadName()).replace("%type%", type.getName()).replace("%message%", message));
+		return println(type,
+			format
+				.replace("%date%", Times.getDate("."))
+				.replace("%time%", Times.getTime(":"))
+				.replace("%thread%", getThreadName())
+				.replace("%type%", type.getName())
+				.replace("%message%", message));
 	}
 
 	/*
@@ -278,14 +283,14 @@ public final class SynLogger implements ILogger {
 	 */
 
 	public SynLogger println(LogType type, String message) {
-		if(!colored) {
+		if (!colored) {
 			return println(message);
 		}
 		if (state.useCustom())
 			if (custom != null)
 				custom.accept(true, type.asColorString(false) + message);
 		if (state.useStream())
-			if(stream != null)
+			if (stream != null)
 				stream.println(type.asColorString(true) + message);
 		return this;
 	}
@@ -295,20 +300,20 @@ public final class SynLogger implements ILogger {
 			if (custom != null)
 				custom.accept(true, message);
 		if (state.useStream())
-			if(stream != null)
+			if (stream != null)
 				stream.println(message);
 		return this;
 	}
 
 	public SynLogger print(LogType type, String message) {
-		if(!colored) {
+		if (!colored) {
 			return print(message);
 		}
 		if (state.useCustom())
 			if (custom != null)
 				custom.accept(false, type.asColorString(false) + message);
 		if (state.useStream())
-			if(stream != null)
+			if (stream != null)
 				stream.print(type.asColorString(true) + message);
 		return this;
 	}
@@ -318,7 +323,7 @@ public final class SynLogger implements ILogger {
 			if (custom != null)
 				custom.accept(false, message);
 		if (state.useStream())
-			if(stream != null)
+			if (stream != null)
 				stream.print(message);
 		return this;
 	}

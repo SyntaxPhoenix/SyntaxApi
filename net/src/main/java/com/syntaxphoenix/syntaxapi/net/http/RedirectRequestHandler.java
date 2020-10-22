@@ -21,10 +21,7 @@ public class RedirectRequestHandler implements RequestHandler, PathHandler {
 	public void handlePath(HttpSender sender, HttpWriter writer, ReceivedRequest data) throws Exception {
 		if (data.getPath().length == 1) {
 			if (main == null) {
-				new NamedAnswer(StandardNamedType.PLAIN)
-					.setResponse("Not Found")
-					.code(ResponseCode.NOT_FOUND)
-					.write(writer);
+				new NamedAnswer(StandardNamedType.PLAIN).setResponse("Not Found").code(ResponseCode.NOT_FOUND).write(writer);
 				return;
 			}
 			main.handlePath(sender, writer, data);
@@ -69,8 +66,7 @@ public class RedirectRequestHandler implements RequestHandler, PathHandler {
 	}
 
 	protected String path(String... path) {
-		return Objects.requireNonNull(path, "Path cannot be null!").length == 1 ? path[0]
-			: SimpleConversion.toPath(path);
+		return Objects.requireNonNull(path, "Path cannot be null!").length == 1 ? path[0] : SimpleConversion.toPath(path);
 	}
 
 	/*
@@ -81,10 +77,7 @@ public class RedirectRequestHandler implements RequestHandler, PathHandler {
 		PathHandler handler = paths.get(data.getPathAsString());
 		if (handler == null) {
 			if (main == null) {
-				new NamedAnswer(StandardNamedType.PLAIN)
-					.setResponse("Not Found")
-					.code(ResponseCode.NOT_FOUND)
-					.write(writer);
+				new NamedAnswer(StandardNamedType.PLAIN).setResponse("Not Found").code(ResponseCode.NOT_FOUND).write(writer);
 				return;
 			}
 			main.handlePath(sender, writer, data);

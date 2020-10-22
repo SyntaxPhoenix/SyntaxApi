@@ -6,5 +6,5 @@ import com.google.gson.JsonObject;
 public interface RequestSerializer {
 
 	public JsonObject serialize(String raw) throws Exception;
-	
+
 }

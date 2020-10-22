@@ -32,13 +32,11 @@ public class SyntaxExecutor extends Thread {
 		test = new SyntaxTest(args);
 
 		try {
-			LOGGER.setStream(
-					WRITER = new PrintWriter(new File("debug.log"), LOGGER.getStream()));
+			LOGGER.setStream(WRITER = new PrintWriter(new File("debug.log"), LOGGER.getStream()));
 		} catch (FileNotFoundException e) {
 			LOGGER.log(e);
 		}
 
-		
 		while (true) {
 			try {
 				QUEUE.take().run();

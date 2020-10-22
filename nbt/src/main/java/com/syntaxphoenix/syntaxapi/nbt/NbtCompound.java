@@ -50,11 +50,11 @@ public final class NbtCompound extends NbtTag {
 	public NbtType getType() {
 		return NbtType.COMPOUND;
 	}
-	
+
 	public void clear() {
 		value.clear();
 	}
-	
+
 	@Override
 	public NbtCompound clone() {
 		return new NbtCompound(value);
@@ -413,8 +413,8 @@ public final class NbtCompound extends NbtTag {
 	/**
 	 * Put the given key and value into the compound tag.
 	 *
-	 * @param path    the key
-	 * @param bool  the value
+	 * @param path the key
+	 * @param bool the value
 	 */
 	public void set(String path, boolean bool) {
 		set(path, (byte) (bool ? 1 : 0));
@@ -551,8 +551,7 @@ public final class NbtCompound extends NbtTag {
 			if (builder.length() > 1) {
 				builder.append(',');
 			}
-			builder.append(SIMPLE_STRING.matcher(key).matches() ? key : NbtString.toMSONString(key)).append(':')
-					.append(this.value.get(key).toMSONString());
+			builder.append(SIMPLE_STRING.matcher(key).matches() ? key : NbtString.toMSONString(key)).append(':').append(this.value.get(key).toMSONString());
 		}
 
 		return builder.append("}").toString();

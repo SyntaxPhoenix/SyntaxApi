@@ -5,9 +5,9 @@ package com.syntaxphoenix.syntaxapi.event;
  *
  */
 public interface Cancelable {
-	
+
 	public boolean isCancelled();
-	
+
 	public void setCancelled(boolean cancelled);
-	
+
 }

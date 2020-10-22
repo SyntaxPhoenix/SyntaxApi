@@ -153,7 +153,10 @@ public abstract class HttpServer extends AsyncSocketServer {
 		if (path[path.length - 1].contains("?")) {
 			parameters = path[path.length - 1].split("\\?");
 			path[path.length - 1] = parameters[0];
-			parameters = parameters[1].contains("&") ? parameters[1].split("&") : new String[] { parameters[1] };
+			parameters = parameters[1].contains("&") ? parameters[1].split("&")
+				: new String[] {
+						parameters[1]
+				};
 		}
 
 		ReceivedRequest request = new ReceivedRequest(RequestType.fromString(info[0]), path);
@@ -168,10 +171,7 @@ public abstract class HttpServer extends AsyncSocketServer {
 		}
 
 		if (!supported.isEmpty() && !supported.contains(request.getType())) {
-			new NamedAnswer(StandardNamedType.PLAIN)
-				.setResponse("Unsupported request method!")
-				.code(ResponseCode.BAD_REQUEST)
-				.write(writer);
+			new NamedAnswer(StandardNamedType.PLAIN).setResponse("Unsupported request method!").code(ResponseCode.BAD_REQUEST).write(writer);
 			reader.close();
 			writer.close();
 			socket.close();
@@ -187,10 +187,7 @@ public abstract class HttpServer extends AsyncSocketServer {
 				}
 			} else {
 				if (!state.message())
-					new NamedAnswer(StandardNamedType.PLAIN)
-						.setResponse("Method or contenttype is not supported")
-						.code(ResponseCode.BAD_REQUEST)
-						.write(writer);
+					new NamedAnswer(StandardNamedType.PLAIN).setResponse("Method or contenttype is not supported").code(ResponseCode.BAD_REQUEST).write(writer);
 				reader.close();
 				writer.close();
 				socket.close();
@@ -199,10 +196,7 @@ public abstract class HttpServer extends AsyncSocketServer {
 		} else {
 			if (request.hasHeader("expect")) {
 				if (((String) request.getHeader("expect")).contains("100-continue"))
-					new NamedAnswer(StandardNamedType.PLAIN)
-						.setResponse("No content length given!")
-						.code(ResponseCode.LENGTH_REQUIRED)
-						.write(writer);
+					new NamedAnswer(StandardNamedType.PLAIN).setResponse("No content length given!").code(ResponseCode.LENGTH_REQUIRED).write(writer);
 			}
 		}
 
@@ -217,10 +211,7 @@ public abstract class HttpServer extends AsyncSocketServer {
 		if (!content.ignore()) {
 
 			if (content.message()) {
-				new NamedAnswer(StandardNamedType.PLAIN)
-					.setResponse("No content length given!")
-					.code(ResponseCode.LENGTH_REQUIRED)
-					.write(writer);
+				new NamedAnswer(StandardNamedType.PLAIN).setResponse("No content length given!").code(ResponseCode.LENGTH_REQUIRED).write(writer);
 				reader.close();
 				writer.close();
 				socket.close();
@@ -265,8 +256,7 @@ public abstract class HttpServer extends AsyncSocketServer {
 
 	}
 
-	protected RequestExecution handleHttpRequest(HttpSender sender, HttpWriter writer, ReceivedRequest request)
-		throws Exception {
+	protected RequestExecution handleHttpRequest(HttpSender sender, HttpWriter writer, ReceivedRequest request) throws Exception {
 		return RequestExecution.CLOSE;
 	}
 

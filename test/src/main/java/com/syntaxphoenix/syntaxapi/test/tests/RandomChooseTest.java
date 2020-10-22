@@ -29,7 +29,7 @@ public class RandomChooseTest implements Consumer<String[]>, Printer {
 			}
 			timeout += 0.5f;
 		}
-		
+
 	}
 
 }

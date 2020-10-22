@@ -6,11 +6,12 @@ import java.util.Collection;
 import java.util.function.Consumer;
 
 public class Lists {
-	
+
 	public static String getEqualsIgnoreCase(String equals, List<String> list) {
-		if(list.isEmpty()) return equals;
-		for(String input : list) {
-			if(input.equalsIgnoreCase(equals)) {
+		if (list.isEmpty())
+			return equals;
+		for (String input : list) {
+			if (input.equalsIgnoreCase(equals)) {
 				return input;
 			}
 		}
@@ -18,7 +19,8 @@ public class Lists {
 	}
 
 	public static boolean containsEqualsIgnoreCase(String equals, List<String> list) {
-		if(list.isEmpty()) return false;
+		if (list.isEmpty())
+			return false;
 		for (String input : list) {
 			if (input.equalsIgnoreCase(equals)) {
 				return true;
@@ -68,7 +70,7 @@ public class Lists {
 	public static <E> List<E> createWithType(Class<E> sample) {
 		return new ArrayList<>();
 	}
-	
+
 	public static <E> List<E> createWithType(E sample) {
 		return new ArrayList<>();
 	}

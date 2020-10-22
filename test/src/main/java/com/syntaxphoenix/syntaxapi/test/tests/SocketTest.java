@@ -31,21 +31,21 @@ public class SocketTest implements Consumer<String[]>, Printer {
 				}
 			}
 		}
-		
+
 		RestApiServer server = new RestApiServer(port);
-		
+
 		try {
 			server.start();
 		} catch (IOException e) {
 			print(e);
 		}
-		
+
 		try {
 			Thread.sleep(30 * 1000);
 		} catch (InterruptedException e) {
 			print(e);
 		}
-		
+
 		try {
 			server.stop();
 		} catch (IOException e) {

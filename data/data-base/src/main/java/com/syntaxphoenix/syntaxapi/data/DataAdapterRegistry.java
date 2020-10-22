@@ -12,8 +12,8 @@ public abstract class DataAdapterRegistry<B> {
 		this.adapterCreator = adapterCreator;
 	}
 
-	protected abstract <I, R extends B> DataAdapter<I, R, B> createAdapter(Class<I> primitiveType, Class<R> resultType,
-			Function<I, R> builder, Function<R, I> extractor);
+	protected abstract <I, R extends B> DataAdapter<I, R, B> createAdapter(Class<I> primitiveType, Class<R> resultType, Function<I, R> builder,
+		Function<R, I> extractor);
 
 	public <T> B wrap(Class<T> type, T value) {
 		DataAdapter<?, B, B> adapter = adapters.computeIfAbsent(type, adapterCreator);
@@ -36,5 +36,5 @@ public abstract class DataAdapterRegistry<B> {
 	public boolean hasAdapter(Class<?> type) {
 		return adapters.containsKey(type);
 	}
-	
+
 }

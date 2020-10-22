@@ -20,10 +20,10 @@ import com.syntaxphoenix.syntaxapi.nbt.NbtType;
 import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 
 public class NbtParser {
-	
+
 	public static final MojangsonDeserializer DESERIALIZER = new MojangsonDeserializer();
 	public static final MojangsonSerializer SERIALIZER = new MojangsonSerializer(true);
-	
+
 	/**
 	 * Convert nbt to mson
 	 * 
@@ -34,7 +34,7 @@ public class NbtParser {
 	public static String toPrettyMson(NbtNamedTag tag) {
 		return SERIALIZER.toString(tag);
 	}
-	
+
 	/**
 	 * Convert mson to nbt
 	 * 
@@ -49,7 +49,7 @@ public class NbtParser {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Analyzes and tries to convert an Object to nbt
 	 * 
@@ -59,30 +59,30 @@ public class NbtParser {
 	 */
 	@SuppressWarnings("unchecked")
 	public static NbtTag fromObject(Object raw) {
-		if(raw instanceof Number) {
+		if (raw instanceof Number) {
 			return NbtNumber.fromNumber((Number) raw);
-		} else if(raw instanceof String) {
+		} else if (raw instanceof String) {
 			String input = (String) raw;
-			if(Strings.isNumeric(input)) {
+			if (Strings.isNumeric(input)) {
 				return new NbtBigInt(input);
-			} else if(Strings.isDecimal(input)) {
+			} else if (Strings.isDecimal(input)) {
 				return new NbtBigDecimal(input);
 			}
 			return new NbtString(input);
-		} else if(raw instanceof List) {
+		} else if (raw instanceof List) {
 			List<NbtList<?>> list = fromList((List<Object>) raw);
-			if(list.size() == 1) {
+			if (list.size() == 1) {
 				return list.get(0);
 			}
 			return listsToList(list);
-		} else if(raw instanceof Map) {
+		} else if (raw instanceof Map) {
 			return fromMap((Map<Object, Object>) raw);
-		} else if(raw instanceof NbtTag) {
+		} else if (raw instanceof NbtTag) {
 			return (NbtTag) raw;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Trying to convert a List to NbtList's
 	 * 
@@ -93,18 +93,18 @@ public class NbtParser {
 	@SuppressWarnings("unchecked")
 	public static List<NbtList<?>> fromList(List<Object> list) {
 		List<NbtList<?>> output = new ArrayList<>();
-		if(list == null || list.isEmpty()) {
+		if (list == null || list.isEmpty()) {
 			output.add(new NbtList<>());
 			return output;
 		}
 		HashMap<NbtType, NbtList<NbtTag>> sort = new HashMap<>();
-		for(Object obj : list) {
+		for (Object obj : list) {
 			NbtTag tag = fromObject(obj);
 			NbtType type = tag.getType();
-			if(sort.containsKey(type)) {
+			if (sort.containsKey(type)) {
 				sort.get(type).add(tag);
 			} else {
-				NbtList<NbtTag> nbt = (NbtList<NbtTag>) NbtList.createFromType(type);  
+				NbtList<NbtTag> nbt = (NbtList<NbtTag>) NbtList.createFromType(type);
 				nbt.add(tag);
 				sort.put(type, nbt);
 			}
@@ -112,7 +112,7 @@ public class NbtParser {
 		output.addAll(sort.values());
 		return output;
 	}
-	
+
 	/**
 	 * Trying to convert a Map to an NbtCompound
 	 * 
@@ -122,24 +122,24 @@ public class NbtParser {
 	 */
 	public static NbtCompound fromMap(Map<Object, Object> map) {
 		NbtCompound compound = new NbtCompound();
-		if(map == null || map.isEmpty()) {
+		if (map == null || map.isEmpty()) {
 			return compound;
 		}
 		Set<Entry<Object, Object>> set = map.entrySet();
-		for(Entry<Object, Object> entry : set) {
+		for (Entry<Object, Object> entry : set) {
 			Object raw = entry.getKey();
-			if(!(raw instanceof String)) {
+			if (!(raw instanceof String)) {
 				continue;
 			}
 			String key = (String) raw;
 			NbtTag input = fromObject(entry.getValue());
-			if(input != null) {
+			if (input != null) {
 				compound.set(key, input);
 			}
 		}
 		return compound;
 	}
-	
+
 	/**
 	 * Convert a List of NbtList's to an NbtList of NbtList's
 	 * 
@@ -149,10 +149,10 @@ public class NbtParser {
 	 */
 	public static NbtList<NbtList<?>> listsToList(List<NbtList<?>> lists) {
 		NbtList<NbtList<?>> list = new NbtList<>();
-		if(lists == null || lists.isEmpty()) {
+		if (lists == null || lists.isEmpty()) {
 			return list;
 		}
-		for(NbtList<?> input : lists) {
+		for (NbtList<?> input : lists) {
 			list.add(input);
 		}
 		return list;

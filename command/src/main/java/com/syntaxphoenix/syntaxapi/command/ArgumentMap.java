@@ -29,7 +29,7 @@ public final class ArgumentMap {
 	final Map<String, BaseArgument> getHandle() {
 		return arguments;
 	}
-	
+
 	public final boolean isLocked() {
 		return locked;
 	}

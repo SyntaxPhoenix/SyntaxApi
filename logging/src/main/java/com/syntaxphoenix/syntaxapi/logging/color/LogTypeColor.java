@@ -3,17 +3,17 @@ package com.syntaxphoenix.syntaxapi.logging.color;
 import java.awt.Color;
 
 public class LogTypeColor extends LogType {
-	
+
 	public static final LogTypeColor DEFAULT = new LogTypeColor("info", "Info", ColorTools.hex2rgb("#474747"));
-	
+
 	public static final ColorProcessor PROCESSOR = (flag, type) -> type.asColorString(flag);
-	
+
 	/*
 	 * 
 	 */
-	
+
 	private Color color;
-	
+
 	/*
 	 * 
 	 * 
@@ -33,17 +33,17 @@ public class LogTypeColor extends LogType {
 		super(id, name);
 		this.color = color;
 	}
-	
+
 	/*
 	 * 
 	 * 
 	 * 
 	 */
-	
+
 	public void setColor(Color color) {
 		this.color = color == null ? this.color : color;
 	}
-	
+
 	/*
 	 * 
 	 * 
@@ -54,7 +54,7 @@ public class LogTypeColor extends LogType {
 	public ColorProcessor getColorProcessor() {
 		return PROCESSOR;
 	}
-	
+
 	@Override
 	public Color asColor() {
 		return color;
@@ -69,5 +69,5 @@ public class LogTypeColor extends LogType {
 	public String asColorString(boolean stream) {
 		return stream ? asColorString() : "";
 	}
-	
+
 }
