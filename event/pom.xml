@@ -15,22 +15,22 @@
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>reflection</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>java</artifactId>
-			<version>2.0.2</version>
+			<version>2.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>logging</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>general</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.4</version>
 		</dependency>
 	</dependencies>
 	<build>

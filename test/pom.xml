@@ -20,47 +20,47 @@
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>java</artifactId>
-			<version>2.0.2</version>
+			<version>2.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>io</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>logging</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>service-download</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>thread</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>nbt</artifactId>
-			<version>2.0.2</version>
+			<version>2.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>config-nbt</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>random</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syntaxphoenix.syntaxapi</groupId>
 			<artifactId>version</artifactId>
-			<version>2.0.2</version>
+			<version>2.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.fusesource.jansi</groupId>
