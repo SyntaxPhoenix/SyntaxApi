@@ -18,10 +18,7 @@ public class InputReader extends Thread {
 	private boolean started = false;
 	private boolean online = true;
 	private boolean command = true;
-
-	/**
-	 * 
-	 */
+	
 	public InputReader(Executor executor, Consumer<String> input, InputStream stream, String name) {
 		scanner = new Scanner(stream);
 		other = executor;

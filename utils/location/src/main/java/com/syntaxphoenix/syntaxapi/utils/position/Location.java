@@ -6,10 +6,6 @@ package com.syntaxphoenix.syntaxapi.utils.position;
  */
 public abstract class Location {
 
-	/**
-	 * 
-	 */
-
 	public abstract long getNormalizedX();
 
 	public abstract long getNormalizedY();

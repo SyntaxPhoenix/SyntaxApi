@@ -94,6 +94,7 @@ public final class Container<T> {
 	 * Returns an {@code Container} describing the given value of the optional.
 	 *
 	 * @param value {code Optional} that contains a value or null
+	 * @param <T>  the type of the value
 	 * @return an {@code Container} with the value of the optional
 	 */
 	public static <T> Container<T> ofOptional(Optional<T> value) {
@@ -104,6 +105,7 @@ public final class Container<T> {
 	 * Returns an {@code Container} describing the given value of the optional.
 	 *
 	 * @param value {code Optional} that contains a value or null
+	 * @param <T>  the type of the value
 	 * @return an {@code Container} with the value of the optional
 	 */
 	public static <T> Container<T> ofOptionalUnmodifiable(Optional<T> value) {
@@ -142,6 +144,8 @@ public final class Container<T> {
 
 	/**
 	 * locks the container
+	 * 
+	 * @return this
 	 */
 	public Container<T> lock() {
 		modifiable = false;

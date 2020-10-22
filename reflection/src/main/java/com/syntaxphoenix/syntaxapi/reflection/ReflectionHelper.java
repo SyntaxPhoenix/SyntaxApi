@@ -49,6 +49,8 @@ public final class ReflectionHelper {
 	 * If the input is null or empty, it defaults to both
 	 * {@link #contextClassLoader()} and {@link #staticClassLoader()}
 	 * 
+	 * @param classLoaders the classLoaders provided
+	 * 
 	 * @return the array of class loaders, not null
 	 */
 	public static ClassLoader[] classLoaders(ClassLoader... classLoaders) {
@@ -81,6 +83,9 @@ public final class ReflectionHelper {
 	 * <p>
 	 * The returned URLs retainsthe order of the given {@code classLoaders}.
 	 * 
+	 * @param classLoaders the classLoaders provided
+	 * @param name the package name
+	 * 
 	 * @return the collection of URLs, not null
 	 */
 	public static Collection<URL> forPackage(String name, ClassLoader... classLoaders) {
@@ -100,6 +105,9 @@ public final class ReflectionHelper {
 	 * {@link ClassLoader#getResources(String)}.
 	 * <p>
 	 * The returned URLs retains the order of the given {@code classLoaders}.
+	 * 
+	 * @param classLoaders the classLoaders provided
+	 * @param resourceName the resource name
 	 *
 	 * @return the collection of URLs, not null
 	 */
@@ -135,6 +143,9 @@ public final class ReflectionHelper {
 	 * If the optional {@link ClassLoader}s are not specified, then both
 	 * {@link #contextClassLoader()} and {@link #staticClassLoader()} are used for
 	 * {@link ClassLoader#getResources(String)}.
+	 * 
+	 * @param classLoaders the classLoaders provided
+	 * @param aClass the class which the url should be get for
 	 * 
 	 * @return the URL containing the class, null if not found
 	 */
@@ -185,6 +196,8 @@ public final class ReflectionHelper {
 	 * {@link ClassLoader#getResources(String)}.
 	 * <p>
 	 * The returned URLs retains the order of the given {@code classLoaders}.
+	 * 
+	 * @param classLoaders the classLoaders provided
 	 * 
 	 * @return the collection of URLs, not null
 	 */
@@ -257,6 +270,8 @@ public final class ReflectionHelper {
 	 * additional manifest classpaths. The returned collection of URLs will always
 	 * contain the input URL.
 	 * 
+	 * @param url the manifest url
+	 * 
 	 * @return the collection of URLs, not null
 	 */
 	@SuppressWarnings("resource")
@@ -301,6 +316,8 @@ public final class ReflectionHelper {
 	 * always contain all the input URLs.
 	 * <p>
 	 * The returned URLs retains the input order.
+	 * 
+	 * @param urls the manifest urls
 	 * 
 	 * @return the collection of URLs, not null
 	 */

@@ -31,6 +31,7 @@ public interface TextSerializer<T> extends Serializer<T> {
 	 *
 	 * @param object the object
 	 * @throws IOException if an I/O error occurs
+	 * @return object written to a string
 	 */
 	default String toString(T object) throws IOException {
 		Writer writer = new StringWriter();
