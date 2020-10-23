@@ -67,7 +67,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.6</version>
+				<version>1.5</version>
 				<executions>
 					<execution>
 						<id>sign-artifacts</id>
@@ -80,6 +80,8 @@
 								<arg>--pinentry-mode</arg>
 								<arg>loopback</arg>
 								<arg>--no-tty</arg>
+								<arg>--batch</arg>
+								<arg>--yes</arg>
 							</gpgArguments>
 						</configuration>
 					</execution>
