@@ -36,7 +36,7 @@ jobs:
         GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
 
     - name: Publish to Maven Central
-      run: mvn --batch-mode -s $GITHUB_WORKSPACE/settings.xml deploy -P ossrh -Dmaven.test.skip -Dmaven.main.skip -Dmaven.install.skip -Dgpg.passphrase=$GPG_PASSPHRASE
+      run: mvn --batch-mode -s $GITHUB_WORKSPACE/.m2/settings.xml deploy -P ossrh -Dmaven.test.skip -Dmaven.main.skip -Dmaven.install.skip -Dgpg.passphrase=$GPG_PASSPHRASE
       env:
         MAVEN_USER: ${{ secrets.MAVEN_USER }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
