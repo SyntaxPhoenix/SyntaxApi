@@ -31,7 +31,7 @@ jobs:
         GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
 
     - name: Build with Maven
-      run: mvn clean install -P ossrh
+      run: mvn install -P ossrh
 
     - name: Publish to Maven Central
       run: mvn -s $GITHUB_WORKSPACE/settings.xml --batch-mode deploy -P ossrh -Dmaven.test.skip -Dmaven.main.skip -Dmaven.install.skip
