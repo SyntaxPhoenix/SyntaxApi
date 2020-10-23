@@ -15,19 +15,6 @@ cache:
     - .m2/repository/
     - target/
 
-build_gpg:
-  stage: build
-  before_script:
-    - gpg --no-tty --batch --yes --passphrase $GPG_PASSPHRASE --import $GPG_SECRET_KEY
-  script:
-    - mvn $MAVEN_CLI_OPTS clean install $PROFILE_OPTS $MAVEN_ADDITION
-  artifacts:
-    paths:
-      - target/
-  except:
-    variables:
-      - $MAVEN_PROFILE == "syntaxphoenix"
-
 build:
   stage: build
   script:
