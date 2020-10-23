@@ -7,7 +7,7 @@ stages:
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-  PROFILE_OPTS: "-P $MAVEN_PROFILE"
+  PROFILE_OPTS: "-P syntaxphoenix"
 
 cache:
   key: ${CI_COMMIT_REF_SLUG}
@@ -18,17 +18,12 @@ cache:
 build:
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS clean install $PROFILE_OPTS $MAVEN_ADDITION
-  except:
-    variables:
-      - $MAVEN_PROFILE == "ossrh"
+    - mvn $MAVEN_CLI_OPTS clean install $PROFILE_OPTS $MAVEN_OPTS $MAVEN_ADDITION
 
 deploy:
   stage: deploy
   script:
-    - mvn $MAVEN_CLI_OPTS deploy $PROFILE_OPTS -Dmaven.test.skip=true -Dmaven.main.skip=true $MAVEN_ADDITION
+    - mvn $MAVEN_CLI_OPTS deploy $PROFILE_OPTS $MAVEN_OPTS -Dmaven.test.skip=true -Dmaven.main.skip=true $MAVEN_ADDITION
   only:
     refs:
       - master
-    variables:
-      - ($CI_COMMIT_MESSAGE =~ /^(?P<name>\[publish\]).*$/) || ($MAVEN_PROFILE == "syntaxphoenix")
