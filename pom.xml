@@ -11,12 +11,14 @@
 	<name>SyntaxApi</name>
 	<description>A Java Library to make some things easier and provide helpful tools</description>
 	<url>https://gitlab.com/SyntaxPhoenix</url>
+	
 	<licenses>
 		<license>
 			<name>MIT License</name>
 			<url>https://gitlab.com/SyntaxPhoenix/syntax-api/-/raw/master/LICENSE</url>
 		</license>
 	</licenses>
+
 	<developers>
 		<developer>
 			<name>Laura Endreß</name>
