@@ -19,6 +19,9 @@ jobs:
       with:
         java-version: 1.8
         settings-path: ${{ github.workspace }} # location for the settings.xml file
+        server-id: ossrh
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
 
     - name: Build with Maven
       run: mvn -B package -P ossrh
@@ -33,7 +36,8 @@ jobs:
         GPG_SECRET_KEY: ${{ secrets.GPG_SECRET_KEY }}
 
     - name: Publish to Maven Central
-      run: mvn --batch-mode -s $GITHUB_WORKSPACE/settings.xml deploy -P ossrh -Dmaven.test.skip -Dmaven.main.skip -Dmaven.install.skip
+      run: mvn --batch-mode -s $GITHUB_WORKSPACE/settings.xml deploy -P ossrh -Dmaven.test.skip -Dmaven.main.skip -Dmaven.install.skip -Dgpg.passphrase=$GPG_PASSPHRASE
       env:
         MAVEN_USER: ${{ secrets.MAVEN_USER }}
         MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+        GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
