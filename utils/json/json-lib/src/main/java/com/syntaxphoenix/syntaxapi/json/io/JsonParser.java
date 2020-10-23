@@ -15,7 +15,11 @@ public class JsonParser implements TextDeserializer<JsonValue<?>> {
 	public JsonValue<?> fromReader(Reader reader) throws IOException, JsonSyntaxException {
 		return read(new JsonReader(reader));
 	}
-
+	
+	/*
+	 * WIP c.c
+	 */
+	
 	protected JsonValue<?> read(JsonReader reader) throws IOException, JsonSyntaxException {
 		JsonToken token = reader.next();
 		switch (token) {
