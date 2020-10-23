@@ -10,11 +10,11 @@
 	<packaging>pom</packaging>
 	<name>SyntaxApi</name>
 	<description>A Java Library to make some things easier and provide helpful tools</description>
-	<url>https://gitlab.com/SyntaxPhoenix</url>
+	<url>https://github.com/SyntaxPhoenix</url>
 	<licenses>
 		<license>
 			<name>MIT License</name>
-			<url>https://gitlab.com/SyntaxPhoenix/syntax-api/-/raw/master/LICENSE</url>
+			<url>https://github.com/SyntaxPhoenix/SyntaxApi/blob/master/LICENSE</url>
 		</license>
 	</licenses>
 	<developers>
@@ -43,9 +43,9 @@
 		<module>test</module>
 	</modules>
 	<scm>
-		<connection>scm:git:git://gitlab.com/SyntaxPhoenix/syntax-api.git</connection>
-		<developerConnection>scm:git:git@gitlab.com:SyntaxPhoenix/syntax-api.git</developerConnection>
-		<url>https://gitlab.com/SyntaxPhoenix/syntax-api/</url>
+		<url>https://github.com/SyntaxPhoenix/SyntaxApi</url>
+		<connection>scm:git:git://github.com/SyntaxPhoenix/SyntaxApi.git</connection>
+		<developerConnection>scm:git:git@github.com:SyntaxPhoenix/SyntaxApi.git</developerConnection>
 	</scm>
 	<properties>
 		<maven.compiler.target>1.8</maven.compiler.target>
