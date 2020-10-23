@@ -10,6 +10,7 @@ variables:
   PROFILE_OPTS: "-P $MAVEN_PROFILE"
 
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - .m2/repository/
     - target/
@@ -31,9 +32,6 @@ build:
   stage: build
   script:
     - mvn $MAVEN_CLI_OPTS clean install $PROFILE_OPTS $MAVEN_ADDITION
-  artifacts:
-    paths:
-      - target/
   except:
     variables:
       - $MAVEN_PROFILE == "ossrh"
