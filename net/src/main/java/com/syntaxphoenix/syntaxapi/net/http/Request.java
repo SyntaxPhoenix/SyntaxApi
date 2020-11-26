@@ -97,6 +97,14 @@ public class Request {
 	 * 
 	 */
 
+	public Response run(String url) throws IOException {
+		return execute(url, null);
+	}
+
+	public Response run(URL url) throws IOException {
+		return execute(url, null);
+	}
+
 	public Response execute(String url, ContentType content) throws IOException {
 		return execute(new URL(url), content);
 	}
@@ -106,7 +114,7 @@ public class Request {
 		byte[] data = null;
 		int length = 0;
 
-		if (hasParameters()) {
+		if (hasParameters() && request.hasOutput()) {
 			CustomRequestData<JsonObject> requestData = new CustomRequestData<>(JsonObject.class, parameters);
 			if (!modifyUrl) {
 				data = content.serialize(requestData).getBytes(StandardCharsets.UTF_8);
@@ -120,18 +128,20 @@ public class Request {
 
 		connection.setRequestMethod(request.name());
 
-		connection.setFixedLengthStreamingMode(length);
 		connection.setDoOutput(true);
 
 		for (Entry<String, String> header : headers.entrySet()) {
 			connection.setRequestProperty(header.getKey(), header.getValue());
 		}
 
-		connection.setRequestProperty("Content-Type", content.type() + "; charset=UTF-8");
+		if (request.hasOutput()) {
+			connection.setRequestProperty("Content-Type", content.type() + "; charset=UTF-8");
+			connection.setFixedLengthStreamingMode(length);
+		}
 
 		connection.connect();
 
-		if (data != null) {
+		if (data != null && request.hasOutput()) {
 
 			OutputStream output = connection.getOutputStream();
 			output.write(data);

@@ -38,7 +38,9 @@ public final class EventCall {
 	public Status execute() {
 		int count = 0;
 		if (executors.isEmpty()) {
-			return new Status(count);
+			Status status = new Status(count);
+			status.done();
+			return status;
 		}
 		LinkedHashMap<EventPriority, ArrayList<EventMethod>> listeners = new LinkedHashMap<>();
 		for (EventPriority priority : EventPriority.values()) {
@@ -56,7 +58,9 @@ public final class EventCall {
 	public Status executeAsync(ExecutorService service) {
 		int count = 0;
 		if (executors.isEmpty()) {
-			return new Status(count);
+			Status status = new Status(count);
+			status.done();
+			return status;
 		}
 		LinkedHashMap<EventPriority, ArrayList<EventMethod>> listeners = new LinkedHashMap<>();
 		for (EventPriority priority : EventPriority.values()) {

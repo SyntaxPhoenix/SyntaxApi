@@ -70,7 +70,7 @@ public class ReceivedRequest {
 
 	public final ReceivedRequest parseCookies(String cookies) {
 		if (!cookies.contains(";")) {
-			return parseCookie(cookies);
+			return parseCookie(cookies.trim());
 		}
 		String[] array = cookies.split(";");
 		for (int index = 0; index < array.length; index++)

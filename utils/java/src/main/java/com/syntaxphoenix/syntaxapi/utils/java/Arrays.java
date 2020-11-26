@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.utils.java;
 
+import java.util.function.BiFunction;
 import java.util.function.IntFunction;
 
 import com.syntaxphoenix.syntaxapi.utils.java.tools.Compare;
@@ -56,6 +57,30 @@ public class Arrays {
 		}
 		E[] output = function.apply(length);
 		System.arraycopy(args, index, output, 0, length);
+		return output;
+	}
+
+	public static Object[][] partition(Object[] args, int length) {
+		int size = (int) Math.floor(args.length / (float) length);
+		if(args.length % length != 0) {
+			size++;
+		}
+		Object[][] output = new Object[size][length];
+		for(int index = 0; index < size; index++) {
+			System.arraycopy(args, index * length, output[index], 0, length);
+		}
+		return output;
+	}
+
+	public static <E> E[][] partition(BiFunction<Integer, Integer, E[][]> function, E[] args, int length) {
+		int size = (int) Math.floor(args.length / (float) length);
+		if(args.length % length != 0) {
+			size++;
+		}
+		E[][] output = function.apply(size, length);
+		for(int index = 0; index < size; index++) {
+			System.arraycopy(args, index * length, output[index], 0, length);
+		}
 		return output;
 	}
 

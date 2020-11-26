@@ -147,7 +147,7 @@ public abstract class HttpServer extends AsyncSocketServer {
 		}
 
 		String[] info = line.split(" ");
-		String[] path = info[1].replaceFirst("/", "").split("/");
+		String[] path = info[1].startsWith("/") ? info[1].substring(1).split("/") : info[1].split("/");
 		String[] parameters = null;
 
 		if (path[path.length - 1].contains("?")) {

@@ -20,9 +20,8 @@ import com.syntaxphoenix.syntaxapi.utils.java.Collect;
 
 public class JsonTools {
 
-	public static final AbstractReflect JSON_PRIMITIVE = new Reflect(JsonPrimitive.class)
-		.searchConstructor("value", Object.class)
-		.searchField("value", "value");
+	public static final AbstractReflect JSON_PRIMITIVE = new Reflect(JsonPrimitive.class).searchConstructor("value", Object.class).searchField("value",
+		"value");
 	public static final AbstractReflect JSON_OBJECT = new Reflect(JsonObject.class).searchField("map", "members");
 
 	private static JsonParser parser = new JsonParser();
@@ -50,7 +49,19 @@ public class JsonTools {
 	}
 
 	public static JsonPrimitive createPrimitive(Object object) {
-		return (JsonPrimitive) JSON_PRIMITIVE.init("value", object);
+		if (object instanceof Character) {
+			return new JsonPrimitive((Character) object);
+		}
+		if (object instanceof String) {
+			return new JsonPrimitive((String) object);
+		}
+		if (object instanceof Number) {
+			return new JsonPrimitive((Number) object);
+		}
+		if (object instanceof Boolean) {
+			return new JsonPrimitive((Boolean) object);
+		}
+		return new JsonPrimitive(object.toString());
 	}
 
 	public static Object getContent(JsonPrimitive primitive) {
