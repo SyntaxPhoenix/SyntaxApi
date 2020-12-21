@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import com.syntaxphoenix.syntaxapi.data.DataAdapter;
 import com.syntaxphoenix.syntaxapi.data.DataContainer;
+import com.syntaxphoenix.syntaxapi.data.IDataContainer;
 import com.syntaxphoenix.syntaxapi.nbt.*;
 import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 
@@ -89,7 +90,26 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		 * Complex Arrays
 		 */
 
-		if (Objects.equals(DataContainer[].class, type) || Objects.equals(NbtContainer[].class, type))
+		if (Objects.equals(IDataContainer[].class, type))
+			return new NbtAdapter<IDataContainer[], NbtList>(IDataContainer[].class, NbtList.class, containers -> {
+				NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
+				for (IDataContainer container : containers) {
+					list.add(toNbtCompound(registry, container));
+				}
+				return list;
+			}, list -> {
+				if (list.getElementType() != NbtType.COMPOUND) {
+					return new IDataContainer[0];
+				}
+				NbtList<NbtCompound> nbtList = (NbtList<NbtCompound>) list;
+				ArrayList<IDataContainer> containers = new ArrayList<>();
+				for (NbtTag tag : nbtList) {
+					containers.add(fromNbtCompound(registry, (NbtCompound) tag));
+				}
+				return containers.toArray(new IDataContainer[0]);
+			});
+
+		if (Objects.equals(DataContainer[].class, type))
 			return new NbtAdapter<DataContainer[], NbtList>(DataContainer[].class, NbtList.class, containers -> {
 				NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
 				for (DataContainer container : containers) {
@@ -131,6 +151,13 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		 * Complex
 		 */
 
+		if (Objects.equals(IDataContainer.class, type))
+			return new NbtAdapter<IDataContainer, NbtCompound>(IDataContainer.class, NbtCompound.class, container -> {
+				return toNbtCompound(registry, container);
+			}, compound -> {
+				return fromNbtCompound(registry, compound);
+			});
+
 		if (Objects.equals(DataContainer.class, type))
 			return new NbtAdapter<DataContainer, NbtCompound>(DataContainer.class, NbtCompound.class, container -> {
 				return toNbtCompound(registry, container);
@@ -159,7 +186,7 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 			"unchecked",
 			"rawtypes"
 	})
-	private static NbtCompound toNbtCompound(NbtAdapterRegistry registry, DataContainer container) {
+	private static NbtCompound toNbtCompound(NbtAdapterRegistry registry, IDataContainer container) {
 		if (container instanceof NbtContainer) {
 			return ((NbtContainer) container).getRoot().clone();
 		}
