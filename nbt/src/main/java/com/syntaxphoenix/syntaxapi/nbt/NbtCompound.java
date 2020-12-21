@@ -3,6 +3,7 @@ package com.syntaxphoenix.syntaxapi.nbt;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
@@ -57,7 +58,11 @@ public final class NbtCompound extends NbtTag {
 
 	@Override
 	public NbtCompound clone() {
-		return new NbtCompound(value);
+		NbtCompound compound = new NbtCompound();
+		for (Entry<String, NbtTag> entry : value.entrySet()) {
+			compound.set(entry.getKey(), entry.getValue().clone());
+		}
+		return compound;
 	}
 
 	/**

@@ -2,6 +2,7 @@ package com.syntaxphoenix.syntaxapi.data.container.nbt;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -25,8 +26,11 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 	 * 
 	 */
 
-	@SuppressWarnings("rawtypes")
-	protected static DataAdapter<?, ?, NbtTag> createAdapter(Class<?> type) {
+	@SuppressWarnings({
+			"rawtypes",
+			"unchecked"
+	})
+	protected static DataAdapter<?, ? extends NbtTag, NbtTag> createAdapter(NbtAdapterRegistry registry, Class<?> type) {
 		type = Primitives.fromPrimitive(type);
 
 		/*
@@ -85,13 +89,42 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 		 * Complex Arrays
 		 */
 
-		if (Objects.equals(DataContainer[].class, type))
+		if (Objects.equals(DataContainer[].class, type) || Objects.equals(NbtContainer[].class, type))
 			return new NbtAdapter<DataContainer[], NbtList>(DataContainer[].class, NbtList.class, containers -> {
 				NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
-
+				for (DataContainer container : containers) {
+					list.add(toNbtCompound(registry, container));
+				}
 				return list;
 			}, list -> {
-				return null;
+				if (list.getElementType() != NbtType.COMPOUND) {
+					return new NbtContainer[0];
+				}
+				NbtList<NbtCompound> nbtList = (NbtList<NbtCompound>) list;
+				ArrayList<DataContainer> containers = new ArrayList<>();
+				for (NbtTag tag : nbtList) {
+					containers.add(fromNbtCompound(registry, (NbtCompound) tag));
+				}
+				return containers.toArray(new DataContainer[0]);
+			});
+
+		if (Objects.equals(NbtContainer[].class, type))
+			return new NbtAdapter<NbtContainer[], NbtList>(NbtContainer[].class, NbtList.class, containers -> {
+				NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
+				for (NbtContainer container : containers) {
+					list.add(toNbtCompound(registry, container));
+				}
+				return list;
+			}, list -> {
+				if (list.getElementType() != NbtType.COMPOUND) {
+					return new NbtContainer[0];
+				}
+				NbtList<NbtCompound> nbtList = (NbtList<NbtCompound>) list;
+				ArrayList<NbtContainer> containers = new ArrayList<>();
+				for (NbtTag tag : nbtList) {
+					containers.add(fromNbtCompound(registry, (NbtCompound) tag));
+				}
+				return containers.toArray(new NbtContainer[0]);
 			});
 
 		/*
@@ -100,9 +133,16 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 
 		if (Objects.equals(DataContainer.class, type))
 			return new NbtAdapter<DataContainer, NbtCompound>(DataContainer.class, NbtCompound.class, container -> {
-				return null;
+				return toNbtCompound(registry, container);
 			}, compound -> {
-				return null;
+				return fromNbtCompound(registry, compound);
+			});
+
+		if (Objects.equals(NbtContainer.class, type))
+			return new NbtAdapter<NbtContainer, NbtCompound>(NbtContainer.class, NbtCompound.class, container -> {
+				return toNbtCompound(registry, container);
+			}, compound -> {
+				return fromNbtCompound(registry, compound);
 			});
 
 		/*
@@ -113,6 +153,29 @@ public class NbtAdapter<P, C extends NbtTag> extends DataAdapter<P, C, NbtTag> {
 			return new NbtAdapter<NbtTag, NbtTag>(NbtTag.class, NbtTag.class, tag -> tag, tag -> tag);
 
 		return null;
+	}
+
+	@SuppressWarnings({
+			"unchecked",
+			"rawtypes"
+	})
+	private static NbtCompound toNbtCompound(NbtAdapterRegistry registry, DataContainer container) {
+		if (container instanceof NbtContainer) {
+			return ((NbtContainer) container).getRoot().clone();
+		}
+		NbtCompound compound = new NbtCompound();
+		for (String key : container.getKeyspaces()) {
+			Object object = container.get(key);
+			NbtTag tag = registry.wrap((Class) object.getClass(), object);
+			if (tag != null) {
+				compound.set(key, tag);
+			}
+		}
+		return compound;
+	}
+
+	private static NbtContainer fromNbtCompound(NbtAdapterRegistry registry, NbtCompound compound) {
+		return new NbtContainer(compound.clone(), registry);
 	}
 
 }

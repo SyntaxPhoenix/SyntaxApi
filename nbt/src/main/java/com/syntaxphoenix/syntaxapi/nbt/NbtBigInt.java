@@ -49,7 +49,7 @@ public class NbtBigInt extends NbtString {
 
 	@Override
 	public NbtString clone() {
-		return new NbtBigInt();
+		return new NbtBigInt(bigInteger.toString());
 	}
 
 }

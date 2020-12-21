@@ -49,7 +49,7 @@ public class NbtBigDecimal extends NbtString {
 
 	@Override
 	public NbtString clone() {
-		return new NbtBigInt();
+		return new NbtBigInt(bigDecimal.toString());
 	}
 
 }

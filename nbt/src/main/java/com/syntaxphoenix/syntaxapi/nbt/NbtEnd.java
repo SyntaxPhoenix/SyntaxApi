@@ -34,7 +34,7 @@ public final class NbtEnd extends NbtTag implements Cloneable {
 
 	@Override
 	public NbtEnd clone() {
-		return new NbtEnd();
+		return INSTANCE;
 	}
 
 }

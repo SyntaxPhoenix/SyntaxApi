@@ -69,7 +69,7 @@ public final class NbtIntArray extends NbtTag implements Cloneable {
 
 	@Override
 	public NbtIntArray clone() {
-		return new NbtIntArray(value);
+		return new NbtIntArray(value.clone());
 	}
 
 }

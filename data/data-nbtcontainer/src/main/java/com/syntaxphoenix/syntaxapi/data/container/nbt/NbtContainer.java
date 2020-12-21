@@ -12,11 +12,16 @@ import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 
 public class NbtContainer extends DataContainer implements DataAdapterContext, NbtStorage<NbtCompound> {
 
-	private final NbtCompound root = new NbtCompound();
+	private final NbtCompound root;
 
 	private final NbtAdapterRegistry registry;
 
 	public NbtContainer(NbtAdapterRegistry registry) {
+		this(new NbtCompound(), registry);
+	}
+
+	protected NbtContainer(NbtCompound root, NbtAdapterRegistry registry) {
+		this.root = root;
 		this.registry = registry;
 	}
 

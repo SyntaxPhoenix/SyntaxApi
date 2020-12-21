@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.nbt;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -241,8 +242,16 @@ public final class NbtList<T extends NbtTag> extends NbtAbstractList<T> {
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public NbtList<T> clone() {
+		if (list.isEmpty()) {
+			return new NbtList<T>(type);
+		}
+		List<T> list = new ArrayList<>();
+		for (T tag : this.list) {
+			list.add((T) tag.clone());
+		}
 		return new NbtList<T>(type, list);
 	}
 
