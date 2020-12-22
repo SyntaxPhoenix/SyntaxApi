@@ -1,13 +1,13 @@
 package com.syntaxphoenix.syntaxapi.data;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 
 public abstract class DataAdapterRegistry<B> {
 
-	private final HashMap<Class<?>, DataAdapter<?, B, B>> adapters = new HashMap<>();
+	private final ConcurrentHashMap<Class<?>, DataAdapter<?, B, B>> adapters = new ConcurrentHashMap<>();
 
 	protected abstract <I, R extends B> DataAdapter<I, R, B> buildAdapter(Class<?> clazz);
 
