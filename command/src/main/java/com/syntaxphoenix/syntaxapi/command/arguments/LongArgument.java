@@ -10,43 +10,43 @@ import com.syntaxphoenix.syntaxapi.command.NumericArgument;
  */
 public class LongArgument extends NumericArgument {
 
-	private Long value;
+    private Long value;
 
-	public LongArgument() {
-		this.value = 0L;
-	}
+    public LongArgument() {
+        this.value = 0L;
+    }
 
-	public LongArgument(Long value) {
-		this.value = value;
-	}
+    public LongArgument(Long value) {
+        this.value = value;
+    }
 
-	@Override
-	public ArgumentType getType() {
-		return ArgumentType.LONG;
-	}
+    @Override
+    public ArgumentType getType() {
+        return ArgumentType.LONG;
+    }
 
-	@Override
-	public Object asObject() {
-		return value;
-	}
+    @Override
+    public Object asObject() {
+        return value;
+    }
 
-	@Override
-	public Number asNumber() {
-		return value;
-	}
+    @Override
+    public Number asNumber() {
+        return value;
+    }
 
-	public Long getValue() {
-		return value;
-	}
+    public Long getValue() {
+        return value;
+    }
 
-	@Override
-	public String toString() {
-		return toString(ArgumentSerializer.DEFAULT);
-	}
+    @Override
+    public String toString() {
+        return toString(ArgumentSerializer.DEFAULT);
+    }
 
-	@Override
-	public String toString(ArgumentSerializer serializer) {
-		return serializer.toString(this);
-	}
+    @Override
+    public String toString(ArgumentSerializer serializer) {
+        return serializer.toString(this);
+    }
 
 }

@@ -10,38 +10,38 @@ import com.syntaxphoenix.syntaxapi.command.BaseArgument;
  */
 public class StringArgument extends BaseArgument {
 
-	private String value;
+    private String value;
 
-	public StringArgument() {
-		this.value = "";
-	}
+    public StringArgument() {
+        this.value = "";
+    }
 
-	public StringArgument(String value) {
-		this.value = value;
-	}
+    public StringArgument(String value) {
+        this.value = value;
+    }
 
-	@Override
-	public ArgumentType getType() {
-		return ArgumentType.STRING;
-	}
+    @Override
+    public ArgumentType getType() {
+        return ArgumentType.STRING;
+    }
 
-	@Override
-	public Object asObject() {
-		return value;
-	}
+    @Override
+    public Object asObject() {
+        return value;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 
-	@Override
-	public String toString() {
-		return toString(ArgumentSerializer.DEFAULT);
-	}
+    @Override
+    public String toString() {
+        return toString(ArgumentSerializer.DEFAULT);
+    }
 
-	@Override
-	public String toString(ArgumentSerializer serializer) {
-		return serializer.toString(this);
-	}
+    @Override
+    public String toString(ArgumentSerializer serializer) {
+        return serializer.toString(this);
+    }
 
 }

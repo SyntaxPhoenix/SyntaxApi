@@ -12,43 +12,43 @@ import com.syntaxphoenix.syntaxapi.command.NumericArgument;
  */
 public class BigDecimalArgument extends NumericArgument {
 
-	private BigDecimal value;
+    private BigDecimal value;
 
-	public BigDecimalArgument() {
-		this.value = BigDecimal.ZERO.abs();
-	}
+    public BigDecimalArgument() {
+        this.value = BigDecimal.ZERO.abs();
+    }
 
-	public BigDecimalArgument(BigDecimal value) {
-		this.value = value;
-	}
+    public BigDecimalArgument(BigDecimal value) {
+        this.value = value;
+    }
 
-	@Override
-	public ArgumentType getType() {
-		return ArgumentType.BIG_DECIMAL;
-	}
+    @Override
+    public ArgumentType getType() {
+        return ArgumentType.BIG_DECIMAL;
+    }
 
-	@Override
-	public Object asObject() {
-		return value;
-	}
+    @Override
+    public Object asObject() {
+        return value;
+    }
 
-	@Override
-	public Number asNumber() {
-		return value;
-	}
+    @Override
+    public Number asNumber() {
+        return value;
+    }
 
-	public BigDecimal getValue() {
-		return value;
-	}
+    public BigDecimal getValue() {
+        return value;
+    }
 
-	@Override
-	public String toString() {
-		return toString(ArgumentSerializer.DEFAULT);
-	}
+    @Override
+    public String toString() {
+        return toString(ArgumentSerializer.DEFAULT);
+    }
 
-	@Override
-	public String toString(ArgumentSerializer serializer) {
-		return serializer.toString(this);
-	}
+    @Override
+    public String toString(ArgumentSerializer serializer) {
+        return serializer.toString(this);
+    }
 
 }

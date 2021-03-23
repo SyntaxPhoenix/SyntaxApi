@@ -7,50 +7,57 @@ import java.util.ArrayList;
 
 public class ServiceAnalyser {
 
-	static ArrayList<Field> findFields(boolean flag, Class<?> clazz) {
-		ArrayList<Field> output = new ArrayList<>();
+    static ArrayList<Field> findFields(boolean flag, Class<?> clazz) {
+        ArrayList<Field> output = new ArrayList<>();
 
-		Field[] fields = clazz.getFields();
-		if (fields.length == 0)
-			return output;
+        Field[] fields = clazz.getFields();
+        if (fields.length == 0) {
+            return output;
+        }
 
-		for (Field field : fields) {
-			if (field.getAnnotation(SubscribeService.class) == null)
-				continue;
+        for (Field field : fields) {
+            if (field.getAnnotation(SubscribeService.class) == null) {
+                continue;
+            }
 
-			boolean static0 = Modifier.isStatic(field.getModifiers());
-			if (flag ? !static0 : static0)
-				continue;
+            boolean static0 = Modifier.isStatic(field.getModifiers());
+            if (flag ? !static0 : static0) {
+                continue;
+            }
 
-			output.add(field);
-		}
+            output.add(field);
+        }
 
-		return output;
-	}
+        return output;
+    }
 
-	static ArrayList<Method> findMethods(boolean flag, Class<?> clazz) {
-		ArrayList<Method> output = new ArrayList<>();
+    static ArrayList<Method> findMethods(boolean flag, Class<?> clazz) {
+        ArrayList<Method> output = new ArrayList<>();
 
-		Method[] methods = clazz.getMethods();
-		if (methods.length == 0)
-			return output;
+        Method[] methods = clazz.getMethods();
+        if (methods.length == 0) {
+            return output;
+        }
 
-		for (Method method : methods) {
+        for (Method method : methods) {
 
-			if (method.getParameterCount() != 0)
-				continue;
+            if (method.getParameterCount() != 0) {
+                continue;
+            }
 
-			if (method.getAnnotation(SubscribeService.class) == null)
-				continue;
+            if (method.getAnnotation(SubscribeService.class) == null) {
+                continue;
+            }
 
-			boolean static0 = Modifier.isStatic(method.getModifiers());
-			if (flag ? !static0 : static0)
-				continue;
+            boolean static0 = Modifier.isStatic(method.getModifiers());
+            if (flag ? !static0 : static0) {
+                continue;
+            }
 
-			output.add(method);
-		}
+            output.add(method);
+        }
 
-		return output;
-	}
+        return output;
+    }
 
 }

@@ -12,91 +12,94 @@ import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 
 public class NbtContainer extends DataContainer implements DataAdapterContext, NbtStorage<NbtCompound> {
 
-	private final NbtCompound root;
+    private final NbtCompound root;
 
-	private final NbtAdapterRegistry registry;
+    private final NbtAdapterRegistry registry;
 
-	public NbtContainer(NbtAdapterRegistry registry) {
-		this(new NbtCompound(), registry);
-	}
+    public NbtContainer(NbtAdapterRegistry registry) {
+        this(new NbtCompound(), registry);
+    }
 
-	protected NbtContainer(NbtCompound root, NbtAdapterRegistry registry) {
-		this.root = root;
-		this.registry = registry;
-	}
+    protected NbtContainer(NbtCompound root, NbtAdapterRegistry registry) {
+        this.root = root;
+        this.registry = registry;
+    }
 
-	@Override
-	public NbtContainer newDataContainer() {
-		return new NbtContainer(registry);
-	}
+    @Override
+    public NbtContainer newDataContainer() {
+        return new NbtContainer(registry);
+    }
 
-	@Override
-	public DataAdapterContext getAdapterContext() {
-		return this;
-	}
+    @Override
+    public DataAdapterContext getAdapterContext() {
+        return this;
+    }
 
-	public NbtAdapterRegistry getAdapterRegistry() {
-		return registry;
-	}
+    public NbtAdapterRegistry getAdapterRegistry() {
+        return registry;
+    }
 
-	public NbtCompound getRoot() {
-		return root;
-	}
+    public NbtCompound getRoot() {
+        return root;
+    }
 
-	@Override
-	public Object get(String key) {
-		NbtTag tag = root.get(key);
-		if (tag == null)
-			return tag;
-		return registry.extract(tag);
-	}
+    @Override
+    public Object get(String key) {
+        NbtTag tag = root.get(key);
+        if (tag == null) {
+            return tag;
+        }
+        return registry.extract(tag);
+    }
 
-	public void set(String key, NbtTag tag) {
-		if (tag == null)
-			return;
-		root.set(key, tag);
-	}
+    public void set(String key, NbtTag tag) {
+        if (tag == null) {
+            return;
+        }
+        root.set(key, tag);
+    }
 
-	@SuppressWarnings("unchecked")
-	public void set(String key, Object object) {
-		set(key, registry.wrap(Primitives.fromPrimitive((Class<Object>) object.getClass()), object));
-	}
+    @SuppressWarnings("unchecked")
+    public void set(String key, Object object) {
+        set(key, registry.wrap(Primitives.fromPrimitive((Class<Object>) object.getClass()), object));
+    }
 
-	@Override
-	public <E, V> void set(String key, E value, DataType<V, E> type) {
-		set(key, registry.wrap(type.getPrimitive(), type.toPrimitive(getAdapterContext(), value)));
-	}
+    @Override
+    public <E, V> void set(String key, E value, DataType<V, E> type) {
+        set(key, registry.wrap(type.getPrimitive(), type.toPrimitive(getAdapterContext(), value)));
+    }
 
-	@Override
-	public boolean remove(String key) {
-		return root.remove(key) != null;
-	}
+    @Override
+    public boolean remove(String key) {
+        return root.remove(key) != null;
+    }
 
-	@Override
-	public Set<String> getKeyspaces() {
-		return root.getKeys();
-	}
+    @Override
+    public Set<String> getKeyspaces() {
+        return root.getKeys();
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return root.isEmpty();
-	}
+    @Override
+    public boolean isEmpty() {
+        return root.isEmpty();
+    }
 
-	@Override
-	public int size() {
-		return root.size();
-	}
+    @Override
+    public int size() {
+        return root.size();
+    }
 
-	@Override
-	public void fromNbt(NbtCompound nbt) {
-		root.clear();
-		for (String key : nbt.getKeys())
-			root.set(key, nbt.get(key));
-	}
+    @Override
+    public void fromNbt(NbtCompound nbt) {
+        root.clear();
+        for (String key : nbt.getKeys()) {
+            root.set(key, nbt.get(key));
+        }
+    }
 
-	@Override
-	public NbtCompound asNbt() {
-		return root.clone();
-	}
+    @Override
+    public NbtCompound asNbt() {
+        return root.clone();
+    }
 
 }

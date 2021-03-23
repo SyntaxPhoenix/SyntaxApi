@@ -39,26 +39,29 @@ public class Request {
     }
 
     public Request header(String key, String value) {
-        if (value != null)
+        if (value != null) {
             headers.put(key, value);
-        else
+        } else {
             headers.remove(key);
+        }
         return this;
     }
 
     public Request parameter(String key, String value) {
-        if (value != null)
+        if (value != null) {
             parameters.addProperty(key, value);
-        else
+        } else {
             parameters.remove(key);
+        }
         return this;
     }
 
     public Request parameter(String key, JsonElement element) {
-        if (element != null)
+        if (element != null) {
             parameters.add(key, element);
-        else
+        } else {
             parameters.remove(key);
+        }
         return this;
     }
 
@@ -163,8 +166,9 @@ public class Request {
 
         byte[] response = new byte[0];
 
-        if (stream != null)
+        if (stream != null) {
             response = Streams.toByteArray(stream);
+        }
 
         return new Response(connection.getResponseCode(), response, connection.getHeaderFields());
 

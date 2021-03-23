@@ -4,13 +4,13 @@ import com.syntaxphoenix.syntaxapi.json.ValueType;
 
 public class JsonBoolean extends JsonSimple<Boolean> {
 
-	public JsonBoolean(Boolean value) {
-		super(value);
-	}
+    public JsonBoolean(Boolean value) {
+        super(value);
+    }
 
-	@Override
-	public ValueType getType() {
-		return ValueType.BOOLEAN;
-	}
+    @Override
+    public ValueType getType() {
+        return ValueType.BOOLEAN;
+    }
 
 }

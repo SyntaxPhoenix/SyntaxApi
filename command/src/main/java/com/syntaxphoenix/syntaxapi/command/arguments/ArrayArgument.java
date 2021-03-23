@@ -13,42 +13,42 @@ import com.syntaxphoenix.syntaxapi.command.BaseArgument;
 @SuppressWarnings("unchecked")
 public class ArrayArgument<E extends BaseArgument> extends BaseArgument {
 
-	private E[] value;
+    private E[] value;
 
-	public ArrayArgument(ArgumentType type) {
-		this.value = (E[]) Array.newInstance(type.getClassType(), 8);
-	}
+    public ArrayArgument(ArgumentType type) {
+        this.value = (E[]) Array.newInstance(type.getClassType(), 8);
+    }
 
-	public ArrayArgument(ArgumentType type, int length) {
-		this.value = (E[]) Array.newInstance(type.getClassType(), length);
-	}
+    public ArrayArgument(ArgumentType type, int length) {
+        this.value = (E[]) Array.newInstance(type.getClassType(), length);
+    }
 
-	public ArrayArgument(E... value) {
-		this.value = value;
-	}
+    public ArrayArgument(E... value) {
+        this.value = value;
+    }
 
-	@Override
-	public ArgumentType getType() {
-		return ArgumentType.ARRAY;
-	}
+    @Override
+    public ArgumentType getType() {
+        return ArgumentType.ARRAY;
+    }
 
-	@Override
-	public Object asObject() {
-		return value;
-	}
+    @Override
+    public Object asObject() {
+        return value;
+    }
 
-	public E[] getValue() {
-		return value;
-	}
+    public E[] getValue() {
+        return value;
+    }
 
-	@Override
-	public String toString() {
-		return toString(ArgumentSerializer.DEFAULT);
-	}
+    @Override
+    public String toString() {
+        return toString(ArgumentSerializer.DEFAULT);
+    }
 
-	@Override
-	public String toString(ArgumentSerializer serializer) {
-		return serializer.toString(this);
-	}
+    @Override
+    public String toString(ArgumentSerializer serializer) {
+        return serializer.toString(this);
+    }
 
 }

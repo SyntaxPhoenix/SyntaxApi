@@ -10,13 +10,13 @@ import com.syntaxphoenix.syntaxapi.utils.io.TextDeserializer;
 
 public class MojangsonDeserializer implements TextDeserializer<NbtNamedTag> {
 
-	@Override
-	public NbtNamedTag fromReader(Reader reader) throws IOException {
-		BufferedReader buffReader = reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
+    @Override
+    public NbtNamedTag fromReader(Reader reader) throws IOException {
+        BufferedReader buffReader = reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
 
-		String mson = buffReader.lines().collect(Collectors.joining());
+        String mson = buffReader.lines().collect(Collectors.joining());
 
-		return MojangsonParser.parse(mson);
-	}
+        return MojangsonParser.parse(mson);
+    }
 
 }

@@ -8,6 +8,6 @@ import java.io.Serializable;
  */
 public class Properties extends AbstractProperties implements Serializable {
 
-	private static final long serialVersionUID = 5806508173901340453L;
+    private static final long serialVersionUID = 5806508173901340453L;
 
 }

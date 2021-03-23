@@ -2,26 +2,26 @@ package com.syntaxphoenix.syntaxapi.net.http;
 
 public enum RequestState {
 
-	ACCEPTED,
-	DENIED;
+    ACCEPTED,
+    DENIED;
 
-	private boolean message = false;
+    private boolean message = false;
 
-	public boolean message() {
-		return message;
-	}
+    public boolean message() {
+        return message;
+    }
 
-	public RequestState message(boolean message) {
-		this.message = message;
-		return this;
-	}
+    public RequestState message(boolean message) {
+        this.message = message;
+        return this;
+    }
 
-	public boolean accepted() {
-		return this == ACCEPTED;
-	}
+    public boolean accepted() {
+        return this == ACCEPTED;
+    }
 
-	public boolean denied() {
-		return this == DENIED;
-	}
+    public boolean denied() {
+        return this == DENIED;
+    }
 
 }

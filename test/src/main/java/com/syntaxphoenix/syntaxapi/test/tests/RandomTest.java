@@ -12,25 +12,25 @@ import com.syntaxphoenix.syntaxapi.utils.io.PrintWriter;
 
 public class RandomTest implements Consumer<String[]>, Printer {
 
-	@Override
-	public void accept(String[] args) {
-		RandomNumberGenerator generator = NumberGeneratorType.MURMUR.create();
+    @Override
+    public void accept(String[] args) {
+        RandomNumberGenerator generator = NumberGeneratorType.MURMUR.create();
 
-		DecimalFormat format = new DecimalFormat(
-			"0.0##########################################################################################################################################################");
-		format.setRoundingMode(RoundingMode.UNNECESSARY);
+        DecimalFormat format = new DecimalFormat(
+            "0.0##########################################################################################################################################################");
+        format.setRoundingMode(RoundingMode.UNNECESSARY);
 
-		PrintWriter writer = SyntaxExecutor.WRITER;
-		writer.writeFile(true);
-		for (int tries = 10000000; tries > 0; tries--) {
-			double db = generator.nextDouble(0, 200);
+        PrintWriter writer = SyntaxExecutor.WRITER;
+        writer.writeFile(true);
+        for (int tries = 10000000; tries > 0; tries--) {
+            double db = generator.nextDouble(0, 200);
 
-			print(format.format(db));
+            print(format.format(db));
 
-		}
-		writer.writeFile(false);
-		writer.flush();
+        }
+        writer.writeFile(false);
+        writer.flush();
 
-	}
+    }
 
 }

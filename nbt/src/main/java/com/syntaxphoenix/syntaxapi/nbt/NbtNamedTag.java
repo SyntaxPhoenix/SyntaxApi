@@ -6,47 +6,47 @@ package com.syntaxphoenix.syntaxapi.nbt;
  */
 public class NbtNamedTag {
 
-	private final String name;
-	private final NbtTag tag;
+    private final String name;
+    private final NbtTag tag;
 
-	/**
-	 * Constructs a new named tag.
-	 *
-	 * @param name the name
-	 * @param tag  the tag
-	 */
-	public NbtNamedTag(String name, NbtTag tag) {
-		this.name = name;
-		this.tag = tag;
-	}
+    /**
+     * Constructs a new named tag.
+     *
+     * @param name the name
+     * @param tag  the tag
+     */
+    public NbtNamedTag(String name, NbtTag tag) {
+        this.name = name;
+        this.tag = tag;
+    }
 
-	/**
-	 * Returns the name of the tag.
-	 *
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * Returns the name of the tag.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Returns the tag.
-	 *
-	 * @return the tag
-	 */
-	public NbtTag getTag() {
-		return tag;
-	}
+    /**
+     * Returns the tag.
+     *
+     * @return the tag
+     */
+    public NbtTag getTag() {
+        return tag;
+    }
 
-	// MISC
+    // MISC
 
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof NbtNamedTag && equals((NbtNamedTag) obj);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof NbtNamedTag && equals((NbtNamedTag) obj);
+    }
 
-	public boolean equals(NbtNamedTag tag) {
-		return this.name.equals(tag.name) && this.tag.equals(tag.tag);
-	}
+    public boolean equals(NbtNamedTag tag) {
+        return this.name.equals(tag.name) && this.tag.equals(tag.tag);
+    }
 
 }

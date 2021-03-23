@@ -19,48 +19,48 @@ import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
  */
 public class SyntaxExecutor extends Thread {
 
-	public static SynLogger LOGGER = new SynLogger(AnsiConsole.out(), LoggerState.EXTENDED_STREAM);
-	public static PrintWriter WRITER;
+    public static SynLogger LOGGER = new SynLogger(AnsiConsole.out(), LoggerState.EXTENDED_STREAM);
+    public static PrintWriter WRITER;
 
-	private static final BlockingQueue<Runnable> QUEUE = new LinkedBlockingQueue<Runnable>();
+    private static final BlockingQueue<Runnable> QUEUE = new LinkedBlockingQueue<Runnable>();
 
-	private static SyntaxTest test;
+    private static SyntaxTest test;
 
-	public static void main(String[] args) {
-		AnsiConsole.systemInstall();
+    public static void main(String[] args) {
+        AnsiConsole.systemInstall();
 
-		test = new SyntaxTest(args);
+        test = new SyntaxTest(args);
 
-		try {
-			LOGGER.setStream(WRITER = new PrintWriter(new File("debug.log"), LOGGER.getStream()));
-		} catch (FileNotFoundException e) {
-			LOGGER.log(e);
-		}
+        try {
+            LOGGER.setStream(WRITER = new PrintWriter(new File("debug.log"), LOGGER.getStream()));
+        } catch (FileNotFoundException e) {
+            LOGGER.log(e);
+        }
 
-		while (true) {
-			try {
-				QUEUE.take().run();
-			} catch (Throwable error) {
-				Printer.spaces();
-				Printer.prints(Exceptions.getError(error));
-				Printer.spaces();
-				getTest().getMenu().open(SyntaxTest.getReader());
-				SyntaxTest.getReader().setCommand(true);
-				continue;
-			}
-		}
+        while (true) {
+            try {
+                QUEUE.take().run();
+            } catch (Throwable error) {
+                Printer.spaces();
+                Printer.prints(Exceptions.getError(error));
+                Printer.spaces();
+                getTest().getMenu().open(SyntaxTest.getReader());
+                SyntaxTest.getReader().setCommand(true);
+                continue;
+            }
+        }
 
-	}
+    }
 
-	/**
-	 * @return the test
-	 */
-	public static SyntaxTest getTest() {
-		return test;
-	}
+    /**
+     * @return the test
+     */
+    public static SyntaxTest getTest() {
+        return test;
+    }
 
-	public static void queue(Runnable command) {
-		QUEUE.add(command);
-	}
+    public static void queue(Runnable command) {
+        QUEUE.add(command);
+    }
 
 }

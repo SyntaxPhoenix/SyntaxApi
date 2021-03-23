@@ -10,76 +10,77 @@ import com.syntaxphoenix.syntaxapi.command.RangeType;
 
 public class TextChooseRange extends BaseArgumentRange {
 
-	private final boolean blacklist;
-	private final List<CharSequence> values;
+    private final boolean blacklist;
+    private final List<CharSequence> values;
 
-	public TextChooseRange(CharSequence... values) {
-		this(false, values);
-	}
+    public TextChooseRange(CharSequence... values) {
+        this(false, values);
+    }
 
-	public TextChooseRange(boolean blacklist, CharSequence... values) {
-		this(blacklist, Arrays.asList(values));
-	}
+    public TextChooseRange(boolean blacklist, CharSequence... values) {
+        this(blacklist, Arrays.asList(values));
+    }
 
-	public TextChooseRange(List<CharSequence> values) {
-		this(false, values);
-	}
+    public TextChooseRange(List<CharSequence> values) {
+        this(false, values);
+    }
 
-	public TextChooseRange(boolean blacklist, List<CharSequence> values) {
-		this.blacklist = blacklist;
-		this.values = values;
-	}
+    public TextChooseRange(boolean blacklist, List<CharSequence> values) {
+        this.blacklist = blacklist;
+        this.values = values;
+    }
 
-	/*
-	 * 
-	 */
+    /*
+     * 
+     */
 
-	public boolean isBlacklist() {
-		return blacklist;
-	}
+    public boolean isBlacklist() {
+        return blacklist;
+    }
 
-	public List<CharSequence> getValues() {
-		return values;
-	}
+    public List<CharSequence> getValues() {
+        return values;
+    }
 
-	/*
-	 * 
-	 */
+    /*
+     * 
+     */
 
-	@Override
-	public RangeType getType() {
-		return RangeType.TEXT_CHOOSE_RANGE;
-	}
+    @Override
+    public RangeType getType() {
+        return RangeType.TEXT_CHOOSE_RANGE;
+    }
 
-	@Override
-	public Class<?> getInputType() {
-		return getType().getInputType();
-	}
+    @Override
+    public Class<?> getInputType() {
+        return getType().getInputType();
+    }
 
-	@Override
-	public boolean hasType(BaseArgument argument) {
-		return argument.getClassType().isAssignableFrom(getInputType());
-	}
+    @Override
+    public boolean hasType(BaseArgument argument) {
+        return argument.getClassType().isAssignableFrom(getInputType());
+    }
 
-	@Override
-	public boolean isInRange(BaseArgument argument) {
-		if (!hasType(argument))
-			return false;
-		return values.contains((CharSequence) argument.asObject());
-	}
+    @Override
+    public boolean isInRange(BaseArgument argument) {
+        if (!hasType(argument)) {
+            return false;
+        }
+        return values.contains(argument.asObject());
+    }
 
-	/*
-	 * 
-	 */
+    /*
+     * 
+     */
 
-	@Override
-	public String toString() {
-		return toString(ArgumentRangeSerializer.DEFAULT);
-	}
+    @Override
+    public String toString() {
+        return toString(ArgumentRangeSerializer.DEFAULT);
+    }
 
-	@Override
-	public String toString(ArgumentRangeSerializer serializer) {
-		return serializer.toString(this);
-	}
+    @Override
+    public String toString(ArgumentRangeSerializer serializer) {
+        return serializer.toString(this);
+    }
 
 }

@@ -6,8 +6,8 @@ package com.syntaxphoenix.syntaxapi.event;
  */
 public abstract class Event {
 
-	public boolean isCancelable() {
-		return this instanceof Cancelable;
-	}
+    public boolean isCancelable() {
+        return this instanceof Cancelable;
+    }
 
 }

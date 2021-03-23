@@ -12,7 +12,8 @@ public class RestHandler implements RequestHandler {
 
     @Override
     public boolean handleRequest(HttpSender sender, HttpWriter writer, ReceivedRequest request) throws Exception {
-        new JsonAnswer(StandardContentType.JSON).header("buildNumber", 0).respond("info", "Message received!").code(ResponseCode.OK).write(writer);
+        new JsonAnswer(StandardContentType.JSON).header("buildNumber", 0).respond("info", "Message received!").code(ResponseCode.OK)
+            .write(writer);
         return true;
     }
 

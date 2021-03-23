@@ -5,54 +5,58 @@ import com.syntaxphoenix.syntaxapi.utils.key.NamespacedKey;
 
 public abstract class DataContainer implements IDataContainer {
 
-	public boolean has(String key) {
-		return get(key) != null;
-	}
+    public boolean has(String key) {
+        return get(key) != null;
+    }
 
-	public boolean has(IKey key) {
-		return get(key) != null;
-	}
+    public boolean has(IKey key) {
+        return get(key) != null;
+    }
 
-	public boolean has(String key, DataType<?, ?> type) {
-		Object obj = get(key);
-		if (obj == null)
-			return false;
-		if (type.isPrimitive(obj))
-			return false;
-		return true;
-	}
+    public boolean has(String key, DataType<?, ?> type) {
+        Object obj = get(key);
+        if (obj == null) {
+            return false;
+        }
+        if (type.isPrimitive(obj)) {
+            return false;
+        }
+        return true;
+    }
 
-	public boolean has(IKey key, DataType<?, ?> type) {
-		Object obj = get(key);
-		if (obj == null)
-			return false;
-		if (type.isPrimitive(obj))
-			return false;
-		return true;
-	}
+    public boolean has(IKey key, DataType<?, ?> type) {
+        Object obj = get(key);
+        if (obj == null) {
+            return false;
+        }
+        if (type.isPrimitive(obj)) {
+            return false;
+        }
+        return true;
+    }
 
-	public <E> E get(String key, DataType<?, E> type) {
-		return type.fromPrimitiveObj(getAdapterContext(), get(key));
-	}
+    public <E> E get(String key, DataType<?, E> type) {
+        return type.fromPrimitiveObj(getAdapterContext(), get(key));
+    }
 
-	public <E> E get(IKey key, DataType<?, E> type) {
-		return type.fromPrimitiveObj(getAdapterContext(), get(key));
-	}
+    public <E> E get(IKey key, DataType<?, E> type) {
+        return type.fromPrimitiveObj(getAdapterContext(), get(key));
+    }
 
-	public Object get(IKey key) {
-		return get(key.toString());
-	}
+    public Object get(IKey key) {
+        return get(key.toString());
+    }
 
-	public <E, V> void set(IKey key, E value, DataType<V, E> type) {
-		set(key.toString(), value, type);
-	}
+    public <E, V> void set(IKey key, E value, DataType<V, E> type) {
+        set(key.toString(), value, type);
+    }
 
-	public boolean remove(IKey key) {
-		return remove(key.toString());
-	}
+    public boolean remove(IKey key) {
+        return remove(key.toString());
+    }
 
-	public IKey[] getKeys() {
-		return getKeyspaces().stream().map(NamespacedKey::fromString).toArray(IKey[]::new);
-	}
+    public IKey[] getKeys() {
+        return getKeyspaces().stream().map(NamespacedKey::fromString).toArray(IKey[]::new);
+    }
 
 }

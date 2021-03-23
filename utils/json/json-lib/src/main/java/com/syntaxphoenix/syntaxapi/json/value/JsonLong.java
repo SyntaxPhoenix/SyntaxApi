@@ -4,13 +4,13 @@ import com.syntaxphoenix.syntaxapi.json.ValueType;
 
 public class JsonLong extends JsonNumber<Long> {
 
-	public JsonLong(Long value) {
-		super(value);
-	}
+    public JsonLong(Long value) {
+        super(value);
+    }
 
-	@Override
-	public final ValueType getType() {
-		return ValueType.LONG;
-	}
+    @Override
+    public final ValueType getType() {
+        return ValueType.LONG;
+    }
 
 }

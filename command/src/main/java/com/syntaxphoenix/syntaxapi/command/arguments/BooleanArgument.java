@@ -6,38 +6,38 @@ import com.syntaxphoenix.syntaxapi.command.BaseArgument;
 
 public class BooleanArgument extends BaseArgument {
 
-	private Boolean value;
+    private Boolean value;
 
-	public BooleanArgument() {
-		this.value = false;
-	}
+    public BooleanArgument() {
+        this.value = false;
+    }
 
-	public BooleanArgument(Boolean value) {
-		this.value = value;
-	}
+    public BooleanArgument(Boolean value) {
+        this.value = value;
+    }
 
-	@Override
-	public ArgumentType getType() {
-		return ArgumentType.BOOLEAN;
-	}
+    @Override
+    public ArgumentType getType() {
+        return ArgumentType.BOOLEAN;
+    }
 
-	@Override
-	public Object asObject() {
-		return value;
-	}
+    @Override
+    public Object asObject() {
+        return value;
+    }
 
-	public Boolean getValue() {
-		return value;
-	}
+    public Boolean getValue() {
+        return value;
+    }
 
-	@Override
-	public String toString() {
-		return toString(ArgumentSerializer.DEFAULT);
-	}
+    @Override
+    public String toString() {
+        return toString(ArgumentSerializer.DEFAULT);
+    }
 
-	@Override
-	public String toString(ArgumentSerializer serializer) {
-		return serializer.toString(this);
-	}
+    @Override
+    public String toString(ArgumentSerializer serializer) {
+        return serializer.toString(this);
+    }
 
 }

@@ -13,49 +13,49 @@ import com.syntaxphoenix.syntaxapi.config.BaseConfig;
  */
 public class JsonConfig extends JsonConfigSection implements BaseConfig {
 
-	@Override
-	public void load(File file) throws IOException {
+    @Override
+    public void load(File file) throws IOException {
 
-		if (file.exists()) {
+        if (file.exists()) {
 
-			Scanner scanner = new Scanner(file);
-			StringBuilder builder = new StringBuilder();
-			while (scanner.hasNextLine()) {
-				builder.append(scanner.nextLine());
-				builder.append('\n');
-			}
-			scanner.close();
+            Scanner scanner = new Scanner(file);
+            StringBuilder builder = new StringBuilder();
+            while (scanner.hasNextLine()) {
+                builder.append(scanner.nextLine());
+                builder.append('\n');
+            }
+            scanner.close();
 
-			String json = builder.toString();
-			fromJsonString(json.substring(0, json.length() - 1));
+            String json = builder.toString();
+            fromJsonString(json.substring(0, json.length() - 1));
 
-		}
+        }
 
-	}
+    }
 
-	@Override
-	public void save(File file) throws IOException {
+    @Override
+    public void save(File file) throws IOException {
 
-		if (!file.exists()) {
-			String parentPath = file.getParent();
-			if (parentPath != null && !parentPath.isEmpty()) {
-				File parent = file.getParentFile();
-				if (parent.exists()) {
-					if (!parent.isDirectory()) {
-						parent.delete();
-						parent.mkdirs();
-					}
-				} else {
-					parent.mkdirs();
-				}
-			}
-			file.createNewFile();
-		}
+        if (!file.exists()) {
+            String parentPath = file.getParent();
+            if (parentPath != null && !parentPath.isEmpty()) {
+                File parent = file.getParentFile();
+                if (parent.exists()) {
+                    if (!parent.isDirectory()) {
+                        parent.delete();
+                        parent.mkdirs();
+                    }
+                } else {
+                    parent.mkdirs();
+                }
+            }
+            file.createNewFile();
+        }
 
-		FileWriter writer = new FileWriter(file);
-		writer.write(toJsonString());
-		writer.close();
+        FileWriter writer = new FileWriter(file);
+        writer.write(toJsonString());
+        writer.close();
 
-	}
+    }
 
 }

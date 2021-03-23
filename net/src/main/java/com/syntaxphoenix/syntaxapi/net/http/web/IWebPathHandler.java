@@ -9,6 +9,6 @@ import com.syntaxphoenix.syntaxapi.net.http.ReceivedRequest;
 @FunctionalInterface
 public interface IWebPathHandler {
 
-	public void handlePath(File directory, HttpSender sender, HttpWriter writer, ReceivedRequest data) throws Exception;
+    public void handlePath(File directory, HttpSender sender, HttpWriter writer, ReceivedRequest data) throws Exception;
 
 }

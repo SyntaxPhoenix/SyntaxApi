@@ -6,43 +6,43 @@ import com.syntaxphoenix.syntaxapi.command.NumericArgument;
 
 public class ShortArgument extends NumericArgument {
 
-	private Short value;
+    private Short value;
 
-	public ShortArgument() {
-		this.value = 0;
-	}
+    public ShortArgument() {
+        this.value = 0;
+    }
 
-	public ShortArgument(Short value) {
-		this.value = value;
-	}
+    public ShortArgument(Short value) {
+        this.value = value;
+    }
 
-	@Override
-	public ArgumentType getType() {
-		return ArgumentType.SHORT;
-	}
+    @Override
+    public ArgumentType getType() {
+        return ArgumentType.SHORT;
+    }
 
-	@Override
-	public Object asObject() {
-		return value;
-	}
+    @Override
+    public Object asObject() {
+        return value;
+    }
 
-	@Override
-	public Number asNumber() {
-		return value;
-	}
+    @Override
+    public Number asNumber() {
+        return value;
+    }
 
-	public Short getValue() {
-		return value;
-	}
+    public Short getValue() {
+        return value;
+    }
 
-	@Override
-	public String toString() {
-		return toString(ArgumentSerializer.DEFAULT);
-	}
+    @Override
+    public String toString() {
+        return toString(ArgumentSerializer.DEFAULT);
+    }
 
-	@Override
-	public String toString(ArgumentSerializer serializer) {
-		return serializer.toString(this);
-	}
+    @Override
+    public String toString(ArgumentSerializer serializer) {
+        return serializer.toString(this);
+    }
 
 }

@@ -4,13 +4,13 @@ import com.syntaxphoenix.syntaxapi.json.ValueType;
 
 public class JsonDouble extends JsonNumber<Double> {
 
-	public JsonDouble(Double value) {
-		super(value);
-	}
+    public JsonDouble(Double value) {
+        super(value);
+    }
 
-	@Override
-	public final ValueType getType() {
-		return ValueType.DOUBLE;
-	}
+    @Override
+    public final ValueType getType() {
+        return ValueType.DOUBLE;
+    }
 
 }

@@ -2,41 +2,41 @@ package com.syntaxphoenix.syntaxapi.net.http;
 
 public enum RequestExecution {
 
-	CLOSE(true),
-	THROW(true),
-	OPEN(false);
+    CLOSE(true),
+    THROW(true),
+    OPEN(false);
 
-	private final boolean close;
+    private final boolean close;
 
-	private RequestExecution(boolean close) {
-		this.close = close;
-	}
+    private RequestExecution(boolean close) {
+        this.close = close;
+    }
 
-	private Throwable throwable;
+    private Throwable throwable;
 
-	private RequestExecution setThrowable(Throwable throwable) {
-		this.throwable = throwable;
-		return this;
-	}
+    private RequestExecution setThrowable(Throwable throwable) {
+        this.throwable = throwable;
+        return this;
+    }
 
-	public Throwable getThrowable() {
-		return throwable;
-	}
+    public Throwable getThrowable() {
+        return throwable;
+    }
 
-	public boolean hasThrowable() {
-		return throwable != null;
-	}
+    public boolean hasThrowable() {
+        return throwable != null;
+    }
 
-	public boolean close() {
-		return close;
-	}
+    public boolean close() {
+        return close;
+    }
 
-	public static RequestExecution of(boolean close) {
-		return close ? CLOSE : OPEN;
-	}
+    public static RequestExecution of(boolean close) {
+        return close ? CLOSE : OPEN;
+    }
 
-	public static RequestExecution error(Throwable throwable) {
-		return RequestExecution.THROW.setThrowable(throwable);
-	}
+    public static RequestExecution error(Throwable throwable) {
+        return RequestExecution.THROW.setThrowable(throwable);
+    }
 
 }

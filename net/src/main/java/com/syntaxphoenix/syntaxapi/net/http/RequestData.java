@@ -4,6 +4,6 @@ public abstract class RequestData<T> {
 
     public abstract Class<T> getType();
 
-	public abstract T getValue();
+    public abstract T getValue();
 
 }

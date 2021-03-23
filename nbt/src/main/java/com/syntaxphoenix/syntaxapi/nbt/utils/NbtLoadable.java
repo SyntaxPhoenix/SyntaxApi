@@ -4,6 +4,6 @@ import com.syntaxphoenix.syntaxapi.nbt.NbtTag;
 
 public interface NbtLoadable<E extends NbtTag> {
 
-	public void fromNbt(E nbt);
+    public void fromNbt(E nbt);
 
 }

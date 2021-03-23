@@ -12,20 +12,20 @@ import com.syntaxphoenix.syntaxapi.reflection.Reflect;
 
 public class LinkedRepresenter extends Representer {
 
-	public static final AbstractReflect BASE_REPRESENT = new Reflect(BaseRepresenter.class).searchField("objectMap", "representedObjects");
+    public static final AbstractReflect BASE_REPRESENT = new Reflect(BaseRepresenter.class).searchField("objectMap", "representedObjects");
 
-	public LinkedRepresenter() {
-		super();
-		replaceMap();
-	}
+    public LinkedRepresenter() {
+        super();
+        replaceMap();
+    }
 
-	public LinkedRepresenter(DumperOptions options) {
-		super(options);
-		replaceMap();
-	}
+    public LinkedRepresenter(DumperOptions options) {
+        super(options);
+        replaceMap();
+    }
 
-	private void replaceMap() {
-		BASE_REPRESENT.setFieldValue(this, "objectMap", new LinkedHashMap<Object, Node>());
-	}
+    private void replaceMap() {
+        BASE_REPRESENT.setFieldValue(this, "objectMap", new LinkedHashMap<Object, Node>());
+    }
 
 }

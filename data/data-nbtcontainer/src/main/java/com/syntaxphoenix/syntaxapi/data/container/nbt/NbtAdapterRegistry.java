@@ -8,20 +8,20 @@ import com.syntaxphoenix.syntaxapi.nbt.NbtTag;
 
 public class NbtAdapterRegistry extends DataAdapterRegistry<NbtTag> {
 
-	public Object extract(NbtTag base) {
-		return extract(base.getType().getOwningClass(), base);
-	}
+    public Object extract(NbtTag base) {
+        return extract(base.getType().getOwningClass(), base);
+    }
 
-	@Override
-	protected <I, R extends NbtTag> NbtAdapter<I, R> createAdapter(Class<I> primitiveType, Class<R> resultType, Function<I, R> builder,
-		Function<R, I> extractor) {
-		return new NbtAdapter<>(primitiveType, resultType, builder, extractor);
-	}
+    @Override
+    protected <I, R extends NbtTag> NbtAdapter<I, R> createAdapter(Class<I> primitiveType, Class<R> resultType, Function<I, R> builder,
+        Function<R, I> extractor) {
+        return new NbtAdapter<>(primitiveType, resultType, builder, extractor);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected <I, R extends NbtTag> DataAdapter<I, R, NbtTag> buildAdapter(Class<?> clazz) {
-		return (DataAdapter<I, R, NbtTag>) NbtAdapter.createAdapter(this, clazz);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    protected <I, R extends NbtTag> DataAdapter<I, R, NbtTag> buildAdapter(Class<?> clazz) {
+        return (DataAdapter<I, R, NbtTag>) NbtAdapter.createAdapter(this, clazz);
+    }
 
 }

@@ -7,63 +7,64 @@ import java.util.Arrays;
  */
 public final class NbtByteArray extends NbtTag {
 
-	private final byte[] value;
+    private final byte[] value;
 
-	public NbtByteArray(byte[] value) {
-		this.value = value;
-	}
+    public NbtByteArray(byte[] value) {
+        this.value = value;
+    }
 
-	public NbtByteArray(Number[] numbers) {
-		this.value = new byte[numbers.length];
-		for (int i = 0; i < numbers.length; i++)
-			value[i] = numbers[i].byteValue();
-	}
+    public NbtByteArray(Number[] numbers) {
+        this.value = new byte[numbers.length];
+        for (int i = 0; i < numbers.length; i++) {
+            value[i] = numbers[i].byteValue();
+        }
+    }
 
-	/**
-	 * Returns the length of this array.
-	 *
-	 * @return the length of this array
-	 */
-	public int length() {
-		return value.length;
-	}
+    /**
+     * Returns the length of this array.
+     *
+     * @return the length of this array
+     */
+    public int length() {
+        return value.length;
+    }
 
-	@Override
-	public byte[] getValue() {
-		return value;
-	}
+    @Override
+    public byte[] getValue() {
+        return value;
+    }
 
-	@Override
-	public NbtType getType() {
-		return NbtType.BYTE_ARRAY;
-	}
+    @Override
+    public NbtType getType() {
+        return NbtType.BYTE_ARRAY;
+    }
 
-	// MISC
+    // MISC
 
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof NbtByteArray && equals((NbtByteArray) obj);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof NbtByteArray && equals((NbtByteArray) obj);
+    }
 
-	public boolean equals(NbtByteArray tag) {
-		return Arrays.equals(this.value, tag.value);
-	}
+    public boolean equals(NbtByteArray tag) {
+        return Arrays.equals(this.value, tag.value);
+    }
 
-	@Override
-	public String toMSONString() {
-		StringBuilder stringbuilder = new StringBuilder("[B;");
-		for (int i = 0; i < this.value.length; i++) {
-			if (i != 0) {
-				stringbuilder.append(',');
-			}
-			stringbuilder.append(this.value[i]).append('B');
-		}
-		return stringbuilder.append(']').toString();
-	}
+    @Override
+    public String toMSONString() {
+        StringBuilder stringbuilder = new StringBuilder("[B;");
+        for (int i = 0; i < this.value.length; i++) {
+            if (i != 0) {
+                stringbuilder.append(',');
+            }
+            stringbuilder.append(this.value[i]).append('B');
+        }
+        return stringbuilder.append(']').toString();
+    }
 
-	@Override
-	public NbtByteArray clone() {
-		return new NbtByteArray(value.clone());
-	}
+    @Override
+    public NbtByteArray clone() {
+        return new NbtByteArray(value.clone());
+    }
 
 }

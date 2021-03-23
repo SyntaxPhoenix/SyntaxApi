@@ -5,24 +5,23 @@ import com.syntaxphoenix.syntaxapi.json.ValueType;
 
 public class JsonNull<E> extends JsonValue<E> {
 
-	private static JsonNull<?> INSTANCE = new JsonNull<>();
+    private static JsonNull<?> INSTANCE = new JsonNull<>();
 
-	@SuppressWarnings("unchecked")
-	public static <E> JsonNull<E> get() {
-		return (JsonNull<E>) INSTANCE;
-	}
+    @SuppressWarnings("unchecked")
+    public static <E> JsonNull<E> get() {
+        return (JsonNull<E>) INSTANCE;
+    }
 
-	private JsonNull() {
-	}
+    private JsonNull() {}
 
-	@Override
-	public ValueType getType() {
-		return ValueType.NULL;
-	}
+    @Override
+    public ValueType getType() {
+        return ValueType.NULL;
+    }
 
-	@Override
-	public E getValue() {
-		return null;
-	}
+    @Override
+    public E getValue() {
+        return null;
+    }
 
 }

@@ -4,13 +4,13 @@ import com.syntaxphoenix.syntaxapi.json.ValueType;
 
 public class JsonFloat extends JsonNumber<Float> {
 
-	public JsonFloat(Float value) {
-		super(value);
-	}
+    public JsonFloat(Float value) {
+        super(value);
+    }
 
-	@Override
-	public ValueType getType() {
-		return ValueType.FLOAT;
-	}
+    @Override
+    public ValueType getType() {
+        return ValueType.FLOAT;
+    }
 
 }

@@ -11,75 +11,75 @@ import java.util.function.Consumer;
  */
 public class InputReader extends Thread {
 
-	private Scanner scanner;
-	private Executor other;
-	private Consumer<String> action;
+    private Scanner scanner;
+    private Executor other;
+    private Consumer<String> action;
 
-	private boolean started = false;
-	private boolean online = true;
-	private boolean command = true;
-	
-	public InputReader(Executor executor, Consumer<String> input, InputStream stream, String name) {
-		scanner = new Scanner(stream);
-		other = executor;
-		action = input;
-		setName(name);
-	}
+    private boolean started = false;
+    private boolean online = true;
+    private boolean command = true;
 
-	@Override
-	public void run() {
-		while (online) {
-			if (scanner.hasNextLine()) {
-				String input = scanner.nextLine();
-				if (command) {
-					other.execute(() -> action.accept(input));
-				}
-			}
-		}
-	}
+    public InputReader(Executor executor, Consumer<String> input, InputStream stream, String name) {
+        scanner = new Scanner(stream);
+        other = executor;
+        action = input;
+        setName(name);
+    }
 
-	public void setCommand(boolean command) {
-		this.command = command;
-	}
+    @Override
+    public void run() {
+        while (online) {
+            if (scanner.hasNextLine()) {
+                String input = scanner.nextLine();
+                if (command) {
+                    other.execute(() -> action.accept(input));
+                }
+            }
+        }
+    }
 
-	public boolean getCommand() {
-		return command;
-	}
+    public void setCommand(boolean command) {
+        this.command = command;
+    }
 
-	public boolean isOnline() {
-		return online;
-	}
+    public boolean getCommand() {
+        return command;
+    }
 
-	public void setAction(Consumer<String> action) {
-		this.action = action;
-	}
+    public boolean isOnline() {
+        return online;
+    }
 
-	public Consumer<String> getAction() {
-		return action;
-	}
+    public void setAction(Consumer<String> action) {
+        this.action = action;
+    }
 
-	public InputReader initialize() {
-		start();
-		return this;
-	}
+    public Consumer<String> getAction() {
+        return action;
+    }
 
-	@Override
-	public void start() {
-		if (!started) {
-			super.start();
-		}
-	}
+    public InputReader initialize() {
+        start();
+        return this;
+    }
 
-	public void shutdown() {
-		interrupt();
-	}
+    @Override
+    public void start() {
+        if (!started) {
+            super.start();
+        }
+    }
 
-	@Override
-	public void interrupt() {
-		if (online) {
-			online = false;
-			super.interrupt();
-		}
-	}
+    public void shutdown() {
+        interrupt();
+    }
+
+    @Override
+    public void interrupt() {
+        if (online) {
+            online = false;
+            super.interrupt();
+        }
+    }
 
 }

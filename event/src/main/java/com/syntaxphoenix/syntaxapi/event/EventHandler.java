@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface EventHandler {
 
-	EventPriority priority() default EventPriority.NORMAL;
+    EventPriority priority() default EventPriority.NORMAL;
 
-	boolean ignoreCancel() default false;
+    boolean ignoreCancel() default false;
 
 }

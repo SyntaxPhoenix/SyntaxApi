@@ -10,43 +10,43 @@ import com.syntaxphoenix.syntaxapi.command.NumericArgument;
  */
 public class FloatArgument extends NumericArgument {
 
-	private Float value;
+    private Float value;
 
-	public FloatArgument() {
-		this.value = 0F;
-	}
+    public FloatArgument() {
+        this.value = 0F;
+    }
 
-	public FloatArgument(Float value) {
-		this.value = value;
-	}
+    public FloatArgument(Float value) {
+        this.value = value;
+    }
 
-	@Override
-	public ArgumentType getType() {
-		return ArgumentType.FLOAT;
-	}
+    @Override
+    public ArgumentType getType() {
+        return ArgumentType.FLOAT;
+    }
 
-	@Override
-	public Object asObject() {
-		return value;
-	}
+    @Override
+    public Object asObject() {
+        return value;
+    }
 
-	@Override
-	public Number asNumber() {
-		return value;
-	}
+    @Override
+    public Number asNumber() {
+        return value;
+    }
 
-	public Float getValue() {
-		return value;
-	}
+    public Float getValue() {
+        return value;
+    }
 
-	@Override
-	public String toString() {
-		return toString(ArgumentSerializer.DEFAULT);
-	}
+    @Override
+    public String toString() {
+        return toString(ArgumentSerializer.DEFAULT);
+    }
 
-	@Override
-	public String toString(ArgumentSerializer serializer) {
-		return serializer.toString(this);
-	}
+    @Override
+    public String toString(ArgumentSerializer serializer) {
+        return serializer.toString(this);
+    }
 
 }

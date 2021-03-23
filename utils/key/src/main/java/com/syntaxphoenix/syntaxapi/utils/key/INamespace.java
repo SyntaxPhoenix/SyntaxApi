@@ -4,28 +4,28 @@ import java.util.Optional;
 
 public interface INamespace<E extends IKey> {
 
-	String getName();
+    String getName();
 
-	boolean contains(String key);
+    boolean contains(String key);
 
-	E createNamed(String key, String name);
+    E createNamed(String key, String name);
 
-	E create(String key);
+    E create(String key);
 
-	Optional<E> option(String key);
+    Optional<E> option(String key);
 
-	E get(String key);
+    E get(String key);
 
-	String[] getKeyspaces();
+    String[] getKeyspaces();
 
-	E[] getKeys();
+    E[] getKeys();
 
-	default int hash() {
-		return getName().hashCode();
-	}
+    default int hash() {
+        return getName().hashCode();
+    }
 
-	default boolean isSimilar(INamespace<?> namespace) {
-		return namespace != null && getName().equals(namespace.getName());
-	}
+    default boolean isSimilar(INamespace<?> namespace) {
+        return namespace != null && getName().equals(namespace.getName());
+    }
 
 }

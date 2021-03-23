@@ -13,38 +13,38 @@ import com.syntaxphoenix.syntaxapi.command.BaseArgument;
  */
 public class ListArgument<E extends BaseArgument> extends BaseArgument {
 
-	private List<E> value;
+    private List<E> value;
 
-	public ListArgument() {
-		this.value = new ArrayList<>();
-	}
+    public ListArgument() {
+        this.value = new ArrayList<>();
+    }
 
-	public ListArgument(List<E> value) {
-		this.value = value;
-	}
+    public ListArgument(List<E> value) {
+        this.value = value;
+    }
 
-	@Override
-	public ArgumentType getType() {
-		return ArgumentType.LIST;
-	}
+    @Override
+    public ArgumentType getType() {
+        return ArgumentType.LIST;
+    }
 
-	@Override
-	public Object asObject() {
-		return value;
-	}
+    @Override
+    public Object asObject() {
+        return value;
+    }
 
-	public List<E> getValue() {
-		return value;
-	}
+    public List<E> getValue() {
+        return value;
+    }
 
-	@Override
-	public String toString() {
-		return toString(ArgumentSerializer.DEFAULT);
-	}
+    @Override
+    public String toString() {
+        return toString(ArgumentSerializer.DEFAULT);
+    }
 
-	@Override
-	public String toString(ArgumentSerializer serializer) {
-		return serializer.toString(this);
-	}
+    @Override
+    public String toString(ArgumentSerializer serializer) {
+        return serializer.toString(this);
+    }
 
 }

@@ -11,23 +11,23 @@ import com.syntaxphoenix.syntaxapi.test.utils.Printer;
 
 public class RequestTest implements Consumer<String[]>, Printer {
 
-	@Override
-	public void accept(String[] args) {
+    @Override
+    public void accept(String[] args) {
 
-		Request request = new Request(RequestType.POST);
+        Request request = new Request(RequestType.POST);
 
-		request.parameter("user", "nice");
+        request.parameter("user", "nice");
 
-		try {
-			Response response = request.execute("http://spigot.syntaxphoenix.com/verify", StandardContentType.JSON);
+        try {
+            Response response = request.execute("http://spigot.syntaxphoenix.com/verify", StandardContentType.JSON);
 
-			print("code: " + response.getCode());
-			print("message: " + response.getResponse());
+            print("code: " + response.getCode());
+            print("message: " + response.getResponse());
 
-		} catch (IOException e) {
-			print(e);
-		}
+        } catch (IOException e) {
+            print(e);
+        }
 
-	}
+    }
 
 }

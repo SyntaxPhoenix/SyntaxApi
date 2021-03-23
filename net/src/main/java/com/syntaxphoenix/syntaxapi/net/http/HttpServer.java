@@ -114,8 +114,9 @@ public abstract class HttpServer extends AsyncSocketServer {
     }
 
     public HttpServer addTypes(RequestType... types) {
-        for (int index = 0; index < types.length; index++)
+        for (int index = 0; index < types.length; index++) {
             supported.add(types[index]);
+        }
         return this;
     }
 
@@ -125,8 +126,9 @@ public abstract class HttpServer extends AsyncSocketServer {
     }
 
     public HttpServer removeTypes(RequestType... types) {
-        for (int index = 0; index < types.length; index++)
+        for (int index = 0; index < types.length; index++) {
             supported.remove(types[index]);
+        }
         return this;
     }
 
@@ -174,12 +176,14 @@ public abstract class HttpServer extends AsyncSocketServer {
 
         ReceivedRequest request = new ReceivedRequest(RequestType.fromString(info[0]), path);
 
-        if (parameters != null)
+        if (parameters != null) {
             request.parseParameters(parameters);
+        }
 
         while ((line = reader.readLine()) != null) {
-            if (line.isEmpty())
+            if (line.isEmpty()) {
                 break;
+            }
             request.parseHeader(line);
         }
 
@@ -196,13 +200,15 @@ public abstract class HttpServer extends AsyncSocketServer {
             RequestState state = gate.acceptRequest(writer, request);
             if (state.accepted()) {
                 if (request.hasHeader("expect")) {
-                    if (((String) request.getHeader("expect")).contains("100-continue"))
+                    if (((String) request.getHeader("expect")).contains("100-continue")) {
                         new NamedAnswer(StandardNamedType.PLAIN).code(ResponseCode.CONTINUE).write(writer);
+                    }
                 }
             } else {
-                if (!state.message())
+                if (!state.message()) {
                     new NamedAnswer(StandardNamedType.PLAIN).setResponse("Method or contenttype is not supported")
                         .code(ResponseCode.BAD_REQUEST).write(writer);
+                }
                 reader.close();
                 writer.close();
                 socket.close();
@@ -210,9 +216,10 @@ public abstract class HttpServer extends AsyncSocketServer {
             }
         } else {
             if (request.hasHeader("expect")) {
-                if (((String) request.getHeader("expect")).contains("100-continue"))
+                if (((String) request.getHeader("expect")).contains("100-continue")) {
                     new NamedAnswer(StandardNamedType.PLAIN).setResponse("No content length given!").code(ResponseCode.LENGTH_REQUIRED)
                         .write(writer);
+                }
             }
         }
 
@@ -221,8 +228,9 @@ public abstract class HttpServer extends AsyncSocketServer {
          */
 
         RequestContent content = RequestContent.UNNEEDED;
-        if (validator != null)
+        if (validator != null) {
             content = validator.parseContent(writer, request);
+        }
 
         if (!content.ignore()) {
 
@@ -270,8 +278,9 @@ public abstract class HttpServer extends AsyncSocketServer {
             reader.close();
             writer.close();
             socket.close();
-            if (execution.hasThrowable())
+            if (execution.hasThrowable()) {
                 throw execution.getThrowable();
+            }
         }
 
     }

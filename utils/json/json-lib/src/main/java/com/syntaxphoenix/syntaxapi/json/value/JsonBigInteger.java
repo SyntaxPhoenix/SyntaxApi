@@ -6,13 +6,13 @@ import com.syntaxphoenix.syntaxapi.json.ValueType;
 
 public class JsonBigInteger extends JsonNumber<BigInteger> {
 
-	public JsonBigInteger(BigInteger value) {
-		super(value);
-	}
+    public JsonBigInteger(BigInteger value) {
+        super(value);
+    }
 
-	@Override
-	public ValueType getType() {
-		return ValueType.BIG_INTEGER;
-	}
+    @Override
+    public ValueType getType() {
+        return ValueType.BIG_INTEGER;
+    }
 
 }

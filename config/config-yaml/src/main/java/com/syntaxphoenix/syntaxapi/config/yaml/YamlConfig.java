@@ -31,10 +31,11 @@ public class YamlConfig extends YamlConfigSection implements BaseConfig {
                 builder.append('\n');
             }
             scanner.close();
-            
+
             String yaml = builder.toString();
-            if (yaml.isEmpty())
+            if (yaml.isEmpty()) {
                 return;
+            }
 
             fromYamlString(yaml.substring(0, yaml.length() - 1));
 

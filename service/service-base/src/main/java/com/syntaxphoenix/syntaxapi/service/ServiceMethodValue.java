@@ -4,70 +4,70 @@ import java.lang.reflect.Method;
 
 public class ServiceMethodValue implements IServiceValue {
 
-	private final Object instance;
-	private final Class<? extends Object> owner;
+    private final Object instance;
+    private final Class<? extends Object> owner;
 
-	private final Method method;
-	private final SubscribeService annotation;
+    private final Method method;
+    private final SubscribeService annotation;
 
-	public ServiceMethodValue(Class<? extends Object> owner, Method method) {
-		this(owner, method, null);
-	}
+    public ServiceMethodValue(Class<? extends Object> owner, Method method) {
+        this(owner, method, null);
+    }
 
-	public ServiceMethodValue(Class<? extends Object> owner, Method method, Object instance) {
-		this.owner = owner;
-		this.instance = instance;
+    public ServiceMethodValue(Class<? extends Object> owner, Method method, Object instance) {
+        this.owner = owner;
+        this.instance = instance;
 
-		this.method = method;
-		this.annotation = method.getAnnotation(SubscribeService.class);
-	}
+        this.method = method;
+        this.annotation = method.getAnnotation(SubscribeService.class);
+    }
 
-	/*
-	 * 
-	 */
+    /*
+     * 
+     */
 
-	@Override
-	public Class<? extends Object> getOwner() {
-		return owner;
-	}
+    @Override
+    public Class<? extends Object> getOwner() {
+        return owner;
+    }
 
-	@Override
-	public Object getOwnerInstance() {
-		return instance;
-	}
+    @Override
+    public Object getOwnerInstance() {
+        return instance;
+    }
 
-	/*
-	 * 
-	 */
+    /*
+     * 
+     */
 
-	@Override
-	public ValueType getType() {
-		return ValueType.METHOD;
-	}
+    @Override
+    public ValueType getType() {
+        return ValueType.METHOD;
+    }
 
-	@Override
-	public Method asMethod() {
-		return method;
-	}
+    @Override
+    public Method asMethod() {
+        return method;
+    }
 
-	@Override
-	public Method getObject() {
-		return method;
-	}
+    @Override
+    public Method getObject() {
+        return method;
+    }
 
-	@Override
-	public SubscribeService getAnnotation() {
-		return annotation;
-	}
+    @Override
+    public SubscribeService getAnnotation() {
+        return annotation;
+    }
 
-	@Override
-	public ServicePriority getPriority() {
-		return annotation.priority();
-	}
+    @Override
+    public ServicePriority getPriority() {
+        return annotation.priority();
+    }
 
-	@Override
-	public Class<? extends IService> getService() {
-		return annotation.service();
-	}
+    @Override
+    public Class<? extends IService> getService() {
+        return annotation.service();
+    }
 
 }
