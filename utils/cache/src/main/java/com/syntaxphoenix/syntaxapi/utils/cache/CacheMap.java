@@ -98,7 +98,7 @@ public class CacheMap<K, V> {
 		}
 	}
 
-	protected class CacheEntry<L, B> implements Entry<L, B> {
+	public static class CacheEntry<L, B> implements Entry<L, B> {
 
 		private final L key;
 		private final B value;

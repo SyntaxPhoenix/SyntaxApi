@@ -1,20 +1,23 @@
 package com.syntaxphoenix.syntaxapi.utils.key;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class Namespace extends AbstractNamespace<NamespacedKey> {
 
-	private static final Map<String, Namespace> NAMESPACES = Collections.synchronizedMap(new HashMap<>());
+	private static final ConcurrentHashMap<String, Namespace> NAMESPACES = new ConcurrentHashMap<>();
 
 	public static Namespace of(String name) {
-		return NAMESPACES.computeIfAbsent(name, namespace -> new Namespace(namespace));
+	    if(NAMESPACES.containsKey(name)) {
+	        return NAMESPACES.get(name);
+	    }
+	    Namespace namespace = new Namespace(name);
+	    NAMESPACES.put(name, namespace);
+	    return namespace;
 	}
 
 	protected final String name;
-	protected final Map<String, NamespacedKey> keys = Collections.synchronizedMap(new HashMap<>());
+	protected final ConcurrentHashMap<String, NamespacedKey> keys = new ConcurrentHashMap<>();
 
 	private Namespace(String name) {
 		this.name = name;

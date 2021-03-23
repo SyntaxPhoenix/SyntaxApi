@@ -10,6 +10,7 @@ public class CustomRequestData<E> extends RequestData<E> {
 		this.value = value;
 	}
 
+    @Override
 	public Class<E> getType() {
 		return type;
 	}

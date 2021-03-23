@@ -16,76 +16,101 @@ import com.syntaxphoenix.syntaxapi.config.yaml.utils.LinkedConstructor;
 
 public class YamlConfigSection extends BaseSection {
 
-	public static final String COMMENT_PREFIX = "# ";
-	public static final String BLANK_CONFIG = "{}\n";
-	private final DumperOptions yamlOptions = new DumperOptions();
-	private final Representer yamlRepresenter;
-	private final Yaml yaml;
+    public static final String COMMENT_PREFIX = "#";
+    public static final String BLANK_CONFIG = "{}\n";
+    private final DumperOptions yamlOptions = new DumperOptions();
+    private final Representer yamlRepresenter;
+    private final Yaml yaml;
 
-	public YamlConfigSection() {
-		this("");
-	}
+    private String comment = "";
 
-	public YamlConfigSection(String name) {
-		super(name);
-		yamlOptions.setIndent(2);
-		yamlOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
-		yamlOptions.setPrettyFlow(true);
-		yamlRepresenter = new Representer(yamlOptions);
-		yaml = new Yaml(new LinkedConstructor(), yamlRepresenter, yamlOptions);
-	}
+    public YamlConfigSection() {
+        this("");
+    }
 
-	@Override
-	protected BaseSection initSection(String name) {
-		return new YamlConfigSection(name);
-	}
+    public YamlConfigSection(String name) {
+        super(name);
+        yamlOptions.setIndent(2);
+        yamlOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
+        yamlOptions.setPrettyFlow(true);
+        yamlRepresenter = new Representer(yamlOptions);
+        yaml = new Yaml(new LinkedConstructor(), yamlRepresenter, yamlOptions);
+    }
 
-	@Override
-	protected boolean isSectionInstance(BaseSection section) {
-		return section instanceof YamlConfigSection;
-	}
+    @Override
+    public void clear() {
+        super.clear();
+        comment = null;
+    }
 
-	public String toYamlString() {
-		String output = "";
+    @Override
+    protected BaseSection initSection(String name) {
+        return new YamlConfigSection(name);
+    }
 
-		if (!values.isEmpty()) {
-			output = yaml.dump(toMap());
-		}
+    @Override
+    protected boolean isSectionInstance(BaseSection section) {
+        return section instanceof YamlConfigSection;
+    }
 
-		if (output.equals(BLANK_CONFIG)) {
-			output = "";
-		}
+    public String toYamlString() {
+        String output = "";
+        if (!values.isEmpty()) {
+            output = yaml.dump(toMap());
+        }
+        if (output.equals(BLANK_CONFIG)) {
+            output = "";
+        }
+        return comment == null ? output : comment + output;
+    }
 
-		return output;
-	}
+    public String getComment() {
+        return comment;
+    }
 
-	@SuppressWarnings("unchecked")
-	public void fromYamlString(String contents) {
+    @SuppressWarnings("unchecked")
+    public void fromYamlString(String contents) {
+        String[] lines = contents.split("\n");
+        StringBuilder content = new StringBuilder();
+        StringBuilder comment = new StringBuilder();
+        for (int index = 0; index < lines.length; index++) {
+            String line = lines[index];
+            if (line.startsWith("#")) {
+                comment.append(line);
+                comment.append(System.lineSeparator());
+            } else {
+                content.append(line);
+                if (index + 1 != lines.length) {
+                    content.append('\n');
+                }
+            }
+        }
+        if (comment.length() != 0) {
+            this.comment = comment.toString();
+        }
+        Map<String, Object> input = null;
+        try {
+            input = (Map<String, Object>) yaml.load(content.toString());
+        } catch (YAMLException | ClassCastException e) {
+            throw e;
+        }
 
-		Map<String, Object> input = null;
-		try {
-			input = (Map<String, Object>) yaml.load(contents);
-		} catch (YAMLException | ClassCastException e) {
-			throw e;
-		}
+        if (input == null) {
+            throw new NullPointerException("No content!");
+        }
+        fromEntrySet(input.entrySet());
+    }
 
-		if (input == null) {
-			throw new NullPointerException("No content!");
-		}
-
-		fromEntrySet(input.entrySet());
-	}
-
-	@SuppressWarnings("unchecked")
-	private void fromEntrySet(Set<Entry<String, Object>> entries) {
-		for (Entry<String, Object> entry : entries) {
-			Object value = entry.getValue();
-			if (value instanceof Map) {
-				((YamlConfigSection) createSection(entry.getKey())).fromEntrySet(((Map<String, Object>) value).entrySet());
-			} else {
-				set(entry.getKey(), entry.getValue());
-			}
-		}
-	}
+    @SuppressWarnings("unchecked")
+    private void fromEntrySet(Set<Entry<String, Object>> entries) {
+        for (Entry<String, Object> entry : entries) {
+            Object value = entry.getValue();
+            if (value instanceof Map) {
+                ((YamlConfigSection) createSection(entry.getKey())).fromEntrySet(((Map<String, Object>) value).entrySet());
+            } else {
+                set(entry.getKey(), entry.getValue());
+            }
+        }
+    }
 
 }

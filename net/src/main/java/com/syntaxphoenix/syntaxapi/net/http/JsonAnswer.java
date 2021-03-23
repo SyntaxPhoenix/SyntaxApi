@@ -28,17 +28,17 @@ public class JsonAnswer extends Answer<JsonObject> {
 	 */
 
 	public JsonAnswer code(int code) {
-		code(code);
+		super.code(code);
 		return this;
 	}
 
 	public JsonAnswer header(String key, Object value) {
-		header(key, value);
+	    super.header(key, value);
 		return this;
 	}
 
 	public JsonAnswer header(String key, String value) {
-		header(key, value);
+	    super.header(key, value);
 		return this;
 	}
 

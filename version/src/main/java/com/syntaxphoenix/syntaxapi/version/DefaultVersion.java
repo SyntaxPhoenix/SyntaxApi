@@ -46,7 +46,7 @@ public class DefaultVersion extends Version {
 					version.setPatch(Strings.isNumeric(parts[2]) ? Integer.parseInt(parts[2]) : 0);
 				}
 			} catch (NumberFormatException ex) {
-
+			    
 			}
 			return version;
 		};
