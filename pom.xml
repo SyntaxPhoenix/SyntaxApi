@@ -38,7 +38,6 @@
     <module>version</module>
     <module>config</module>
     <module>data</module>
-    <module>test</module>
   </modules>
   <scm>
     <connection>scm:git:git://github.com/SyntaxPhoenix/SyntaxApi.git</connection>
