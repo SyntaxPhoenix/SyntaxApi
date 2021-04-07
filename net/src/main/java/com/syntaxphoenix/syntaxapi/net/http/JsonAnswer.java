@@ -1,7 +1,7 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonValue;
 
 public class JsonAnswer extends Answer<JsonObject> {
 
@@ -19,7 +19,7 @@ public class JsonAnswer extends Answer<JsonObject> {
      * 
      */
 
-    public JsonElement respond(String key) {
+    public JsonValue<?> respond(String key) {
         return object.get(key);
     }
 
@@ -44,16 +44,16 @@ public class JsonAnswer extends Answer<JsonObject> {
 
     public JsonAnswer respond(String key, String value) {
         if (value != null) {
-            object.addProperty(key, value);
+            object.set(key, value);
         } else {
             object.remove(key);
         }
         return this;
     }
 
-    public JsonAnswer respond(String key, JsonElement element) {
+    public JsonAnswer respond(String key, JsonValue<?> element) {
         if (element != null) {
-            object.add(key, element);
+            object.set(key, element);
         } else {
             object.remove(key);
         }
@@ -84,7 +84,7 @@ public class JsonAnswer extends Answer<JsonObject> {
      */
 
     public boolean hasResponse() {
-        return !object.keySet().isEmpty();
+        return !object.isEmpty();
     }
 
     @Override

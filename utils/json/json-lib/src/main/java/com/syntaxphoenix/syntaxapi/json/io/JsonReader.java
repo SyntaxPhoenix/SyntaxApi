@@ -44,8 +44,6 @@ public class JsonReader {
     public JsonScope scope;
     public JsonState state;
 
-    public JsonState next;
-
     public int limit;
     public int cursor;
 
@@ -65,12 +63,11 @@ public class JsonReader {
      */
 
     public JsonToken next() throws IOException, JsonSyntaxException {
-        JsonToken token = nextState(false).asToken();
-        return token;
+        return currentState().asToken();
     }
 
     public boolean hasNext() throws IOException, JsonSyntaxException {
-        JsonState state = peekState();
+        JsonState state = currentState();
         return state != JsonState.END_OBJECT && state != JsonState.END_ARRAY && state != JsonState.EOF;
     }
 
@@ -413,35 +410,33 @@ public class JsonReader {
 
     protected void resetState() {
         state = null;
+        scope = null;
     }
 
     protected JsonState currentState() throws IOException, JsonSyntaxException {
         JsonState current = this.state;
         if (current == null) {
-            current = nextState(false);
+            current = nextState();
         }
         return current;
     }
 
-    protected JsonState peekState() throws IOException, JsonSyntaxException {
-        return next == null ? next = nextState(true) : next;
-    }
-
-    protected JsonState nextState(boolean peek) throws IOException, JsonSyntaxException {
-        next = null;
+    protected JsonState nextState() throws IOException, JsonSyntaxException {
         JsonScope current = scope;
         if (scope == null) {
-            current = scope = peek ? peek() : pop();
+            current = scope = peek();
         }
         try {
             switch (current) {
             case EMPTY_ARRAY:
+                pop();
                 stack.push(JsonScope.FILLED_ARRAY);
                 break;
             case FILLED_ARRAY:
                 char character3 = nextCharacter();
                 switch (character3) {
                 case ']':
+                    pop();
                     return state = JsonState.END_ARRAY;
                 case ',':
                     break;
@@ -450,6 +445,7 @@ public class JsonReader {
                 }
                 break;
             case EMPTY_OBJECT:
+                pop();
             case FILLED_OBJECT:
                 stack.push(JsonScope.PENDING_NAME);
                 if (current == JsonScope.FILLED_OBJECT) {
@@ -473,6 +469,7 @@ public class JsonReader {
                     if (current == JsonScope.FILLED_OBJECT) {
                         wrongSyntax("Unnamed element");
                     }
+                    pop();
                     return state = JsonState.END_OBJECT;
                 default:
                     throw wrongSyntax("Unnamed element");
@@ -481,6 +478,7 @@ public class JsonReader {
                 stack.push(JsonScope.FILLED_READER);
                 break;
             case FILLED_READER:
+                pop();
                 nextCharacter();
                 cursor--;
                 break;
@@ -499,8 +497,10 @@ public class JsonReader {
             switch (character) {
             case ']':
                 if (current == JsonScope.EMPTY_ARRAY) {
+                    pop();
                     return state = JsonState.END_ARRAY;
                 }
+                break;
             case ',':
                 throw wrongSyntax("Unexpected value");
             case '\'':
@@ -514,7 +514,7 @@ public class JsonReader {
             default:
                 cursor--;
             }
-
+            
             if (isKeyword() || isNumber()) {
                 return state;
             }

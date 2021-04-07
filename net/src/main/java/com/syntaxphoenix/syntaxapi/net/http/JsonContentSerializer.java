@@ -1,6 +1,6 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
-import com.google.gson.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonValue;
 
 @FunctionalInterface
 public interface JsonContentSerializer extends ContentSerializer {
@@ -8,9 +8,9 @@ public interface JsonContentSerializer extends ContentSerializer {
     @Override
     default String process(RequestData<?> parameters) {
         Object value = parameters.getValue();
-        return value instanceof JsonObject ? process((JsonObject) value) : null;
+        return value instanceof JsonValue ? process((JsonValue<?>) value) : null;
     }
 
-    public String process(JsonObject object);
+    public String process(JsonValue<?> object);
 
 }

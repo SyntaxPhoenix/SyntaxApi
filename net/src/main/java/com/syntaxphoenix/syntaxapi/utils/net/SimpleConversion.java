@@ -1,6 +1,8 @@
 package com.syntaxphoenix.syntaxapi.utils.net;
 
-public class SimpleConversion {
+public final class SimpleConversion {
+    
+    private SimpleConversion() {}
 
     public static String toPath(String[] path) {
         return toPath(path, "/");

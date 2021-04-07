@@ -1,11 +1,11 @@
 package com.syntaxphoenix.syntaxapi.config.json;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 
 import com.syntaxphoenix.syntaxapi.config.BaseConfig;
+import com.syntaxphoenix.syntaxapi.json.io.JsonParser;
+import com.syntaxphoenix.syntaxapi.json.io.JsonWriter;
 
 /**
  * @author Lauriichen
@@ -13,29 +13,18 @@ import com.syntaxphoenix.syntaxapi.config.BaseConfig;
  */
 public class JsonConfig extends JsonConfigSection implements BaseConfig {
 
+    private final JsonParser parser = new JsonParser();
+    private final JsonWriter writer = new JsonWriter().setPretty(true);
+
     @Override
     public void load(File file) throws IOException {
-
         if (file.exists()) {
-
-            Scanner scanner = new Scanner(file);
-            StringBuilder builder = new StringBuilder();
-            while (scanner.hasNextLine()) {
-                builder.append(scanner.nextLine());
-                builder.append('\n');
-            }
-            scanner.close();
-
-            String json = builder.toString();
-            fromJsonString(json.substring(0, json.length() - 1));
-
+            fromJson(parser.fromFile(file));
         }
-
     }
 
     @Override
     public void save(File file) throws IOException {
-
         if (!file.exists()) {
             String parentPath = file.getParent();
             if (parentPath != null && !parentPath.isEmpty()) {
@@ -51,11 +40,7 @@ public class JsonConfig extends JsonConfigSection implements BaseConfig {
             }
             file.createNewFile();
         }
-
-        FileWriter writer = new FileWriter(file);
-        writer.write(toJsonString());
-        writer.close();
-
+        writer.toFile(toJson(), file);
     }
 
 }

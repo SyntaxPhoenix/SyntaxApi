@@ -4,12 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import com.syntaxphoenix.syntaxapi.json.utils.SynchronizedIterator;
+import com.syntaxphoenix.syntaxapi.json.utils.LockedIterator;
 
 public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> implements Iterable<JsonEntry<?>> {
 
     private final ArrayList<JsonEntry<?>> values = new ArrayList<>();
+
+    private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
+    private final Lock read = lock.readLock();
+    private final Lock write = lock.writeLock();
 
     @Override
     public final ValueType getType() {
@@ -19,11 +26,11 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> implements 
     @Override
     public Map<String, JsonValue<?>> getValue() {
         HashMap<String, JsonValue<?>> values = new HashMap<>();
-        synchronized (this.values) {
-            for (JsonEntry<?> entry : this.values) {
-                values.put(entry.getKey(), entry.getValue());
-            }
+        read.lock();
+        for (JsonEntry<?> entry : this.values) {
+            values.put(entry.getKey(), entry.getValue());
         }
+        read.unlock();
         return values;
     }
 
@@ -32,9 +39,9 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> implements 
             return this;
         }
         remove(key);
-        synchronized (values) {
-            values.add(new JsonEntry<>(key, value));
-        }
+        write.lock();
+        values.add(new JsonEntry<>(key, value));
+        write.unlock();
         return this;
     }
 
@@ -45,9 +52,9 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> implements 
     public Optional<JsonValue<?>> remove(String key) {
         Optional<JsonEntry<?>> option = search(key);
         if (option.isPresent()) {
-            synchronized (values) {
-                values.remove(option.get());
-            }
+            write.lock();
+            values.remove(option.get());
+            write.unlock();
         }
         return option.map(JsonEntry::getValue);
     }
@@ -73,32 +80,43 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> implements 
     }
 
     public int size() {
-        synchronized (values) {
-            return values.size();
-        }
+        return values.size();
+    }
+
+    public boolean isEmpty() {
+        return values.isEmpty();
     }
 
     public String[] keys() {
-        synchronized (values) {
+        read.lock();
+        try {
             return values.stream().map(JsonEntry::getKey).toArray(String[]::new);
+        } finally {
+            read.unlock();
         }
     }
 
     public JsonValue<?>[] values() {
-        synchronized (values) {
+        read.lock();
+        try {
             return values.stream().map(JsonEntry::getKey).toArray(JsonValue<?>[]::new);
+        } finally {
+            read.unlock();
         }
     }
 
     public JsonEntry<?>[] entries() {
-        synchronized (values) {
+        read.lock();
+        try {
             return values.toArray(new JsonEntry<?>[0]);
+        } finally {
+            read.unlock();
         }
     }
 
     @Override
-    public SynchronizedIterator<JsonEntry<?>> iterator() {
-        return new SynchronizedIterator<>(values);
+    public LockedIterator<JsonEntry<?>> iterator() {
+        return new LockedIterator<>(read, values.iterator());
     }
 
     /*
@@ -106,14 +124,20 @@ public class JsonObject extends JsonValue<Map<String, JsonValue<?>>> implements 
      */
 
     private Optional<JsonEntry<?>> search(String key) {
-        synchronized (values) {
+        read.lock();
+        try {
             return values.stream().filter(entry -> entry.getKey().equals(key)).findFirst();
+        } finally {
+            read.unlock();
         }
     }
 
     private Optional<JsonEntry<?>> search(JsonValue<?> value) {
-        synchronized (values) {
+        read.lock();
+        try {
             return values.stream().filter(entry -> entry.getValue().equals(value)).findFirst();
+        } finally {
+            read.unlock();
         }
     }
 

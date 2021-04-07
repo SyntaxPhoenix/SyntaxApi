@@ -9,8 +9,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonValue;
 import com.syntaxphoenix.syntaxapi.utils.java.Streams;
 
 public class Request {
@@ -49,16 +49,16 @@ public class Request {
 
     public Request parameter(String key, String value) {
         if (value != null) {
-            parameters.addProperty(key, value);
+            parameters.set(key, value);
         } else {
             parameters.remove(key);
         }
         return this;
     }
 
-    public Request parameter(String key, JsonElement element) {
+    public Request parameter(String key, JsonValue<?> element) {
         if (element != null) {
-            parameters.add(key, element);
+            parameters.set(key, element);
         } else {
             parameters.remove(key);
         }
@@ -93,7 +93,7 @@ public class Request {
     }
 
     public boolean hasParameters() {
-        return !parameters.keySet().isEmpty();
+        return !parameters.isEmpty();
     }
 
     /*

@@ -1,7 +1,11 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
-import com.google.gson.JsonObject;
-import com.syntaxphoenix.syntaxapi.utils.json.JsonTools;
+import java.io.IOException;
+
+import com.syntaxphoenix.syntaxapi.json.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonValue;
+import com.syntaxphoenix.syntaxapi.json.ValueType;
+import com.syntaxphoenix.syntaxapi.json.io.JsonParser;
 
 public class DefaultDeserializers {
 
@@ -15,7 +19,17 @@ public class DefaultDeserializers {
      * Json deserializers
      */
 
-    public static final JsonContentDeserializer JSON = value -> JsonTools.readJson(value);
+    public static final JsonContentDeserializer JSON = value -> {
+        try {
+            JsonValue<?> output = new JsonParser().fromString(value);
+            if (output.getType() == ValueType.OBJECT) {
+                return (JsonObject) output;
+            }
+        } catch (IOException e) {
+            // Ignore
+        }
+        return new JsonObject();
+    };
 
     public static final JsonContentDeserializer URL_ENCODED = value -> {
         JsonObject output = new JsonObject();
@@ -29,7 +43,7 @@ public class DefaultDeserializers {
                 continue;
             }
             String[] entry = current.split("=", 2);
-            output.addProperty(entry[0], entry[1]);
+            output.set(entry[0], entry[1]);
         }
         return output;
     };

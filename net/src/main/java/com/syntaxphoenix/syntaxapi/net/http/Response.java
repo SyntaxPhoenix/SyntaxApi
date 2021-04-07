@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonArray;
+import com.syntaxphoenix.syntaxapi.json.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonValue;
+import com.syntaxphoenix.syntaxapi.json.ValueType;
+import com.syntaxphoenix.syntaxapi.json.io.JsonParser;
+import com.syntaxphoenix.syntaxapi.json.value.JsonNull;
 import com.syntaxphoenix.syntaxapi.utils.java.Streams;
-import com.syntaxphoenix.syntaxapi.utils.json.JsonTools;
+import com.syntaxphoenix.syntaxapi.utils.net.JsonHelper;
 
 public class Response {
 
@@ -20,7 +23,7 @@ public class Response {
     public Response(int responseCode, byte[] response, Map<String, List<String>> headerMap) {
         this.responseCode = responseCode;
         this.response = response;
-        this.headers = headerMap.entrySet().stream().collect(JsonTools.toJsonObject());
+        this.headers = (JsonObject) JsonHelper.from(headerMap);
     }
 
     /*
@@ -28,26 +31,27 @@ public class Response {
      */
 
     public boolean has(String header) {
-        return headers.has(header.toLowerCase());
+        return headers.has(header);
     }
 
-    public boolean hasMultiple(String header) {
-        if (!has(header)) {
-            return false;
-        }
-        return get(header).isJsonArray();
+    public boolean hasArray(String header) {
+        return headers.has(header, ValueType.ARRAY);
     }
 
-    public JsonElement get(String header) {
+    public boolean hasObject(String header) {
+        return headers.has(header, ValueType.OBJECT);
+    }
+
+    public JsonValue<?> get(String header) {
         return headers.get(header);
     }
 
-    public JsonArray getMultiple(String header) {
-        return headers.get(header).getAsJsonArray();
+    public JsonArray getArray(String header) {
+        return (JsonArray) headers.get(header);
     }
 
-    public String getAsString(String header) {
-        return get(header).getAsString();
+    public JsonObject getObject(String header) {
+        return (JsonObject) headers.get(header);
     }
 
     /*
@@ -70,8 +74,12 @@ public class Response {
         }
     }
 
-    public JsonObject getResponseAsJson() {
-        return JsonTools.readJson(getResponse());
+    public JsonValue<?> getResponseAsJson() {
+        try {
+            return new JsonParser().fromString(getResponse());
+        } catch (IOException e) {
+            return JsonNull.get();
+        }
     }
 
     public JsonObject getResponseHeaders() {

@@ -2,75 +2,11 @@ package com.syntaxphoenix.syntaxapi.nbt.tools;
 
 import java.util.HashMap;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.syntaxphoenix.syntaxapi.nbt.NbtBigDecimal;
-import com.syntaxphoenix.syntaxapi.nbt.NbtBigInt;
-import com.syntaxphoenix.syntaxapi.nbt.NbtByte;
-import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
-import com.syntaxphoenix.syntaxapi.nbt.NbtList;
-import com.syntaxphoenix.syntaxapi.nbt.NbtNumber;
-import com.syntaxphoenix.syntaxapi.nbt.NbtString;
-import com.syntaxphoenix.syntaxapi.nbt.NbtTag;
-import com.syntaxphoenix.syntaxapi.nbt.NbtType;
-import com.syntaxphoenix.syntaxapi.utils.java.Strings;
+import com.syntaxphoenix.syntaxapi.json.value.*;
+import com.syntaxphoenix.syntaxapi.json.*;
+import com.syntaxphoenix.syntaxapi.nbt.*;
 
 public class NbtJsonParser {
-
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
-    public static Object fromJson(JsonElement element, Class<?> classOfT) {
-        return GSON.fromJson(element, classOfT);
-    }
-
-    /**
-     * Convert nbt to json and then serialize it with
-     * {@code fromJson(JsonElement, Class<?>)}
-     * 
-     * @param tag  - Nbt to convert
-     * @param type - Type of in nbt serialized object
-     * 
-     * @return the object
-     */
-    public static Object fromNbt(NbtTag tag, Class<?> type) {
-        return fromJson(toJson(tag), type);
-    }
-
-    /**
-     * Serialize an object to json
-     * 
-     * @param object - Object to serialize
-     * 
-     * @return json that was created
-     */
-    public static JsonElement toJson(Object object) {
-        if (object instanceof JsonElement) {
-            return (JsonElement) object;
-        } else if (object instanceof NbtTag) {
-            return toJson((NbtTag) object);
-        }
-        return GSON.toJsonTree(object);
-    }
-
-    /**
-     * Serialize an object to nbt
-     * 
-     * @param object - Object to serialize
-     * 
-     * @return nbt that was created
-     */
-    public static NbtTag toNbt(Object object) {
-        if (object instanceof JsonElement) {
-            return toNbt((JsonElement) object);
-        } else if (object instanceof NbtTag) {
-            return (NbtTag) object;
-        }
-        return toNbt(toJson(object));
-    }
 
     /**
      * Convert json to nbt
@@ -79,28 +15,38 @@ public class NbtJsonParser {
      * 
      * @return resulting nbt tag
      */
-    public static NbtTag toNbt(JsonElement element) {
-        if (element.isJsonObject()) {
-            return toNbtCompound(element.getAsJsonObject());
-        } else if (element.isJsonArray()) {
-            return toNbtList(element.getAsJsonArray());
-        } else if (element.isJsonPrimitive()) {
-            JsonPrimitive primitive = element.getAsJsonPrimitive();
-            if (primitive.isBoolean()) {
-                return new NbtByte((byte) (primitive.getAsBoolean() ? 1 : 0));
-            } else if (primitive.isString()) {
-                String input = primitive.getAsString();
-                if (Strings.isNumeric(input)) {
-                    return new NbtBigInt(input);
-                } else if (Strings.isDecimal(input)) {
-                    return new NbtBigDecimal(input);
-                }
-                return new NbtString(input);
-            } else if (primitive.isNumber()) {
-                return NbtNumber.fromNumber(primitive.getAsNumber());
-            }
+    public static NbtTag toNbt(JsonValue<?> element) {
+        if (element == null || element.hasType(ValueType.NULL)) {
+            return null;
         }
-        return null;
+        switch (element.getType()) {
+        case ARRAY:
+            return toNbtList((JsonArray) element);
+        case OBJECT:
+            return toNbtCompound((JsonObject) element);
+        case BIG_DECIMAL:
+            return new NbtBigDecimal(((JsonBigDecimal) element).getValue());
+        case BIG_INTEGER:
+            return new NbtBigDecimal(((JsonBigDecimal) element).getValue());
+        case BOOLEAN:
+            return new NbtByte((byte) (((JsonBoolean) element).getValue() ? 1 : 0));
+        case BYTE:
+            return new NbtByte(((JsonByte) element).getValue());
+        case DOUBLE:
+            return new NbtDouble(((JsonDouble) element).getValue());
+        case FLOAT:
+            return new NbtFloat(((JsonFloat) element).getValue());
+        case INTEGER:
+            return new NbtInt(((JsonInteger) element).getValue());
+        case LONG:
+            return new NbtLong(((JsonLong) element).getValue());
+        case SHORT:
+            return new NbtShort(((JsonShort) element).getValue());
+        case STRING:
+            return new NbtString(((JsonString) element).getValue());
+        default:
+            return null;
+        }
     }
 
     /**
@@ -115,12 +61,12 @@ public class NbtJsonParser {
         if (object.size() == 0) {
             return compound;
         }
-        for (String key : object.keySet()) {
-            NbtTag tag = toNbt(object.get(key));
+        for (JsonEntry<?> entry : object) {
+            NbtTag tag = toNbt(entry.getValue());
             if (tag == null) {
                 continue;
             }
-            compound.set(key, tag);
+            compound.set(entry.getKey(), tag);
         }
         return compound;
     }
@@ -181,13 +127,13 @@ public class NbtJsonParser {
      * 
      * @return resulting json
      */
-    public static JsonElement toJson(NbtTag tag) {
+    public static JsonValue<?> toJson(NbtTag tag) {
         if (tag instanceof NbtCompound) {
             return toJsonObject((NbtCompound) tag);
         } else if (tag instanceof NbtList) {
             return toJsonArray((NbtList<?>) tag);
         }
-        return GSON.toJsonTree(tag.getValue());
+        return JsonValue.fromPrimitive(tag.getValue());
     }
 
     /**
@@ -203,7 +149,7 @@ public class NbtJsonParser {
             return object;
         }
         for (String key : compound.getKeys()) {
-            object.add(key, toJson(compound.get(key)));
+            object.set(key, toJson(compound.get(key)));
         }
         return object;
     }

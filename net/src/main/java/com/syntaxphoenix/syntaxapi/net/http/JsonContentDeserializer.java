@@ -1,6 +1,6 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
-import com.google.gson.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonObject;
 
 public interface JsonContentDeserializer extends ContentDeserializer {
 

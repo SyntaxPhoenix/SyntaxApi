@@ -1,10 +1,10 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
-import java.util.Map.Entry;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonArray;
+import com.syntaxphoenix.syntaxapi.json.JsonEntry;
+import com.syntaxphoenix.syntaxapi.json.JsonObject;
+import com.syntaxphoenix.syntaxapi.json.JsonValue;
+import com.syntaxphoenix.syntaxapi.json.ValueType;
 
 public class SpecialSerializers {
 
@@ -28,19 +28,30 @@ public class SpecialSerializers {
         private final String NULL = "null";
         private final String NEXT = "==>";
 
-        public String process(JsonObject parameters) {
+        public String process(JsonValue<?> element) {
             StringBuilder builder = new StringBuilder();
-
-            append(builder, parameters, 0);
-
-            return builder.toString();
+            if (element == null || element.getType() == ValueType.NULL) {
+                return NULL;
+            }
+            if (element.isPrimitive()) {
+                return builder.append(element.getValue()).toString();
+            }
+            if (element.getType() == ValueType.ARRAY) {
+                append(builder, (JsonArray) element, 0);
+                return builder.toString();
+            }
+            if (element.getType() == ValueType.OBJECT) {
+                append(builder, (JsonObject) element, 0);
+                return builder.toString();
+            }
+            return NULL;
         }
 
         private boolean append(StringBuilder builder, JsonObject object, int depth) {
 
-            for (Entry<String, JsonElement> entry : object.entrySet()) {
+            for (JsonEntry<?> entry : object) {
 
-                JsonElement element = entry.getValue();
+                JsonValue<?> element = entry.getValue();
 
                 for (int current = 0; current < depth; current++) {
                     builder.append(CHARS[2]);
@@ -50,24 +61,27 @@ public class SpecialSerializers {
                 builder.append(CHARS[0]);
                 builder.append(CHARS[1]);
 
-                if (element == null || element.isJsonNull()) {
+                if (element == null || element.getType() == ValueType.NULL) {
                     builder.append(NULL);
                     continue;
                 }
 
-                if (element.isJsonPrimitive()) {
-                    builder.append(element.getAsString());
+                if (element.isPrimitive()) {
+                    builder.append(element.getValue());
                     continue;
                 }
 
                 builder.append(CHARS[3]);
 
-                if (element.isJsonArray()) {
-                    append(builder, element.getAsJsonArray(), depth + 1);
+                if (element.getType() == ValueType.ARRAY) {
+                    append(builder, (JsonArray) element, depth + 1);
                     continue;
                 }
 
-                append(builder, element.getAsJsonObject(), depth + 1);
+                if (element.getType() == ValueType.OBJECT) {
+                    append(builder, (JsonObject) element, depth + 1);
+                    continue;
+                }
 
             }
 
@@ -76,7 +90,7 @@ public class SpecialSerializers {
 
         private boolean append(StringBuilder builder, JsonArray array, int depth) {
 
-            for (JsonElement element : array) {
+            for (JsonValue<?> element : array) {
 
                 for (int current = 0; current < depth; current++) {
                     builder.append(CHARS[2]);
@@ -85,25 +99,28 @@ public class SpecialSerializers {
                 builder.append(CHARS[4]);
                 builder.append(CHARS[0]);
 
-                if (element == null || element.isJsonNull()) {
+                if (element == null || element.getType() == ValueType.NULL) {
                     builder.append(NULL);
                     continue;
                 }
 
-                if (element.isJsonPrimitive()) {
-                    builder.append(element.getAsString());
+                if (element.isPrimitive()) {
+                    builder.append(element.getValue());
                     continue;
                 }
 
                 builder.append(NEXT);
                 builder.append(CHARS[3]);
 
-                if (element.isJsonArray()) {
-                    append(builder, element.getAsJsonArray(), depth + 1);
+                if (element.getType() == ValueType.ARRAY) {
+                    append(builder, (JsonArray) element, depth + 1);
                     continue;
                 }
 
-                append(builder, element.getAsJsonObject(), depth + 1);
+                if (element.getType() == ValueType.OBJECT) {
+                    append(builder, (JsonObject) element, depth + 1);
+                    continue;
+                }
 
             }
 

@@ -3,8 +3,8 @@ package com.syntaxphoenix.syntaxapi.net.http;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.syntaxphoenix.syntaxapi.utils.json.ValueIdentifier;
 import com.syntaxphoenix.syntaxapi.utils.net.SimpleConversion;
+import com.syntaxphoenix.syntaxapi.utils.net.ValueIdentifier;
 
 public class ReceivedRequest {
 

@@ -1,11 +1,13 @@
-package com.syntaxphoenix.syntaxapi.utils.json;
+package com.syntaxphoenix.syntaxapi.utils.net;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import com.syntaxphoenix.syntaxapi.utils.java.Strings;
 
-public class ValueIdentifier {
+public final class ValueIdentifier {
+
+    private ValueIdentifier() {}
 
     public static Object identify(String value) {
         if (value.length() == 1) {

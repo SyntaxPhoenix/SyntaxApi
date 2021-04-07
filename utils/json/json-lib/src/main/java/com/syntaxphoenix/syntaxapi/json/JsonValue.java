@@ -50,7 +50,7 @@ public abstract class JsonValue<E> {
         if (complex == BigDecimal.class) {
             return (JsonValue<E>) new JsonBigDecimal((BigDecimal) primitive);
         }
-        return null;
+        return JsonNull.get();
     }
 
     public abstract ValueType getType();

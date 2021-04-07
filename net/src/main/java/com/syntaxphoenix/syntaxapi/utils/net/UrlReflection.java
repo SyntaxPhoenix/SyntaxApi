@@ -6,7 +6,9 @@ import java.util.Objects;
 import com.syntaxphoenix.syntaxapi.reflection.AbstractReflect;
 import com.syntaxphoenix.syntaxapi.reflection.Reflect;
 
-public class UrlReflection {
+public final class UrlReflection {
+    
+    private UrlReflection() {}
 
     public static final AbstractReflect URL_REFLECT = new Reflect(URL.class).searchField("query", "query").searchField("file", "file");
 
