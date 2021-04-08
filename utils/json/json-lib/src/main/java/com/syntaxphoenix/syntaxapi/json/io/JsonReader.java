@@ -445,13 +445,14 @@ public class JsonReader {
                 }
                 break;
             case EMPTY_OBJECT:
-                pop();
             case FILLED_OBJECT:
+                pop();
                 stack.push(JsonScope.PENDING_NAME);
                 if (current == JsonScope.FILLED_OBJECT) {
                     char character1 = nextCharacter();
                     switch (character1) {
                     case '}':
+                        pop();
                         return state = JsonState.END_OBJECT;
                     case ',':
                         break;
@@ -483,6 +484,7 @@ public class JsonReader {
                 cursor--;
                 break;
             case PENDING_NAME:
+                pop();
                 stack.push(JsonScope.FILLED_OBJECT);
                 char character0 = nextCharacter();
                 if (character0 != ':') {

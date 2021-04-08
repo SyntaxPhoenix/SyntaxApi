@@ -132,6 +132,9 @@ public class JsonWriter implements TextSerializer<JsonValue<?>> {
                 }
             }
         }
+        if (pretty) {
+            indent(writer, depth);
+        }
         writer.append('}');
     }
 

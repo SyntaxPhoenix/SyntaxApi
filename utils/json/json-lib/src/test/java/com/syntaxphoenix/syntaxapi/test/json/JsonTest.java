@@ -1,6 +1,7 @@
 package com.syntaxphoenix.syntaxapi.test.json;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import org.junit.jupiter.api.Test;
 
@@ -49,6 +50,24 @@ public class JsonTest {
         writer.toStream(value, System.out);
         
         System.out.println("\n== Read Test ==");
+
+    }
+
+    @Test
+    public void tryRealExample() throws Exception {
+        
+        System.out.println("== Skin Test ==\n");
+
+        String name = "Lauriichan";
+        String rawId = MojangProfileServer.getUniqueIdString(name);
+        if(rawId.isEmpty()) {
+            return;
+        }
+        Skin skin = MojangProfileServer.getSkinShorten(name, rawId);
+        
+        System.out.println(new String(Base64.getDecoder().decode(skin.getValue())));
+        
+        System.out.println("\n== Skin Test ==");
 
     }
 
