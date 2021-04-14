@@ -44,15 +44,15 @@ public abstract class DataContainer implements IDataContainer {
     }
 
     public Object get(IKey key) {
-        return get(key.toString());
+        return get(key.asString());
     }
 
     public <E, V> void set(IKey key, E value, DataType<V, E> type) {
-        set(key.toString(), value, type);
+        set(key.asString(), value, type);
     }
 
     public boolean remove(IKey key) {
-        return remove(key.toString());
+        return remove(key.asString());
     }
 
     public IKey[] getKeys() {
