@@ -13,11 +13,7 @@ public class NbtAdapterRegistry extends DataAdapterRegistry<NbtTag> {
         if (base.getType() == NbtType.END) {
             return null;
         }
-        Object value = extract(base.getValue().getClass(), base);
-        if (value instanceof NbtTag) {
-            return extract((NbtTag) value);
-        }
-        return value;
+        return extract(base.getValue().getClass(), base);
     }
 
     @Override
