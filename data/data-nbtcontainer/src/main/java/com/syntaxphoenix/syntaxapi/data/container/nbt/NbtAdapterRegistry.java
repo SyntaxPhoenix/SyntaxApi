@@ -5,11 +5,19 @@ import java.util.function.Function;
 import com.syntaxphoenix.syntaxapi.data.DataAdapter;
 import com.syntaxphoenix.syntaxapi.data.DataAdapterRegistry;
 import com.syntaxphoenix.syntaxapi.nbt.NbtTag;
+import com.syntaxphoenix.syntaxapi.nbt.NbtType;
 
 public class NbtAdapterRegistry extends DataAdapterRegistry<NbtTag> {
 
     public Object extract(NbtTag base) {
-        return extract(base.getType().getOwningClass(), base);
+        if (base.getType() == NbtType.END) {
+            return null;
+        }
+        Object value = extract(base.getValue().getClass(), base);
+        if (value instanceof NbtTag) {
+            return extract((NbtTag) value);
+        }
+        return value;
     }
 
     @Override
