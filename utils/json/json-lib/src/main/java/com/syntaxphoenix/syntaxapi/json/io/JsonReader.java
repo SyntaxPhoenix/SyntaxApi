@@ -516,7 +516,7 @@ public class JsonReader {
             default:
                 cursor--;
             }
-            
+
             if (isKeyword() || isNumber()) {
                 return state;
             }
@@ -584,8 +584,7 @@ public class JsonReader {
         boolean decimal = false;
         boolean negative = false;
         boolean exponential = false;
-
-        int exponentialLength = 0;
+        boolean exponentialNegative = false;
 
         StringBuilder value = new StringBuilder();
         StringBuilder exponentialValue = new StringBuilder();
@@ -615,7 +614,7 @@ public class JsonReader {
                     continue;
                 case NUMBER_EXP_IND:
                     parser = NUMBER_EXP_SIGN;
-                    exponentialLength = 2;
+                    exponentialNegative = true;
                     value.append(current);
                     continue;
                 default:
@@ -629,7 +628,6 @@ public class JsonReader {
                     continue;
                 case NUMBER_EXP_IND:
                     parser = NUMBER_EXP_SIGN;
-                    exponentialLength = 2;
                     value.append(current);
                     continue;
                 default:
@@ -642,7 +640,6 @@ public class JsonReader {
                 }
                 exponential = true;
                 parser = NUMBER_EXP_IND;
-                exponentialLength = 1;
                 value.append(current);
                 continue;
             case '.':
@@ -679,6 +676,7 @@ public class JsonReader {
                     continue;
                 case NUMBER_EXP_IND:
                 case NUMBER_EXP_SIGN:
+                case NUMBER_EXP_DIGIT:
                     value.append(current);
                     exponentialValue.append(current);
                     parser = NUMBER_EXP_DIGIT;
@@ -690,27 +688,44 @@ public class JsonReader {
         }
         try {
             stringBuffer = value.toString();
-            int length = (((decimal ? stringBuffer.split(".", 2)[0].length() : stringBuffer.length()) - exponentialLength)
-                * (exponential ? 10 ^ Integer.parseInt(exponentialValue.toString()) : 1)) - (negative ? 0 : 1);
+            if (stringBuffer.length() == 0) {
+                stringBuffer = "0";
+                state = JsonState.BYTE;
+                cursor += 1;
+                return true;
+            }
+            int length = (decimal ? stringBuffer.split(".", 2)[0].length() : stringBuffer.length()) - (negative ? 0 : 1);
 
             if (decimal) {
-                switch (length) {
-                case LENGTH_FLOAT:
-                    state = isLower(stringBuffer, SIZE_FLOAT, negative) ? JsonState.FLOAT : JsonState.DOUBLE;
-                    break;
-                case LENGTH_DOUBLE:
-                    state = isLower(stringBuffer, SIZE_DOUBLE, negative) ? JsonState.DOUBLE : JsonState.BIG_DECIMAL;
-                    break;
-                default:
-                    if (length < LENGTH_FLOAT) {
+                if (exponential && exponentialValue.length() > 0) {
+                    BigDecimal number = new BigDecimal(stringBuffer.split("E", 2)[0])
+                        .pow(Integer.parseInt(exponentialValue.toString()) * (exponentialNegative ? -1 : 1));
+                    if (hasSize(number, SIZE_FLOAT, negative)) {
                         state = JsonState.FLOAT;
-                        break;
-                    }
-                    if (length < LENGTH_DOUBLE) {
+                    } else if (hasSize(number, SIZE_DOUBLE, negative)) {
                         state = JsonState.DOUBLE;
-                        break;
+                    } else {
+                        state = JsonState.BIG_DECIMAL;
                     }
-                    state = JsonState.BIG_DECIMAL;
+                } else {
+                    switch (length) {
+                    case LENGTH_FLOAT:
+                        state = isLower(stringBuffer, SIZE_FLOAT, negative) ? JsonState.FLOAT : JsonState.DOUBLE;
+                        break;
+                    case LENGTH_DOUBLE:
+                        state = isLower(stringBuffer, SIZE_DOUBLE, negative) ? JsonState.DOUBLE : JsonState.BIG_DECIMAL;
+                        break;
+                    default:
+                        if (length < LENGTH_FLOAT) {
+                            state = JsonState.FLOAT;
+                            break;
+                        }
+                        if (length < LENGTH_DOUBLE) {
+                            state = JsonState.DOUBLE;
+                            break;
+                        }
+                        state = JsonState.BIG_DECIMAL;
+                    }
                 }
             } else {
                 switch (length) {
@@ -746,12 +761,19 @@ public class JsonReader {
                     state = JsonState.BIG_INTEGER;
                 }
             }
-            cursor += length + 1;
+            cursor += stringBuffer.length();
             return true;
         } catch (NumberFormatException exception) {
             exception.printStackTrace();
             return false;
         }
+    }
+
+    protected boolean hasSize(BigDecimal compare, BigDecimal comparision, boolean negative) {
+        if (negative) {
+            return compare.compareTo(comparision.multiply(BigDecimal.ONE.negate())) >= 0;
+        }
+        return compare.compareTo(comparision) <= 0;
     }
 
     protected boolean isLower(String value, BigDecimal comparision, boolean negative) {

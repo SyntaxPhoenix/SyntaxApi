@@ -32,6 +32,7 @@ public class JsonParser implements TextDeserializer<JsonValue<?>> {
 
     protected JsonValue<?> read(JsonReader reader) throws IOException, JsonSyntaxException {
         JsonToken token = reader.next();
+        System.out.println(token.name());
         switch (token) {
         case NULL:
             reader.readNull();
@@ -46,6 +47,7 @@ public class JsonParser implements TextDeserializer<JsonValue<?>> {
             while (reader.hasNext()) {
                 array.add(read(reader));
             }
+            System.out.println("END_ARRAY");
             reader.endArray();
             return array;
         case START_OBJECT:
@@ -54,6 +56,7 @@ public class JsonParser implements TextDeserializer<JsonValue<?>> {
             while (reader.hasNext()) {
                 object.set(reader.readName(), read(reader));
             }
+            System.out.println("END_OBJECT");
             reader.endObject();
             return object;
         case BYTE:

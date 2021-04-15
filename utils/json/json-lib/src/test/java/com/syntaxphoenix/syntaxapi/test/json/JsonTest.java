@@ -15,7 +15,7 @@ public class JsonTest {
 
     @Test
     public void tryJsonWriter() throws IOException {
-        
+
         System.out.println("== Write Test ==\n");
 
         JsonWriter writer = new JsonWriter().setPretty(true).setIndent(2).setSpaces(true);
@@ -31,14 +31,14 @@ public class JsonTest {
         object.set("test3", array);
 
         writer.toStream(object, System.out);
-        
+
         System.out.println("\n== Write Test ==");
 
     }
 
     @Test
     public void tryJsonReader() throws Exception {
-        
+
         System.out.println("== Read Test ==\n");
 
         JsonParser parser = new JsonParser();
@@ -48,26 +48,44 @@ public class JsonTest {
         JsonWriter writer = new JsonWriter().setPretty(true).setIndent(2).setSpaces(true);
 
         writer.toStream(value, System.out);
-        
+
         System.out.println("\n== Read Test ==");
 
     }
 
     @Test
     public void tryRealExample() throws Exception {
-        
+
         System.out.println("== Skin Test ==\n");
 
         String name = "Lauriichan";
         String rawId = MojangProfileServer.getUniqueIdString(name);
-        if(rawId.isEmpty()) {
+        if (rawId.isEmpty()) {
             return;
         }
         Skin skin = MojangProfileServer.getSkinShorten(name, rawId);
-        
+
         System.out.println(new String(Base64.getDecoder().decode(skin.getValue())));
-        
+
         System.out.println("\n== Skin Test ==");
+
+    }
+
+    @Test
+    public void tryNumberParsing() throws Exception {
+
+        System.out.println("\n== Number Test ==");
+
+        JsonParser parser = new JsonParser();
+
+        JsonValue<?> value = parser.fromString("{\"byte\":0,\"short\":" + (Short.MAX_VALUE - 1) + ",\"integer\":" + (Integer.MAX_VALUE - 1)
+            + ",\"long\":" + (Long.MAX_VALUE - 1) + ",\"float\":" + (Float.MAX_VALUE - 1) + ",\"double\":" + (Double.MAX_VALUE - 1) + "}");
+
+        JsonWriter writer = new JsonWriter().setPretty(true).setIndent(2).setSpaces(true);
+
+        writer.toStream(value, System.out);
+
+        System.out.println("\n== Number Test ==");
 
     }
 

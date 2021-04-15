@@ -16,6 +16,9 @@ public final class JsonHelper {
 
     public static JsonObject addValuesTo(Map<String, ?> map, JsonObject object) {
         for (Entry<String, ?> entry : map.entrySet()) {
+            if (entry.getKey() == null) {
+                continue;
+            }
             object.set(entry.getKey(), from(entry.getValue()));
         }
         return object;
