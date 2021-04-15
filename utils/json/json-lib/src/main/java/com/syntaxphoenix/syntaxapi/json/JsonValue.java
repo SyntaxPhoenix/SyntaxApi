@@ -1,8 +1,10 @@
 package com.syntaxphoenix.syntaxapi.json;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import com.syntaxphoenix.syntaxapi.json.io.JsonWriter;
 import com.syntaxphoenix.syntaxapi.json.value.JsonBigDecimal;
 import com.syntaxphoenix.syntaxapi.json.value.JsonBigInteger;
 import com.syntaxphoenix.syntaxapi.json.value.JsonByte;
@@ -16,6 +18,9 @@ import com.syntaxphoenix.syntaxapi.json.value.JsonString;
 import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 
 public abstract class JsonValue<E> {
+
+    private static final JsonWriter PRETTY = new JsonWriter().setPretty(true);
+    private static final JsonWriter UNPRETTY = new JsonWriter();
 
     @SuppressWarnings("unchecked")
     public static <E> JsonValue<E> fromPrimitive(E primitive) {
@@ -63,6 +68,23 @@ public abstract class JsonValue<E> {
 
     public boolean isPrimitive() {
         return getType().isPrimitive();
+    }
+
+    @Override
+    public String toString() {
+        try {
+            return UNPRETTY.toString(this);
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
+    public String toPrettyString() {
+        try {
+            return PRETTY.toString(this);
+        } catch (IOException e) {
+            return "";
+        }
     }
 
 }
