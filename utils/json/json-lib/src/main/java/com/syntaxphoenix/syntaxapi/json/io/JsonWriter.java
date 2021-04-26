@@ -217,11 +217,10 @@ public class JsonWriter implements TextSerializer<JsonValue<?>> {
             char character = array[index];
             if (character < 128) {
                 String escaped = ESCAPE_CHARS[character];
-                if (escaped == null) {
+                if (escaped != null) {
+                    builder.append(escaped);
                     continue;
                 }
-                builder.append(escaped);
-                continue;
             }
             if (character == '\u2028') {
                 builder.append("\\u2028");
