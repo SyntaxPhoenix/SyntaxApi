@@ -15,6 +15,22 @@ import com.syntaxphoenix.syntaxapi.utils.io.TextSerializer;
 
 public class JsonWriter implements TextSerializer<JsonValue<?>> {
 
+    private static final String[] ESCAPE_CHARS;
+
+    static {
+        ESCAPE_CHARS = new String[128];
+        ESCAPE_CHARS['\b'] = "\\b";
+        ESCAPE_CHARS['\f'] = "\\f";
+        ESCAPE_CHARS['\n'] = "\\n";
+        ESCAPE_CHARS['\r'] = "\\r";
+        ESCAPE_CHARS['\t'] = "\\t";
+        ESCAPE_CHARS['\"'] = "\\\"";
+        ESCAPE_CHARS['\\'] = "\\\\";
+        for (int code = 0; code < 31; code++) {
+            ESCAPE_CHARS[code] = String.format("\\u%04x", code);
+        }
+    }
+
     public static final int TAB_SPACES = 4;
 
     private boolean pretty = false;
@@ -71,7 +87,7 @@ public class JsonWriter implements TextSerializer<JsonValue<?>> {
         if (pretty) {
             indent(writer, depth);
         }
-        writeUnescapedString(entry.getKey(), writer);
+        writeStringObject(entry.getKey(), writer);
         writer.append(':');
         if (pretty) {
             writer.append(' ');
@@ -167,7 +183,7 @@ public class JsonWriter implements TextSerializer<JsonValue<?>> {
     }
 
     public void writeString(JsonString string, Writer writer) throws IOException {
-        writeUnescapedString(string.getValue(), writer);
+        writeStringObject(string.getValue(), writer);
     }
 
     public void writeNumber(JsonNumber<?> number, Writer writer) throws IOException {
@@ -194,11 +210,30 @@ public class JsonWriter implements TextSerializer<JsonValue<?>> {
         }
     }
 
-    private void writeUnescapedString(String string, Writer writer) throws IOException {
-        // TODO: escape string
-        writer.append('"');
-        writer.append(string);
-        writer.append('"');
+    private void writeStringObject(String string, Writer writer) throws IOException {
+        char[] array = string.toCharArray();
+        StringBuilder builder = new StringBuilder("\"");
+        for (int index = 0; index < array.length; index++) {
+            char character = array[index];
+            if (character < 128) {
+                String escaped = ESCAPE_CHARS[character];
+                if (escaped == null) {
+                    continue;
+                }
+                builder.append(escaped);
+                continue;
+            }
+            if (character == '\u2028') {
+                builder.append("\\u2028");
+                continue;
+            }
+            if (character == '\u2029') {
+                builder.append("\\u2029");
+                continue;
+            }
+            builder.append(character);
+        }
+        writer.append(builder.append('"').toString());
     }
 
 }

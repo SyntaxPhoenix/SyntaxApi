@@ -26,10 +26,6 @@ public class JsonParser implements TextDeserializer<JsonValue<?>> {
         return read(new JsonReader(reader));
     }
 
-    /*
-     * WIP c.c
-     */
-
     protected JsonValue<?> read(JsonReader reader) throws IOException, JsonSyntaxException {
         JsonToken token = reader.next();
         switch (token) {

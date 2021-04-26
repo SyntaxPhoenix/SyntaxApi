@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.EmptyStackException;
+import java.util.Enumeration;
 import java.util.Stack;
 
 public class JsonReader {
@@ -419,6 +420,18 @@ public class JsonReader {
             current = nextState();
         }
         return current;
+    }
+
+    public String stackAsString() {
+        StringBuilder builder = new StringBuilder("[");
+        Enumeration<JsonScope> enumeration = stack.elements();
+        while (enumeration.hasMoreElements()) {
+            builder.append(enumeration.nextElement().name());
+            if (enumeration.hasMoreElements()) {
+                builder.append(", ");
+            }
+        }
+        return builder.append("]").toString();
     }
 
     protected JsonState nextState() throws IOException, JsonSyntaxException {

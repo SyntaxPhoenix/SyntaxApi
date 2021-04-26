@@ -1,4 +1,4 @@
-package com.syntaxphoenix.syntaxapi.test.json;
+package com.syntaxphoenix.syntaxapi.test.json.utils;
 
 import java.io.IOException;
 import java.net.URL;

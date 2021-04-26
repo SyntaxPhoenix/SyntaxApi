@@ -48,8 +48,11 @@ public enum ValueType {
     }
 
     public boolean hasType(JsonValue<?> value) {
-        ValueType type = value.getType();
-        return parent != null ? (parent == type ? true : this == type) : this == type;
+        return value.getType().isType(this);
+    }
+
+    public boolean isType(ValueType type) {
+        return type == this || (parent != null ? parent == type : false);
     }
 
 }

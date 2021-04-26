@@ -1,4 +1,4 @@
-package com.syntaxphoenix.syntaxapi.test.json;
+package com.syntaxphoenix.syntaxapi.test.json.utils;
 
 public enum SkinModel {
 

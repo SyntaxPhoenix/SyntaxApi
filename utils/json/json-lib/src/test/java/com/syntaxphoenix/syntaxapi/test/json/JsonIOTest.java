@@ -10,8 +10,11 @@ import com.syntaxphoenix.syntaxapi.json.JsonObject;
 import com.syntaxphoenix.syntaxapi.json.JsonValue;
 import com.syntaxphoenix.syntaxapi.json.io.JsonParser;
 import com.syntaxphoenix.syntaxapi.json.io.JsonWriter;
+import com.syntaxphoenix.syntaxapi.test.json.utils.JsonData;
+import com.syntaxphoenix.syntaxapi.test.json.utils.MojangProfileServer;
+import com.syntaxphoenix.syntaxapi.test.json.utils.Skin;
 
-public class JsonTest {
+public class JsonIOTest {
 
     @Test
     public void tryJsonWriter() throws IOException {
@@ -87,6 +90,23 @@ public class JsonTest {
 
         System.out.println("\n== Number Test ==");
 
+    }
+    
+    @Test
+    public void tryPrettyExample() throws Exception {
+
+        System.out.println("\n== Pretty Test ==");
+
+        JsonParser parser = new JsonParser();
+
+        JsonValue<?> value = parser.fromString(JsonData.PRETTY_DATA);
+
+        JsonWriter writer = new JsonWriter().setPretty(true).setIndent(2).setSpaces(true);
+
+        writer.toStream(value, System.out);
+        
+        System.out.println("\n== Pretty Test ==");
+        
     }
 
 }

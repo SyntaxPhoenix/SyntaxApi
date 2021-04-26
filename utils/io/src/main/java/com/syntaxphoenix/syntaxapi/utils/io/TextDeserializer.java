@@ -1,5 +1,6 @@
 package com.syntaxphoenix.syntaxapi.utils.io;
 
+import java.io.BufferedReader;
 import java.io.CharArrayReader;
 import java.io.File;
 import java.io.FileReader;
@@ -57,14 +58,14 @@ public interface TextDeserializer<T> extends Deserializer<T> {
 
     @Override
     default T fromStream(InputStream stream) throws IOException {
-        try (Reader reader = new InputStreamReader(stream)) {
+        try (Reader reader = new BufferedReader(new InputStreamReader(stream))) {
             return fromReader(reader);
         }
     }
 
     @Override
     default T fromFile(File file) throws IOException {
-        try (Reader reader = new FileReader(file)) {
+        try (Reader reader = new BufferedReader(new FileReader(file))) {
             return fromReader(reader);
         }
     }

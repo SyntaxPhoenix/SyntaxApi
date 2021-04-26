@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import com.syntaxphoenix.syntaxapi.json.io.JsonWriter;
 import com.syntaxphoenix.syntaxapi.json.value.JsonBigDecimal;
 import com.syntaxphoenix.syntaxapi.json.value.JsonBigInteger;
+import com.syntaxphoenix.syntaxapi.json.value.JsonBoolean;
 import com.syntaxphoenix.syntaxapi.json.value.JsonByte;
 import com.syntaxphoenix.syntaxapi.json.value.JsonDouble;
 import com.syntaxphoenix.syntaxapi.json.value.JsonFloat;
@@ -30,6 +31,9 @@ public abstract class JsonValue<E> {
         Class<?> complex = Primitives.fromPrimitive(primitive.getClass());
         if (complex == String.class) {
             return (JsonValue<E>) new JsonString((String) primitive);
+        }
+        if (complex == Boolean.class) {
+            return (JsonValue<E>) new JsonBoolean((Boolean) primitive);
         }
         if (complex == Byte.class) {
             return (JsonValue<E>) new JsonByte((Byte) primitive);
