@@ -707,7 +707,7 @@ public class JsonReader {
                 cursor += 1;
                 return true;
             }
-            int length = (decimal ? stringBuffer.split(".", 2)[0].length() : stringBuffer.length()) - (negative ? 0 : 1);
+            int length = (decimal ? stringBuffer.split(".", 2)[0].length() : stringBuffer.length()) - (negative ? 1 : 0);
 
             if (decimal) {
                 if (exponential && exponentialValue.length() > 0) {

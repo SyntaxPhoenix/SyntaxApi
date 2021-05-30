@@ -1,10 +1,13 @@
 package com.syntaxphoenix.syntaxapi.test.json;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
 import com.syntaxphoenix.syntaxapi.json.JsonEntry;
 import com.syntaxphoenix.syntaxapi.json.JsonObject;
 import com.syntaxphoenix.syntaxapi.json.ValueType;
+import com.syntaxphoenix.syntaxapi.json.io.JsonParser;
 import com.syntaxphoenix.syntaxapi.utils.java.lang.StringBuilder;
 
 public class JsonObjectTest {
@@ -52,6 +55,29 @@ public class JsonObjectTest {
         }
 
         System.out.println("== Object Has Test ==");
+
+    }
+
+    @Test
+    public void testNumberParse() throws IOException {
+
+        System.out.println("\n== Number Parse Test ==\n");
+
+        JsonObject object = new JsonObject();
+        object.set("short", Byte.MAX_VALUE + 1);
+        object.set("long", Integer.MAX_VALUE + 1);
+        object.set("double", Float.MAX_VALUE + 1);
+        
+        String out = object.toString();
+        JsonParser parser = new JsonParser();
+        JsonObject val = (JsonObject) parser.fromString(out);
+        
+        System.out.println(val.get("short").getValue());
+        System.out.println(val.get("long").getValue());
+        System.out.println(val.get("double").getValue());
+        System.out.println();
+
+        System.out.println("== Object Parse Test ==");
 
     }
 

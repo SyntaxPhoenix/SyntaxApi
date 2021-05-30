@@ -171,7 +171,7 @@ public final class NbtInputStream extends DataInputStream {
 
     public NbtString readTagString() throws IOException {
         String input = readString();
-        if (Strings.isNumeric(input)) {
+        if (!input.isEmpty() && Strings.isNumeric(input)) {
             return new NbtBigInt(input);
         }
         return new NbtString(input);
