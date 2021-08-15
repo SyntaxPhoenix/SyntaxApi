@@ -9,10 +9,10 @@ import com.syntaxphoenix.syntaxapi.json.ValueType;
 import com.syntaxphoenix.syntaxapi.json.io.JsonParser;
 import com.syntaxphoenix.syntaxapi.net.http.CustomRequestData;
 import com.syntaxphoenix.syntaxapi.net.http.RequestData;
-import com.syntaxphoenix.syntaxapi.net.http.RequestSerializer;
+import com.syntaxphoenix.syntaxapi.net.http.RequestTextSerializer;
 import com.syntaxphoenix.syntaxapi.utils.java.Files;
 
-public class RestSerializer implements RequestSerializer {
+public class RestSerializer implements RequestTextSerializer {
 
     private final JsonParser parser = new JsonParser();
 

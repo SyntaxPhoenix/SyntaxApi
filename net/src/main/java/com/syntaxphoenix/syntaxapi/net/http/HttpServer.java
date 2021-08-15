@@ -1,6 +1,7 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -245,11 +246,16 @@ public abstract class HttpServer extends AsyncSocketServer {
 
             int length = ((Number) request.getHeader("Content-Length")).intValue();
 
-            StringBuilder builder = new StringBuilder();
-            for (int index = 0; index < length; index++) {
-                builder.append((char) reader.read());
+            ByteArrayOutputStream array = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int remain = length;
+            while (remain != 0) {
+                int amount = remain > 1024 ? 1024 : remain;
+                stream.read(buffer, 0, amount);
+                array.write(buffer, 0, amount);
+                remain -= amount;
             }
-            String data = builder.toString();
+            byte[] data = array.toByteArray();
             if (serializer != null) {
                 try {
                     request.setData(serializer.serialize(data));
@@ -263,7 +269,7 @@ public abstract class HttpServer extends AsyncSocketServer {
                     return;
                 }
             } else {
-                request.setData(new CustomRequestData<>(String.class, data));
+                request.setData(new CustomRequestData<>(String.class, new String(data, StandardCharsets.UTF_8)));
             }
         }
 

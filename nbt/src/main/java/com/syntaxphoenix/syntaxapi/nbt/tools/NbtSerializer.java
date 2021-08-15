@@ -10,7 +10,7 @@ import com.syntaxphoenix.syntaxapi.utils.io.Serializer;
 public class NbtSerializer implements Serializer<NbtNamedTag> {
 
     public static final NbtSerializer COMPRESSED = new NbtSerializer(true);
-    public static final NbtSerializer UNCOMPRESSED = new NbtSerializer(true);
+    public static final NbtSerializer UNCOMPRESSED = new NbtSerializer(false);
 
     private final boolean compress;
 

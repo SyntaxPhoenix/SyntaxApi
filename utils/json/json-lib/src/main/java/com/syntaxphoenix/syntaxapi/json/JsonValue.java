@@ -16,6 +16,7 @@ import com.syntaxphoenix.syntaxapi.json.value.JsonLong;
 import com.syntaxphoenix.syntaxapi.json.value.JsonNull;
 import com.syntaxphoenix.syntaxapi.json.value.JsonShort;
 import com.syntaxphoenix.syntaxapi.json.value.JsonString;
+import com.syntaxphoenix.syntaxapi.utils.java.Exceptions;
 import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 
 public abstract class JsonValue<E> {
@@ -79,6 +80,7 @@ public abstract class JsonValue<E> {
         try {
             return UNPRETTY.toString(this);
         } catch (IOException e) {
+            System.out.println(Exceptions.stackTraceToString(e));
             return "";
         }
     }

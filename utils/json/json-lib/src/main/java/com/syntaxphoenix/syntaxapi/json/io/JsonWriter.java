@@ -71,16 +71,7 @@ public class JsonWriter implements TextSerializer<JsonValue<?>> {
 
     @Override
     public void toWriter(JsonValue<?> object, Writer writer) throws IOException {
-        switch (object.getType()) {
-        case ARRAY:
-            writeArray((JsonArray) object, writer, 0);
-            break;
-        case OBJECT:
-            writeObject((JsonObject) object, writer, 0);
-            break;
-        default:
-            break;
-        }
+        writeValue(object, writer, 0);
     }
 
     public void writeEntry(JsonEntry<?> entry, Writer writer, int depth) throws IOException {

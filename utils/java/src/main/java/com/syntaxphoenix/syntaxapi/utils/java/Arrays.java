@@ -61,25 +61,22 @@ public class Arrays {
     }
 
     public static Object[][] partition(Object[] args, int length) {
-        int size = (int) Math.floor(args.length / (float) length);
-        if (args.length % length != 0) {
-            size++;
-        }
-        Object[][] output = new Object[size][length];
-        for (int index = 0; index < size; index++) {
-            System.arraycopy(args, index * length, output[index], 0, length);
-        }
-        return output;
+        return partition((a, b) -> new Object[a][b], args, length);
     }
 
     public static <E> E[][] partition(BiFunction<Integer, Integer, E[][]> function, E[] args, int length) {
-        int size = (int) Math.floor(args.length / (float) length);
-        if (args.length % length != 0) {
-            size++;
+        int amount = (int) Math.floor((double) args.length / length);
+        int size = args.length % length;
+        if (size != 0) {
+            amount++;
         }
-        E[][] output = function.apply(size, length);
-        for (int index = 0; index < size; index++) {
-            System.arraycopy(args, index * length, output[index], 0, length);
+        E[][] output = function.apply(amount, length);
+        for (int index = 0; index < amount; index++) {
+            if (index != amount + 1) {
+                System.arraycopy(args, index * length, output[index], 0, length);
+                continue;
+            }
+            System.arraycopy(args, index * length, output[index], 0, size);
         }
         return output;
     }
