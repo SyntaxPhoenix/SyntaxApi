@@ -378,7 +378,7 @@ public class JsonReader {
                     output += (check - 'a' + 10);
                     continue;
                 }
-                if (check >= 'a' && check <= 'F') {
+                if (check >= 'A' && check <= 'F') {
                     output += (check - 'A' + 10);
                     continue;
                 }

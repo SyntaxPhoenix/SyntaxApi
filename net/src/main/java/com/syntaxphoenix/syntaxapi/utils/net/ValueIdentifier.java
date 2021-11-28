@@ -10,9 +10,6 @@ public final class ValueIdentifier {
     private ValueIdentifier() {}
 
     public static Object identify(String value) {
-        if (value.length() == 1) {
-            return value.charAt(0);
-        }
         if (Strings.isBoolean(value)) {
             return Boolean.valueOf(value);
         }

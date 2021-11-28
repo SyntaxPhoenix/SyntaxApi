@@ -3,6 +3,7 @@ package com.syntaxphoenix.syntaxapi.net;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -93,6 +94,11 @@ public abstract class AsyncSocketServer extends SocketServer {
     }
 
     protected void handleExceptionAsync(Throwable throwable) {
+        if(throwable instanceof SocketException) {
+            if(throwable.getMessage().contains("Socket closed")) {
+                return; // Ignore close exception
+            }
+        }
         throwable.printStackTrace();
     }
 

@@ -1,14 +1,14 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
-import java.io.BufferedReader;
+import java.io.InputStream;
 import java.net.Socket;
 
 public class HttpSender {
 
     private final Socket client;
-    private final BufferedReader input;
+    private final InputStream input;
 
-    public HttpSender(Socket client, BufferedReader input) {
+    public HttpSender(Socket client, InputStream input) {
         this.client = client;
         this.input = input;
     }
@@ -17,7 +17,7 @@ public class HttpSender {
         return client;
     }
 
-    public BufferedReader getInput() {
+    public InputStream getInput() {
         return input;
     }
 

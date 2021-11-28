@@ -1,9 +1,9 @@
 package com.syntaxphoenix.syntaxapi.net.http;
 
-import java.io.BufferedReader;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -151,10 +151,9 @@ public abstract class HttpServer extends AsyncSocketServer {
 
         HttpWriter writer = new HttpWriter(new PrintStream(socket.getOutputStream()));
 
-        InputStream stream = socket.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
+        InputStream stream = new BufferedInputStream(socket.getInputStream());
 
-        String line = reader.readLine();
+        String line = readLine(stream);
 
         if (line == null) {
             new NamedAnswer(StandardNamedType.PLAIN).code(ResponseCode.NO_CONTENT).write(writer);
@@ -163,6 +162,11 @@ public abstract class HttpServer extends AsyncSocketServer {
         }
 
         String[] info = line.split(" ");
+        if (info.length < 2) {
+            new NamedAnswer(StandardNamedType.PLAIN).code(ResponseCode.NO_CONTENT).write(writer);
+            socket.close();
+            return;
+        }
         String[] path = info[1].startsWith("/") ? info[1].substring(1).split("/") : info[1].split("/");
         String[] parameters = null;
 
@@ -177,25 +181,25 @@ public abstract class HttpServer extends AsyncSocketServer {
 
         ReceivedRequest request = new ReceivedRequest(RequestType.fromString(info[0]), path);
 
-        if (parameters != null) {
-            request.parseParameters(parameters);
-        }
-
-        while ((line = reader.readLine()) != null) {
-            if (line.isEmpty()) {
-                break;
-            }
-            request.parseHeader(line);
-        }
-
         if (!supported.isEmpty() && !supported.contains(request.getType())) {
             new NamedAnswer(StandardNamedType.PLAIN).setResponse("Unsupported request method!").code(ResponseCode.BAD_REQUEST)
                 .write(writer);
-            reader.close();
             writer.close();
             socket.close();
             return;
         }
+
+        if (parameters != null) {
+            request.parseParameters(parameters);
+        }
+
+        while ((line = readLine(stream)) != null) {
+            if (line.isBlank()) {
+                break;
+            }
+            request.parseHeader(line);
+        }
+        stream.reset();
 
         if (gate != null) {
             RequestState state = gate.acceptRequest(writer, request);
@@ -210,7 +214,6 @@ public abstract class HttpServer extends AsyncSocketServer {
                     new NamedAnswer(StandardNamedType.PLAIN).setResponse("Method or contenttype is not supported")
                         .code(ResponseCode.BAD_REQUEST).write(writer);
                 }
-                reader.close();
                 writer.close();
                 socket.close();
                 return;
@@ -238,7 +241,6 @@ public abstract class HttpServer extends AsyncSocketServer {
             if (content.message()) {
                 new NamedAnswer(StandardNamedType.PLAIN).setResponse("No content length given!").code(ResponseCode.LENGTH_REQUIRED)
                     .write(writer);
-                reader.close();
                 writer.close();
                 socket.close();
                 return;
@@ -247,13 +249,15 @@ public abstract class HttpServer extends AsyncSocketServer {
             int length = ((Number) request.getHeader("Content-Length")).intValue();
 
             ByteArrayOutputStream array = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
+
+            int overflow = stream.available() - length;
+            if (overflow > 0) {
+                stream.skip(overflow);
+            }
+
             int remain = length;
-            while (remain != 0) {
-                int amount = remain > 1024 ? 1024 : remain;
-                stream.read(buffer, 0, amount);
-                array.write(buffer, 0, amount);
-                remain -= amount;
+            while (--remain != 0) {
+                array.write(stream.read());
             }
             byte[] data = array.toByteArray();
             if (serializer != null) {
@@ -263,7 +267,6 @@ public abstract class HttpServer extends AsyncSocketServer {
                     System.out.println(Exceptions.stackTraceToString(exp));
                     new NamedAnswer(StandardNamedType.PLAIN).setResponse("Failed to serialize data")
                         .code(ResponseCode.INTERNAL_SERVER_ERROR).write(writer);
-                    reader.close();
                     writer.close();
                     socket.close();
                     return;
@@ -275,13 +278,12 @@ public abstract class HttpServer extends AsyncSocketServer {
 
         RequestExecution execution = null;
         try {
-            execution = handleHttpRequest(new HttpSender(socket, reader), writer, request);
+            execution = handleHttpRequest(new HttpSender(socket, stream), writer, request);
         } catch (Exception e) {
             execution = RequestExecution.error(e);
         }
 
         if ((execution == null ? RequestExecution.CLOSE : execution).close()) {
-            reader.close();
             writer.close();
             socket.close();
             if (execution.hasThrowable()) {
@@ -289,6 +291,25 @@ public abstract class HttpServer extends AsyncSocketServer {
             }
         }
 
+    }
+
+    private String readLine(InputStream stream) throws IOException {
+        stream.mark(8192);
+        int character;
+        StringBuilder builder = new StringBuilder();
+        while ((character = stream.read()) != '\r' && character != -1) {
+            if (character == '\n') {
+                continue;
+            }
+            if (!Character.isValidCodePoint(character)) {
+                break;
+            }
+            builder.append((char) character);
+        }
+        if (stream.available() > 0) {
+            stream.skip(1);
+        }
+        return builder.toString();
     }
 
     protected RequestExecution handleHttpRequest(HttpSender sender, HttpWriter writer, ReceivedRequest request) throws Exception {
