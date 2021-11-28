@@ -194,7 +194,7 @@ public abstract class HttpServer extends AsyncSocketServer {
         }
 
         while ((line = readLine(stream)) != null) {
-            if (line.isBlank()) {
+            if (line.trim().isEmpty()) {
                 break;
             }
             request.parseHeader(line);
