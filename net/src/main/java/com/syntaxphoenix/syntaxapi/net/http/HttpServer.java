@@ -256,7 +256,7 @@ public abstract class HttpServer extends AsyncSocketServer {
             }
 
             int remain = length;
-            while (--remain != 0) {
+            while (remain-- != 0) {
                 array.write(stream.read());
             }
             byte[] data = array.toByteArray();
