@@ -57,7 +57,7 @@ public class JsonIOTest {
     }
 
     @Test
-    public void tryRealExample() throws Exception {
+    public void tryMojangExample() throws Exception {
 
         System.out.println("== Skin Test ==\n");
 
@@ -71,6 +71,24 @@ public class JsonIOTest {
         System.out.println(new String(Base64.getDecoder().decode(skin.getValue())));
 
         System.out.println("\n== Skin Test ==");
+
+    }
+
+    @Test
+    public void tryPowerExample() throws Exception {
+
+        System.out.println("== Power Test ==\n");
+
+        JsonParser parser = new JsonParser();
+
+        JsonValue<?> value = parser.fromString(
+            "{\"StatusSNS\":{\"Time\":\"2021-12-08T20:22:23\",\"ENERGY\":{\"TotalStartTime\":\"2021-07-09T16:56:28\",\"Total\":91.117,\"Yesterday\":0.386,\"Today\":1.274,\"Power\":87,\"ApparentPower\":151,\"ReactivePower\":124,\"Factor\":0.58,\"Voltage\":229,\"Current\":0.662}}}");
+
+        JsonWriter writer = new JsonWriter().setPretty(true).setIndent(2).setSpaces(true);
+
+        writer.toStream(value, System.out);
+
+        System.out.println("\n== Power Test ==");
 
     }
 
@@ -91,7 +109,7 @@ public class JsonIOTest {
         System.out.println("\n== Number Test ==");
 
     }
-    
+
     @Test
     public void tryPrettyExample() throws Exception {
 
@@ -104,9 +122,9 @@ public class JsonIOTest {
         JsonWriter writer = new JsonWriter().setPretty(true).setIndent(2).setSpaces(true);
 
         writer.toStream(value, System.out);
-        
+
         System.out.println("\n== Pretty Test ==");
-        
+
     }
 
 }
