@@ -1,9 +1,9 @@
 */bin/
 */target/
-/.settings/
-*/.settings/
-*/.classpath
-*/.gitlab-ci.yml
-*/debug.log
+*.settings
+*.classpath
+*.gitlab-ci.yml
+*debug.log
 *.html
 *.project
+*.json
