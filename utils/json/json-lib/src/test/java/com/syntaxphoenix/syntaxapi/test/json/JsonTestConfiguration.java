@@ -26,7 +26,7 @@ public final class JsonTestConfiguration {
     public static final long SEED = 5908375382894239029L;
     private static final RandomNumberGenerator SEED_RANDOM = NumberGeneratorType.MURMUR.create(SEED);
 
-    public static final int TEST_AMOUNT = 20;
+    public static final int TEST_AMOUNT = 100;
     public static final boolean TEST_PLAIN = true;
     public static final boolean TEST_PRETTY = true;
 

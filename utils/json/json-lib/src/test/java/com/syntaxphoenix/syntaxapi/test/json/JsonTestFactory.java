@@ -30,7 +30,7 @@ public class JsonTestFactory {
     public Collection<DynamicTest> b0Parse() {
         try {
             FileUtils.cleanDirectory(TEST_DIRECTORY);
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
         }
         TEST_DIRECTORY.mkdirs();
         ArrayList<DynamicTest> list = new ArrayList<>();
