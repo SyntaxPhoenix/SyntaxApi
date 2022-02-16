@@ -28,6 +28,7 @@ public class JsonReader {
     public static final BigDecimal SIZE_FLOAT = new BigDecimal(Float.MAX_VALUE);
     public static final BigDecimal SIZE_DOUBLE = new BigDecimal(Double.MAX_VALUE);
 
+    public static final int NUMBER_ZERO = -2;
     public static final int NUMBER_NONE = -1;
     public static final int NUMBER_DIGIT = 0;
     public static final int NUMBER_SIGN = 1;
@@ -55,7 +56,11 @@ public class JsonReader {
 
     public JsonReader(Reader reader) throws IOException {
         this.reader = reader;
-        reader.reset();
+        try {
+            reader.reset();
+        } catch (IOException ignore) {
+            // Ignore because we don't care about it
+        }
         stack.push(JsonScope.EMPTY_READER);
     }
 
@@ -533,37 +538,38 @@ public class JsonReader {
             if (isKeyword() || isNumber()) {
                 return state;
             }
-//          printDebug();
+            // printDebug();
             throw wrongSyntax("No value present");
         } catch (EndOfFileException eof) {
             return state = JsonState.EOF;
         }
     }
-    
-//    private void printDebug() throws IOException {
-//        StringBuilder builder = new StringBuilder();
-//        int current = this.cursor;
-//        int amount = Math.min(cursor, 10);
-//        this.cursor = current - amount;
-//        builder.append('\'');
-//        for(int index = 0; index < amount; index++) {
-//            try {
-//                builder.append(nextCharacter());
-//            } catch(EndOfFileException eof) {
-//                break;
-//            }
-//        }
-//        builder.append("' <<-- \n").append('\'');
-//        for(int index = 0; index < 16; index++) {
-//            try {
-//                builder.append(nextCharacter());
-//            } catch(EndOfFileException eof) {
-//                break;
-//            }
-//        }
-//        this.cursor = current;
-//        System.out.println(cursor + ": '" + buffer[cursor] + "'\n" + builder.append('\'').toString());
-//    }
+
+    // private void printDebug() throws IOException {
+    // StringBuilder builder = new StringBuilder();
+    // int current = this.cursor;
+    // int amount = Math.min(cursor, 10);
+    // this.cursor = current - amount;
+    // builder.append('\'');
+    // for(int index = 0; index < amount; index++) {
+    // try {
+    // builder.append(nextCharacter());
+    // } catch(EndOfFileException eof) {
+    // break;
+    // }
+    // }
+    // builder.append("' <<-- \n").append('\'');
+    // for(int index = 0; index < 16; index++) {
+    // try {
+    // builder.append(nextCharacter());
+    // } catch(EndOfFileException eof) {
+    // break;
+    // }
+    // }
+    // this.cursor = current;
+    // System.out.println(cursor + ": '" + buffer[cursor] + "'\n" +
+    // builder.append('\'').toString());
+    // }
 
     protected boolean isKeyword() throws IOException, JsonSyntaxException {
         char current = buffer[cursor];
@@ -630,17 +636,20 @@ public class JsonReader {
         int parser = NUMBER_NONE;
 
         int index = 0;
+        int read = 0;
 
         characterLoop:
-        for (; true; index++) {
+        for (; true; index++, read++) {
             if (position + index == limit) {
-                if (!readToBuffer(index + 1)) {
+                if (!readToBuffer(1)) {
                     break;
+                }
+                if (cursor == 0) {
+                    read = index;
                 }
                 position = cursor;
                 limit = this.limit;
             }
-
             char current = buffer[position + index];
             switch (current) {
             case '-':
@@ -655,6 +664,8 @@ public class JsonReader {
                     exponentialNegative = true;
                     value.append(current);
                     continue;
+                case NUMBER_ZERO:
+                    continue;
                 default:
                     return false;
                 }
@@ -668,13 +679,21 @@ public class JsonReader {
                     parser = NUMBER_EXP_SIGN;
                     value.append(current);
                     continue;
+                case NUMBER_ZERO:
+                    continue;
                 default:
                     return false;
                 }
             case 'e':
             case 'E':
-                if (parser != NUMBER_DIGIT || exponential) {
+                if ((parser != NUMBER_DIGIT && parser != NUMBER_NONE) || exponential) {
                     return false;
+                }
+                if(first) {
+                    first = false;
+                    parser = NUMBER_ZERO;
+                    value.append('0');
+                    continue;
                 }
                 exponential = true;
                 parser = NUMBER_EXP_IND;
@@ -684,7 +703,7 @@ public class JsonReader {
                 if (!first && (parser != NUMBER_DIGIT || decimal)) {
                     return false;
                 }
-                if(first) {
+                if (first) {
                     value.append('0');
                 }
                 decimal = true;
@@ -708,6 +727,13 @@ public class JsonReader {
                     value.append(current);
                     continue;
                 case NUMBER_SIGN:
+                    if (first && current == '0') {
+                        continue;
+                    }
+                    first = false;
+                    parser = NUMBER_DIGIT;
+                    value.append(current);
+                    continue;
                 case NUMBER_DIGIT:
                     value.append(current);
                     continue;
@@ -722,6 +748,8 @@ public class JsonReader {
                     exponentialValue.append(current);
                     parser = NUMBER_EXP_DIGIT;
                     continue;
+                case NUMBER_ZERO:
+                    continue;
                 default:
                     return false;
                 }
@@ -735,12 +763,13 @@ public class JsonReader {
                 cursor += 1;
                 return true;
             }
-            int length = (decimal ? stringBuffer.split(".", 2)[0].length() : stringBuffer.length()) - (negative ? 1 : 0);
+            int length = (decimal ? stringBuffer.split("\\.", 2)[0].length() : stringBuffer.length()) - (negative ? 1 : 0);
 
             if (decimal) {
                 if (exponential && exponentialValue.length() > 0) {
-                    BigDecimal number = new BigDecimal(stringBuffer.split("E", 2)[0])
-                        .pow(Integer.parseInt(exponentialValue.toString()) * (exponentialNegative ? -1 : 1));
+                    BigDecimal number = new BigDecimal(stringBuffer.split("E", 2)[0]);
+                    int amount = Integer.parseInt(exponentialValue.toString());
+                    number = exponentialNegative ? number.movePointLeft(amount) : number.movePointRight(amount);
                     if (hasSize(number, SIZE_FLOAT, negative)) {
                         state = JsonState.FLOAT;
                     } else if (hasSize(number, SIZE_DOUBLE, negative)) {
@@ -802,19 +831,20 @@ public class JsonReader {
                     state = JsonState.BIG_INTEGER;
                 }
             }
-            cursor += stringBuffer.length();
+            cursor += read;
             return true;
         } catch (NumberFormatException exception) {
             exception.printStackTrace();
-            return false;
+            throw new IllegalStateException("fail", exception);
+            // return false;
         }
     }
 
     protected boolean hasSize(BigDecimal compare, BigDecimal comparision, boolean negative) {
         if (negative) {
-            return compare.compareTo(comparision.multiply(BigDecimal.ONE.negate())) >= 0;
+            return compare.compareTo(comparision.multiply(BigDecimal.ONE.negate())) >= 1;
         }
-        return compare.compareTo(comparision) <= 0;
+        return compare.compareTo(comparision) <= -1;
     }
 
     protected boolean isLower(String value, BigDecimal comparision, boolean negative) {
