@@ -533,12 +533,37 @@ public class JsonReader {
             if (isKeyword() || isNumber()) {
                 return state;
             }
-
+//          printDebug();
             throw wrongSyntax("No value present");
         } catch (EndOfFileException eof) {
             return state = JsonState.EOF;
         }
     }
+    
+//    private void printDebug() throws IOException {
+//        StringBuilder builder = new StringBuilder();
+//        int current = this.cursor;
+//        int amount = Math.min(cursor, 10);
+//        this.cursor = current - amount;
+//        builder.append('\'');
+//        for(int index = 0; index < amount; index++) {
+//            try {
+//                builder.append(nextCharacter());
+//            } catch(EndOfFileException eof) {
+//                break;
+//            }
+//        }
+//        builder.append("' <<-- \n").append('\'');
+//        for(int index = 0; index < 16; index++) {
+//            try {
+//                builder.append(nextCharacter());
+//            } catch(EndOfFileException eof) {
+//                break;
+//            }
+//        }
+//        this.cursor = current;
+//        System.out.println(cursor + ": '" + buffer[cursor] + "'\n" + builder.append('\'').toString());
+//    }
 
     protected boolean isKeyword() throws IOException, JsonSyntaxException {
         char current = buffer[cursor];
@@ -656,8 +681,11 @@ public class JsonReader {
                 value.append(current);
                 continue;
             case '.':
-                if (parser != NUMBER_DIGIT || decimal) {
+                if (!first && (parser != NUMBER_DIGIT || decimal)) {
                     return false;
+                }
+                if(first) {
+                    value.append('0');
                 }
                 decimal = true;
                 parser = NUMBER_DECIMAL;

@@ -2,9 +2,6 @@ package com.syntaxphoenix.syntaxapi.utils.java.lang;
 
 import java.util.Arrays;
 
-import sun.misc.FloatingDecimal;
-
-@SuppressWarnings("restriction")
 abstract class AbstractStringBuilder implements Appendable, CharSequence {
     char[] value;
     int count;
@@ -300,12 +297,12 @@ abstract class AbstractStringBuilder implements Appendable, CharSequence {
     }
 
     public AbstractStringBuilder append(float var1) {
-        FloatingDecimal.appendTo(var1, this);
+        append("" + var1);
         return this;
     }
 
     public AbstractStringBuilder append(double var1) {
-        FloatingDecimal.appendTo(var1, this);
+        append("" + var1);
         return this;
     }
 
