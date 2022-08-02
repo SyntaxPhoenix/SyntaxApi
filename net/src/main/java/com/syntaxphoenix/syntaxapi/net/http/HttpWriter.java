@@ -2,12 +2,48 @@ package com.syntaxphoenix.syntaxapi.net.http;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Date;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.SignStyle;
+import java.time.temporal.ChronoField;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class HttpWriter {
+
+    public static final DateTimeFormatter FORMATTER;
+
+    static {
+        HashMap<Long, String> dow = new HashMap<>();
+        dow.put(1L, "Mon");
+        dow.put(2L, "Tue");
+        dow.put(3L, "Wed");
+        dow.put(4L, "Thu");
+        dow.put(5L, "Fri");
+        dow.put(6L, "Sat");
+        dow.put(7L, "Sun");
+        HashMap<Long, String> moy = new HashMap<>();
+        moy.put(1L, "Jan");
+        moy.put(2L, "Feb");
+        moy.put(3L, "Mar");
+        moy.put(4L, "Apr");
+        moy.put(5L, "May");
+        moy.put(6L, "Jun");
+        moy.put(7L, "Jul");
+        moy.put(8L, "Aug");
+        moy.put(9L, "Sep");
+        moy.put(10L, "Oct");
+        moy.put(11L, "Nov");
+        moy.put(12L, "Dec");
+        FORMATTER = new DateTimeFormatterBuilder().parseCaseInsensitive().parseLenient().appendText(ChronoField.DAY_OF_WEEK, dow)
+            .appendLiteral(", ").appendValue(ChronoField.DAY_OF_MONTH, 1, 2, SignStyle.NOT_NEGATIVE).appendLiteral(' ')
+            .appendText(ChronoField.MONTH_OF_YEAR, moy).appendLiteral(' ').appendValue(ChronoField.YEAR, 4).appendLiteral(' ')
+            .appendValue(ChronoField.HOUR_OF_DAY, 2).appendLiteral(':').appendValue(ChronoField.MINUTE_OF_HOUR, 2).appendLiteral(':')
+            .appendValue(ChronoField.SECOND_OF_MINUTE, 2).appendLiteral(' ').appendLiteral("GMT").toFormatter().withZone(ZoneId.of("GMT"));
+    }
 
     private final PrintStream output;
 
@@ -41,7 +77,7 @@ public class HttpWriter {
     }
 
     public HttpWriter writeDate() {
-        return write("Date", new Date());
+        return write("Date", FORMATTER.format(OffsetDateTime.now()));
     }
 
     public HttpWriter writeLength(int length) {
